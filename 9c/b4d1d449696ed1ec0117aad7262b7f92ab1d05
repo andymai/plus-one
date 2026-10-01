@@ -1,0 +1,67 @@
+DESIGN.md
+  s_c879bf701c3060::t_e3e054f0447a80 47
+  s_c879bf701c3060::t_a3ee326e376352 1-46,48-49
+rubric.md
+  s_c879bf701c3060::t_78682ece57a056 92
+  s_c879bf701c3060::t_a815a7aadf201e 1-80,91,93-100
+  s_c879bf701c3060::t_b5ff2998a313f7 81-90
+prr/review.py
+  s_c879bf701c3060::t_29f6f7b53a5297 83-90,92
+  s_c879bf701c3060::t_3b4dd4f9e7760c 80-82
+  s_c879bf701c3060::t_5d0341bb8345f5 91
+  s_c879bf701c3060::t_fd97f6495e9d63 93-95
+README.md
+  s_c879bf701c3060::t_388a618bac187c 1-27
+bin/install-units
+  s_c879bf701c3060::t_703e3d9b44030f 1-8
+bin/prr
+  s_c879bf701c3060::t_cc2df9b65b2c9b 1-8
+config.toml
+  s_c879bf701c3060::t_3c27be003ed7d6 1-56
+prr/actions.py
+  s_c879bf701c3060::t_5b75eef7509dbe 1-47
+prr/claude.py
+  s_c879bf701c3060::t_8b0190695d20f6 1-65
+prr/cli.py
+  s_c879bf701c3060::t_e304b87fd57835 1-253
+prr/codeowners.py
+  s_c879bf701c3060::t_20f0831a1db242 1-51
+prr/config.py
+  s_c879bf701c3060::t_d898dc993312c7 1-21
+prr/diffs.py
+  s_c879bf701c3060::t_09f8a2135353f0 1-48
+prr/drafts.py
+  s_c879bf701c3060::t_113aefb5d5e66f 1-84
+prr/filters.py
+  s_c879bf701c3060::t_e1bd6362e2b8fb 1-73
+prr/gh.py
+  s_c879bf701c3060::t_23a1ae101c781c 1-142
+prr/prompts.py
+  s_c879bf701c3060::t_d7b0a729b18446 1-142
+prr/state.py
+  s_c879bf701c3060::t_a2a17b1755922e 1-93
+systemd/pr-review.service
+  s_c879bf701c3060::t_a40b502c6f788e 1-10
+systemd/pr-review.timer
+  s_c879bf701c3060::t_77d753f2f9fa32 1-10
+tests/selftest_sandbox.py
+  s_c879bf701c3060::t_e4e39bcf9b0bf1 1-38
+tests/test_core.py
+  s_c879bf701c3060::t_63f493c8ec8f92 1-197
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "9cb4d1d449696ed1ec0117aad7262b7f92ab1d05",
+  "prompts": {},
+  "sessions": {
+    "s_c879bf701c3060": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "adcbb892-4cae-42a5-b133-ed681d6a0949",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
