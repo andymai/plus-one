@@ -1,0 +1,42 @@
+prr/web/templates/partials/stack.html
+  s_e88fe4c01fd2c2::t_a635c3de7e5a35 1-20
+prr/web/static/app.css
+  s_e88fe4c01fd2c2::t_5a6fbe8720e7e3 428-466
+  s_e88fe4c01fd2c2::t_5af144cebec45c 323,969-978
+tests/test_core.py
+  s_e88fe4c01fd2c2::t_6f515eb1f2e45f 10,283-307
+  s_e88fe4c01fd2c2::t_b212ce4b71a03e 308-309
+prr/web/cards.py
+  s_e88fe4c01fd2c2::t_da6aa9ad99fc5a 2,10-34,133,137-139,174-200,203
+tests/test_web.py
+  s_e88fe4c01fd2c2::t_6f515eb1f2e45f 223-242
+prr/web/routes.py
+  s_e88fe4c01fd2c2::t_a635c3de7e5a35 45
+  s_e88fe4c01fd2c2::t_da6aa9ad99fc5a 59-60
+prr/web/templates/todo.html
+  s_e88fe4c01fd2c2::t_a635c3de7e5a35 34-41,43-51
+prr/web/templates/partials/card.html
+  s_e88fe4c01fd2c2::t_3c752296b5d733 8
+  s_e88fe4c01fd2c2::t_a635c3de7e5a35 1,21,31-35,37-52,54,58-59,61,63
+prr/web/static/app.js
+  s_e88fe4c01fd2c2::t_3c752296b5d733 81-89
+  s_e88fe4c01fd2c2::t_c8874760fdffda 123,185,390-394,435-438,453,520-541,576
+prr/web/templates/partials/card_body.html
+  s_e88fe4c01fd2c2::t_a635c3de7e5a35 1-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "baf395dc75f0e61694f2259d0ff917851984c50e",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
