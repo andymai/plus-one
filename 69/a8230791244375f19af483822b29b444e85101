@@ -1,0 +1,62 @@
+prr/web/cards.py
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 47-50,104
+  s_e88fe4c01fd2c2::t_8cf682c3558aea 105
+prr/web/routes.py
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 125,135,194,244
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 19,22-27,35,90-91,165,215-219
+  s_e88fe4c01fd2c2::t_8f519a605e0bb6 220
+prr/web/templates/pr.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 20
+prr/store.py
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 191-196,304-312
+  s_e88fe4c01fd2c2::t_d597012d858c84 313
+prr/web/templates/review.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 30
+prr/web/static/app.js
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 212,456-460
+  s_e88fe4c01fd2c2::t_47baeb61d7a43a 461-463
+prr/web/words.py
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 48-49,91
+prr/web/templates/partials/handed_off.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 1-4
+prr/web/queries.py
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 185,202-203,223
+tests/test_web.py
+  s_e88fe4c01fd2c2::t_975e49174c7ad8 406-444
+prr/web/templates/partials/card_body.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 108,113-114
+prr/web/static/app.css
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 397
+prr/web/templates/_icons.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 34
+prr/web/executor.py
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 13,57-59,121
+prr/web/templates/base.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 100
+prr/web/templates/activity.html
+  s_e88fe4c01fd2c2::t_3a4eb0d6b33127 20-37
+prr/cli.py
+  s_e88fe4c01fd2c2::t_2bc0446720eaaf 157,161,170-174,341-357,386-387
+DESIGN.md
+  s_e88fe4c01fd2c2::t_f749e47c441e6a 18,42
+README.md
+  s_e88fe4c01fd2c2::t_e3131f01e01575 11,26
+UI-PLAN.md
+  s_e88fe4c01fd2c2::t_de28d1cb80108b 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "69a8230791244375f19af483822b29b444e85101",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
