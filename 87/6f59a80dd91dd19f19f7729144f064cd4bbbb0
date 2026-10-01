@@ -1,0 +1,19 @@
+prr/web/static/app.js
+  s_e88fe4c01fd2c2::t_2deeac046f10a7 141,562
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "876f59a80dd91dd19f19f7729144f064cd4bbbb0",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
