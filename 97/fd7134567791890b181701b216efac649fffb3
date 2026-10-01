@@ -1,0 +1,21 @@
+CLAUDE.md
+  s_e88fe4c01fd2c2::t_983eb2466c9947 53
+UI-PLAN.md
+  s_e88fe4c01fd2c2::t_51ee6f891a4868 15-17,19-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "97fd7134567791890b181701b216efac649fffb3",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
