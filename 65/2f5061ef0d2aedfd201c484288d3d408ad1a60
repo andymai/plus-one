@@ -1,0 +1,24 @@
+tests/test_web.py
+  s_e88fe4c01fd2c2::t_9fa268228139ee 301-320
+prr/web/templates/partials/card.html
+  s_e88fe4c01fd2c2::t_3e6010e80efa38 14,19
+  s_e88fe4c01fd2c2::t_314ecefab6a3fb 9
+prr/web/cards.py
+  s_e88fe4c01fd2c2::t_3e6010e80efa38 57-58,106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "652f5061ef0d2aedfd201c484288d3d408ad1a60",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
