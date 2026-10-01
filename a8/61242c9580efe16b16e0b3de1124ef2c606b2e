@@ -1,0 +1,27 @@
+prr/web/static/app.css
+  s_e88fe4c01fd2c2::t_d090542358d667 430-432
+prr/cli.py
+  s_e88fe4c01fd2c2::t_3267067a23f458 345,353
+prr/store.py
+  s_e88fe4c01fd2c2::t_5154716075a9fc 311-314
+prr/web/routes.py
+  s_e88fe4c01fd2c2::t_4f879233ed9d9b 218
+tests/test_web.py
+  s_e88fe4c01fd2c2::t_e10a9b5adbc7af 422-423
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a861242c9580efe16b16e0b3de1124ef2c606b2e",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
