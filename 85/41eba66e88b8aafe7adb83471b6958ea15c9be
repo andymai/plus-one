@@ -1,0 +1,19 @@
+.gitignore
+  s_e88fe4c01fd2c2::t_a84a2b5828723f 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8541eba66e88b8aafe7adb83471b6958ea15c9be",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
