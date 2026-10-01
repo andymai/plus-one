@@ -1,0 +1,67 @@
+prr/web/static/app.css
+  s_e88fe4c01fd2c2::t_5dc18d30e5468a 456-458,473,477
+  s_e88fe4c01fd2c2::t_c14b940819e071 472,474
+  s_e88fe4c01fd2c2::t_187c959f6bb02a 464-465,467-471,475-476
+  s_e88fe4c01fd2c2::t_eaddfc7b88e703 454-455,459-463,466,478-497
+prr/web/templates/_macros.html
+  s_e88fe4c01fd2c2::t_fc6848f38ea3ea 6-7,9-10,13-14
+  s_e88fe4c01fd2c2::t_c14b940819e071 8,11-12
+prr/web/words.py
+  s_e88fe4c01fd2c2::t_5b8916ac863102 1,34,37-40,90-132
+prr/web/templates/pr.html
+  s_e88fe4c01fd2c2::t_78d3b12ca6bfe2 29
+prr/web/templates/partials/card.html
+  s_e88fe4c01fd2c2::t_5dc18d30e5468a 73
+  s_e88fe4c01fd2c2::t_78d3b12ca6bfe2 1,53-70,72,74-76,78-79,93-100,106
+  s_e88fe4c01fd2c2::t_187c959f6bb02a 52,71
+  s_e88fe4c01fd2c2::t_c14b940819e071 77
+tests/test_web.py
+  s_e88fe4c01fd2c2::t_e1645de7ae0b57 220-239,285
+prr/web/app.py
+  s_e88fe4c01fd2c2::t_3c02d637ab1885 138-146
+  s_e88fe4c01fd2c2::t_afb1cbf8e4ff5f 199-200
+  s_e88fe4c01fd2c2::t_2afec0dd5372e7 116-123,126,128-137,147,153-158,162-167
+  s_e88fe4c01fd2c2::t_dda048b9b8ad48 124-125,127,148-152,159-161
+prr/web/cards.py
+  s_e88fe4c01fd2c2::t_9facc3aafc271a 5,35-55,84-91,93,97,103-104,110,117-118,122-123
+tests/test_core.py
+  s_e88fe4c01fd2c2::t_e1645de7ae0b57 9-10,208-246,248-251,253-254
+  s_e88fe4c01fd2c2::t_af29e8d5a27cd5 247,252
+  s_e88fe4c01fd2c2::t_73a6ffd1bd701a 255-256
+prr/web/static/app.js
+  s_e88fe4c01fd2c2::t_187c959f6bb02a 39-40,53-57,64-66,69,160
+  s_e88fe4c01fd2c2::t_5dc18d30e5468a 41-52,58-63
+  s_e88fe4c01fd2c2::t_e564cefae4372a 139-143
+prr/web/templates/insights.html
+  s_e88fe4c01fd2c2::t_78d3b12ca6bfe2 101-104
+prr/web/routes.py
+  s_e88fe4c01fd2c2::t_c3d831c1a2a52c 87,150-152
+prr/diffs.py
+  s_e88fe4c01fd2c2::t_e3f530e50dd954 3
+  s_e88fe4c01fd2c2::t_5b8916ac863102 50-65
+prr/web/queries.py
+  s_e88fe4c01fd2c2::t_9facc3aafc271a 403
+  s_e88fe4c01fd2c2::t_e3f530e50dd954 7,366-402,404-412
+  s_e88fe4c01fd2c2::t_63144b27cdc459 413-414
+prr/actions.py
+  s_e88fe4c01fd2c2::t_c3d831c1a2a52c 1,127-137
+  s_e88fe4c01fd2c2::t_87fa8436278072 138-139
+prr/web/templates/review.html
+  s_e88fe4c01fd2c2::t_78d3b12ca6bfe2 45-46,52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "41523bc80d173074782516922d29226301975a30",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
