@@ -1,0 +1,25 @@
+tests/test_web.py
+  s_e88fe4c01fd2c2::t_9dbe06585b48e6 214-219
+prr/prompts.py
+  s_e88fe4c01fd2c2::t_9ad0ee32e10c34 43,45,117
+prr/web/templates/review.html
+  s_e88fe4c01fd2c2::t_3b2beca4552125 181-184
+prr/web/static/app.css
+  s_e88fe4c01fd2c2::t_38a85c2cc404eb 739-741
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "eb5779d8c681af14d40f76c76d05ebb0970ec4b1",
+  "prompts": {},
+  "sessions": {
+    "s_e88fe4c01fd2c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36269ca0-0451-4547-b588-fef7334142a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
