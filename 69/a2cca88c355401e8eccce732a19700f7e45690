@@ -1,0 +1,30 @@
+plus1/gh.py
+  s_4b077280f0af27::t_7e6d506b17f119 27-30,91-95
+  s_4b077280f0af27::t_ba6cc54c5d2c3d 2,10,26,90,96-98,122
+tests/test_store.py
+  s_4b077280f0af27::t_b9b7964d9e8269 34-39
+plus1/store.py
+  s_4b077280f0af27::t_ba6cc54c5d2c3d 245-248,299
+plus1/prompts.py
+  s_4b077280f0af27::t_ba6cc54c5d2c3d 38,46,113
+tests/test_core.py
+  s_4b077280f0af27::t_b9b7964d9e8269 8,346,348,352-353
+  s_4b077280f0af27::t_002284fb98d06b 356-357
+  s_4b077280f0af27::t_7e6d506b17f119 347,349-351,354-355
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "69a2cca88c355401e8eccce732a19700f7e45690",
+  "prompts": {},
+  "sessions": {
+    "s_4b077280f0af27": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9234cdf4-e2a7-48ed-9862-5977b927acc8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
