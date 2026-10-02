@@ -1,0 +1,58 @@
+CLAUDE.md
+  s_1df1cac1e64228::t_a2e40a6b6eb29c 18
+  s_1df1cac1e64228::t_cabd63a4ffc553 28-29
+  s_1df1cac1e64228::t_862df768afe480 48-49
+  s_1df1cac1e64228::t_52da9e63790904 26
+  s_1df1cac1e64228::t_5197fef51d1c89 59-61
+  s_1df1cac1e64228::t_f905aae64de406 57
+  s_1df1cac1e64228::t_7c7df1ac7f0bf9 58
+prr/web/words.py
+  s_1df1cac1e64228::t_744b10fe7af8e3 85
+prr/web/cards.py
+  s_1df1cac1e64228::t_cc266d2d3b99f7 173-176,182,188-213
+  s_1df1cac1e64228::t_bd99d3463c4441 114
+  s_1df1cac1e64228::t_91519a71240008 9
+  s_1df1cac1e64228::t_e34bcc6a4775b6 63-68
+  s_1df1cac1e64228::t_112ecdb81b2716 3,7
+  s_a8677c67f85a06::t_c15a9c963a1bda 214-215
+tests/test_web.py
+  s_1df1cac1e64228::t_305adf0609c87a 460-487
+prr/gh.py
+  s_1df1cac1e64228::t_c762371acd0dbd 9
+  s_1df1cac1e64228::t_6c4711f96c7e12 98
+  s_1df1cac1e64228::t_001b6f5b264140 132-147
+prr/filters.py
+  s_1df1cac1e64228::t_96d2eac1e896d9 25-26
+prr/web/app.py
+  s_1df1cac1e64228::t_bed0bbe03af5dc 416
+tests/test_core.py
+  s_1df1cac1e64228::t_ea602d626c735d 109
+  s_1df1cac1e64228::t_522b1517cd6b94 131-132
+prr/store.py
+  s_1df1cac1e64228::t_d46fce4823ad60 197-203
+  s_1df1cac1e64228::t_0d7e6b73be03b5 328-331
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "61cc5575cf97fd9f3561e304c0367b96b09537d2",
+  "prompts": {},
+  "sessions": {
+    "s_1df1cac1e64228": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b3aecd29-f3a1-4ed0-b006-24db25071c14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    },
+    "s_a8677c67f85a06": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "85b17417-28bf-4293-9803-4c3b96f3617d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
