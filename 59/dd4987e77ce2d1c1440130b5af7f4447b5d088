@@ -1,0 +1,21 @@
+tests/test_store.py
+  s_4b077280f0af27::t_2aa0f4e3e115da 36-41
+plus1/store.py
+  s_4b077280f0af27::t_2aa0f4e3e115da 248-256
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "59dd4987e77ce2d1c1440130b5af7f4447b5d088",
+  "prompts": {},
+  "sessions": {
+    "s_4b077280f0af27": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9234cdf4-e2a7-48ed-9862-5977b927acc8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
