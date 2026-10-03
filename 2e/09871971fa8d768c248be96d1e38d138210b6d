@@ -1,0 +1,32 @@
+.github/workflows/dependabot-auto-merge.yml
+  s_d52ce68d3f74a8::t_bb9999c52b3daf 1-29
+.github/workflows/osv-scan.yml
+  s_d52ce68d3f74a8::t_d867111a964317 3-4
+  s_d52ce68d3f74a8::t_028c549025da9c 1-2,5-33
+.github/dependabot.yml
+  s_d52ce68d3f74a8::t_758954c31f7bbd 7-9,11-16,22-23,25-30
+.github/pull_request_template.md
+  s_d52ce68d3f74a8::t_18a1a9de59c710 1,3,5,7-8,10
+.github/workflows/pr-title.yml
+  s_d52ce68d3f74a8::t_95e062461af9a6 1-37
+.github/workflows/ci.yml
+  s_d52ce68d3f74a8::t_486fa1c6cf1291 18-19,21-22,24-25,28-39
+AI-DISCLOSURE.md
+  s_d52ce68d3f74a8::t_cff795ff5a3bee 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2e09871971fa8d768c248be96d1e38d138210b6d",
+  "prompts": {},
+  "sessions": {
+    "s_d52ce68d3f74a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2e605001-de67-480e-9781-5d0e9a2644b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
