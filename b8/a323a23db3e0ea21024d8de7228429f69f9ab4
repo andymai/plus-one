@@ -1,0 +1,31 @@
+LICENSE
+  s_d52ce68d3f74a8::t_edec3885fbef66 1-14
+.editorconfig
+  s_d52ce68d3f74a8::t_93a32377793389 1-15
+.github/pull_request_template.md
+  s_d52ce68d3f74a8::t_d694c7a80bfa6a 1-17
+.github/dependabot.yml
+  s_d52ce68d3f74a8::t_cce6d5f3c00fed 1-32
+.github/workflows/ci.yml
+  s_d52ce68d3f74a8::t_c759f07e18eb72 1-26
+.python-version
+  s_d52ce68d3f74a8::t_fe25913dd3cc6c 1
+.github/workflows/dependabot-automerge.yml
+  s_d52ce68d3f74a8::t_fe24dbc4afa52e 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b8a323a23db3e0ea21024d8de7228429f69f9ab4",
+  "prompts": {},
+  "sessions": {
+    "s_d52ce68d3f74a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2e605001-de67-480e-9781-5d0e9a2644b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
