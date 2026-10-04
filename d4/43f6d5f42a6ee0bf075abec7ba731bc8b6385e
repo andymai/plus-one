@@ -1,0 +1,39 @@
+plus1/web/queries.py
+  s_8b168bf9e8756f::t_4a65b59a53ec47 175-176,213-228,232-236,244-265,267-268
+plus1/web/static/app.css
+  s_8b168bf9e8756f::t_85e5ae3df90af4 785-801,1219-1221
+tests/test_web.py
+  s_8b168bf9e8756f::t_f26ce0cc3d9049 577-591,596-599
+  s_8b168bf9e8756f::t_bb19e0705bb85e 592-595
+plus1/calibrate.py
+  s_8b168bf9e8756f::t_4a65b59a53ec47 157
+plus1/web/routes.py
+  s_8b168bf9e8756f::t_4a65b59a53ec47 139
+  s_8b168bf9e8756f::t_505e5646f0f4ef 137
+plus1/web/templates/activity.html
+  s_8b168bf9e8756f::t_85e5ae3df90af4 2
+  s_8b168bf9e8756f::t_fdeacfde29423e 77,83-105
+plus1/web/templates/insights.html
+  s_8b168bf9e8756f::t_fdeacfde29423e 28,135-140
+  s_8b168bf9e8756f::t_c315a9813a5f43 159
+tests/test_core.py
+  s_8b168bf9e8756f::t_f26ce0cc3d9049 410-421
+UI-PLAN.md
+  s_8b168bf9e8756f::t_9e726c9b3f4e3e 14,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d443f6d5f42a6ee0bf075abec7ba731bc8b6385e",
+  "prompts": {},
+  "sessions": {
+    "s_8b168bf9e8756f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82ffbaac-eb42-4354-af65-764a959abf7b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
