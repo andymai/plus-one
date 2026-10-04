@@ -1,0 +1,45 @@
+plus1/web/words.py
+  s_8b168bf9e8756f::t_9b62216b120f10 69,76,184-191
+  s_8b168bf9e8756f::t_e6bfc15ca2c5f9 192-193
+tests/test_web.py
+  s_8b168bf9e8756f::t_be7d35fbf818ec 501-523
+plus1/filters.py
+  s_8b168bf9e8756f::t_9b62216b120f10 64,67,71-81
+plus1/store.py
+  s_8b168bf9e8756f::t_9b62216b120f10 245-246,309
+tests/test_core.py
+  s_8b168bf9e8756f::t_be7d35fbf818ec 200-206,276-285
+  s_8b168bf9e8756f::t_5fdcc9a7df7fb6 286
+plus1/web/templates/partials/pane.html
+  s_8b168bf9e8756f::t_9b62216b120f10 58
+plus1/cli.py
+  s_8b168bf9e8756f::t_9b62216b120f10 201-202
+UI-PLAN.md
+  s_8b168bf9e8756f::t_9b62216b120f10 16
+plus1/web/cards.py
+  s_8b168bf9e8756f::t_9b62216b120f10 63-64,71-74,195,220-221
+plus1/web/static/app.css
+  s_8b168bf9e8756f::t_9b62216b120f10 657
+plus1/web/templates/partials/card_body.html
+  s_8b168bf9e8756f::t_9b62216b120f10 10-11,25,35,124-125
+plus1/web/queries.py
+  s_8b168bf9e8756f::t_9b62216b120f10 12
+CLAUDE.md
+  s_8b168bf9e8756f::t_70ed7fbb685edd 28,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "39e9002a811a530e74c536a5a2646bb2d3e768a3",
+  "prompts": {},
+  "sessions": {
+    "s_8b168bf9e8756f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82ffbaac-eb42-4354-af65-764a959abf7b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
