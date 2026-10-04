@@ -1,0 +1,38 @@
+plus1/web/templates/partials/card_body.html
+  s_8b168bf9e8756f::t_d9215a80d4dbe9 10,24-26,28-29,34-35,56,92-101,123
+  s_8b168bf9e8756f::t_e5dfaee74fca6c 27
+plus1/web/routes.py
+  s_8b168bf9e8756f::t_501c91851c6fbd 72-75,77
+plus1/web/words.py
+  s_8b168bf9e8756f::t_501c91851c6fbd 76
+plus1/web/static/app.css
+  s_8b168bf9e8756f::t_df85bd598deb93 645-658
+plus1/web/cards.py
+  s_8b168bf9e8756f::t_501c91851c6fbd 6,8,56-92,126,175
+UI-PLAN.md
+  s_8b168bf9e8756f::t_19a609132bb417 16
+plus1/web/templates/partials/pane.html
+  s_8b168bf9e8756f::t_10d990958c678f 86-87,94
+  s_8b168bf9e8756f::t_ec43df5d29dac2 56-60,62,72,80-81,84-85,88,91,93,102
+tests/test_web.py
+  s_8b168bf9e8756f::t_373b798875b7fb 392,468-499
+  s_8b168bf9e8756f::t_1490597824fb0a 500
+CLAUDE.md
+  s_8b168bf9e8756f::t_19a609132bb417 58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "dd557f2e2b603e54e998320b1c78bb785e544cd6",
+  "prompts": {},
+  "sessions": {
+    "s_8b168bf9e8756f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82ffbaac-eb42-4354-af65-764a959abf7b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
