@@ -1,0 +1,25 @@
+plus1/web/routes.py
+  s_8b168bf9e8756f::t_9e1a89c021ed19 63,66,85,151
+plus1/web/static/app.js
+  s_8b168bf9e8756f::t_9e1a89c021ed19 112-119,888-897
+plus1/web/cards.py
+  s_8b168bf9e8756f::t_9e1a89c021ed19 302-303
+plus1/web/static/app.css
+  s_8b168bf9e8756f::t_9e1a89c021ed19 1032
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ebe119f147f409a789a2971668290868f8f309ac",
+  "prompts": {},
+  "sessions": {
+    "s_8b168bf9e8756f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82ffbaac-eb42-4354-af65-764a959abf7b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
