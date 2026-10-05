@@ -1,0 +1,106 @@
+plus1/store.py
+  s_8b168bf9e8756f::t_16575b937ecfa9 245,307-308
+plus1/web/static/app.css
+  s_8b168bf9e8756f::t_5235f34605055c 407,1088-1093
+  s_8b168bf9e8756f::t_560a21cd3a566b 446,452-456,464-465,471-476,1125-1130
+  s_8b168bf9e8756f::t_62984e60b9e3dd 479,482
+  s_8b168bf9e8756f::t_9d74f9a479c017 1085-1087
+  s_8b168bf9e8756f::t_82f11d7ca82cc9 466-470,1131-1132
+  s_8b168bf9e8756f::t_cc42c0aa95b5d5 1046-1048
+  s_8b168bf9e8756f::t_9a73f36bd74132 1052
+  s_8b168bf9e8756f::t_155ceac4590867 1031-1032
+  s_8b168bf9e8756f::t_ce8f2bb06f5971 1062
+  s_8b168bf9e8756f::t_7136b127fa1d04 214,1058,1159-1160
+  s_8b168bf9e8756f::t_d024c6c0bc5e94 212-213,484-499,1024-1030,1033-1045,1049-1051,1053-1057,1059-1061
+plus1/web/templates/partials/stack.html
+  s_8b168bf9e8756f::t_654ef7ea66c2ec 1,6-12,15-16
+  s_8b168bf9e8756f::t_82f11d7ca82cc9 13-14
+plus1/web/cards.py
+  s_8b168bf9e8756f::t_62984e60b9e3dd 15,50-54,150
+  s_8b168bf9e8756f::t_8991357b396371 138,140-141,144,147,169-171,292
+plus1/web/words.py
+  s_8b168bf9e8756f::t_3fb497cb083bc2 184-220
+  s_8b168bf9e8756f::t_8f84e458339262 14-15
+plus1/web/templates/_macros.html
+  s_8b168bf9e8756f::t_9c39877dd8af12 4
+  s_8b168bf9e8756f::t_498b9d0be8836e 27
+tests/test_core.py
+  s_8b168bf9e8756f::t_174b0c50583d02 392-404
+  s_8b168bf9e8756f::t_088684bdb857d5 358
+  s_8b168bf9e8756f::t_ac0d186b8f55ec 246-268
+plus1/web/templates/base.html
+  s_8b168bf9e8756f::t_b8a28172a5d98f 55
+  s_8b168bf9e8756f::t_f9ca40f90f4871 58
+plus1/web/templates/partials/review_any.html
+  s_8b168bf9e8756f::t_9753807e887d42 1-12
+plus1/web/static/app.js
+  s_8b168bf9e8756f::t_9971c478c921b2 526-527,848-850,852-855
+  s_8b168bf9e8756f::t_075659ab16e781 904-907
+  s_8b168bf9e8756f::t_155ceac4590867 987
+  s_8b168bf9e8756f::t_00c5781fe78c39 669,836,860-903,910-986,988-990,996-997
+  s_8b168bf9e8756f::t_450304fcc7dfea 109-113,127,257,313,512,535,567,580-581,589
+plus1/web/templates/partials/card.html
+  s_8b168bf9e8756f::t_a9f04f9bf57963 1
+  s_8b168bf9e8756f::t_e4a9d2cacccb80 47-55,57-58
+  s_8b168bf9e8756f::t_82f11d7ca82cc9 56
+  s_8b168bf9e8756f::t_498b9d0be8836e 4,9,15,25,37,43
+tests/test_web.py
+  s_8b168bf9e8756f::t_9c20e8e5983cbd 389-390,392-417,467
+  s_8b168bf9e8756f::t_a009cae09b87d7 418-428
+  s_8b168bf9e8756f::t_5c9c1b5dd83bdd 391,430-466
+  s_8b168bf9e8756f::t_50e334dc9970a1 467
+plus1/gh.py
+  s_8b168bf9e8756f::t_16575b937ecfa9 11-12,30,101-110,129
+UI-PLAN.md
+  s_8b168bf9e8756f::t_d70b7f596f2279 14
+  s_8b168bf9e8756f::t_c0947ec1711b07 15-16
+plus1/web/templates/partials/todo_list.html
+  s_8b168bf9e8756f::t_62984e60b9e3dd 3
+  s_8b168bf9e8756f::t_7136b127fa1d04 5
+plus1/web/templates/partials/pane.html
+  s_8b168bf9e8756f::t_8c69772479d0e9 49-55,129-149,151-153,155
+  s_8b168bf9e8756f::t_ea9abfb32ef47b 150
+  s_8b168bf9e8756f::t_b18c96c52f0ead 1-48,56-128,154,156-191
+plus1/web/templates/partials/reasons.html
+  s_8b168bf9e8756f::t_498b9d0be8836e 8
+CLAUDE.md
+  s_8b168bf9e8756f::t_c0947ec1711b07 58
+plus1/web/templates/review.html
+  s_8b168bf9e8756f::t_f9ca40f90f4871 2,11
+plus1/web/templates/partials/noted.html
+  s_8b168bf9e8756f::t_fe94165b3f81df 2
+plus1/web/templates/partials/card_body.html
+  s_8b168bf9e8756f::t_8c69772479d0e9 27,43
+  s_8b168bf9e8756f::t_498b9d0be8836e 88,111
+plus1/web/routes.py
+  s_a8677c67f85a06::t_bdb001c461643e 167
+  s_8b168bf9e8756f::t_8cbcbf0a10d5d1 165
+  s_8b168bf9e8756f::t_dfbeac85b05b67 63-87,95-96,137,141-146,148-151,163-164,166
+plus1/web/templates/inbox.html
+  s_8b168bf9e8756f::t_f9ca40f90f4871 1-3,5-28
+  s_8b168bf9e8756f::t_94fde0a486a5ad 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6d5cf5c8eabd1d5030833000ff14fb9354b1fd34",
+  "prompts": {},
+  "sessions": {
+    "s_8b168bf9e8756f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82ffbaac-eb42-4354-af65-764a959abf7b",
+        "model": "unknown"
+      },
+      "human_author": null
+    },
+    "s_a8677c67f85a06": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "85b17417-28bf-4293-9803-4c3b96f3617d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
