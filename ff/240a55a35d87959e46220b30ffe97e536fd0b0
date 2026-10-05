@@ -1,0 +1,121 @@
+plus1/store.py
+  s_8b168bf9e8756f::t_16575b937ecfa9 245,307-308
+plus1/web/static/app.css
+  s_8b168bf9e8756f::t_5235f34605055c 407,1101-1106
+  s_8b168bf9e8756f::t_560a21cd3a566b 446,452-456,464-465,471-476,1138-1143
+  s_8b168bf9e8756f::t_62984e60b9e3dd 479,482
+  s_8b168bf9e8756f::t_9d74f9a479c017 1098-1100
+  s_8b168bf9e8756f::t_82f11d7ca82cc9 466-470,1144-1145
+  s_8b168bf9e8756f::t_cc42c0aa95b5d5 1059-1061
+  s_8b168bf9e8756f::t_9a73f36bd74132 1065
+  s_8b168bf9e8756f::t_155ceac4590867 1044
+  s_8b168bf9e8756f::t_ce8f2bb06f5971 1075
+  s_8b168bf9e8756f::t_7136b127fa1d04 214,1071,1172-1173
+  s_8b168bf9e8756f::t_d024c6c0bc5e94 212-213,484-499,1037-1043,1046-1058,1062-1064,1066-1070,1072-1074
+  s_8b168bf9e8756f::t_9e1a89c021ed19 1045
+  s_8b168bf9e8756f::t_df85bd598deb93 645-658
+plus1/web/templates/partials/stack.html
+  s_8b168bf9e8756f::t_654ef7ea66c2ec 1,6-12,15-16
+  s_8b168bf9e8756f::t_82f11d7ca82cc9 13-14
+plus1/web/cards.py
+  s_8b168bf9e8756f::t_62984e60b9e3dd 16,51-55,189
+  s_8b168bf9e8756f::t_8991357b396371 177,179-180,183,186,208-210,331
+  s_8b168bf9e8756f::t_9e1a89c021ed19 341-342
+  s_8b168bf9e8756f::t_501c91851c6fbd 6,8,56-92,126,175
+plus1/web/words.py
+  s_8b168bf9e8756f::t_3fb497cb083bc2 184-220
+  s_8b168bf9e8756f::t_8f84e458339262 14-15
+  s_8b168bf9e8756f::t_501c91851c6fbd 76
+plus1/web/templates/_macros.html
+  s_8b168bf9e8756f::t_9c39877dd8af12 4
+  s_8b168bf9e8756f::t_498b9d0be8836e 27
+tests/test_core.py
+  s_8b168bf9e8756f::t_174b0c50583d02 392-404
+  s_8b168bf9e8756f::t_088684bdb857d5 358
+  s_8b168bf9e8756f::t_ac0d186b8f55ec 246-268
+plus1/web/templates/base.html
+  s_8b168bf9e8756f::t_b8a28172a5d98f 55
+  s_8b168bf9e8756f::t_f9ca40f90f4871 58
+plus1/web/templates/partials/review_any.html
+  s_8b168bf9e8756f::t_9753807e887d42 1-12
+plus1/web/static/app.js
+  s_8b168bf9e8756f::t_9971c478c921b2 533-534,855-857,859-862
+  s_8b168bf9e8756f::t_075659ab16e781 920-923
+  s_8b168bf9e8756f::t_155ceac4590867 1003
+  s_8b168bf9e8756f::t_00c5781fe78c39 676,843,867-887,898-919,926-1002,1004-1006,1012-1013
+  s_8b168bf9e8756f::t_450304fcc7dfea 109-111,120,134,264,320,519,542,574,587-588,596
+  s_8b168bf9e8756f::t_9e1a89c021ed19 112-119,888-897
+plus1/web/templates/partials/card.html
+  s_8b168bf9e8756f::t_a9f04f9bf57963 1
+  s_8b168bf9e8756f::t_e4a9d2cacccb80 47-55,57-58
+  s_8b168bf9e8756f::t_82f11d7ca82cc9 56
+  s_8b168bf9e8756f::t_498b9d0be8836e 4,9,15,25,37,43
+tests/test_web.py
+  s_8b168bf9e8756f::t_9c20e8e5983cbd 389-390,393-417,500
+  s_8b168bf9e8756f::t_a009cae09b87d7 418-428
+  s_8b168bf9e8756f::t_5c9c1b5dd83bdd 391,430-466
+  s_8b168bf9e8756f::t_50e334dc9970a1 467
+  s_8b168bf9e8756f::t_373b798875b7fb 392,468-499
+  s_8b168bf9e8756f::t_1490597824fb0a 500
+plus1/gh.py
+  s_8b168bf9e8756f::t_16575b937ecfa9 11-12,30,101-110,129
+UI-PLAN.md
+  s_8b168bf9e8756f::t_d70b7f596f2279 14
+  s_8b168bf9e8756f::t_c0947ec1711b07 15
+  s_8b168bf9e8756f::t_19a609132bb417 16
+plus1/web/templates/partials/todo_list.html
+  s_8b168bf9e8756f::t_62984e60b9e3dd 3
+  s_8b168bf9e8756f::t_7136b127fa1d04 5
+plus1/web/templates/partials/pane.html
+  s_8b168bf9e8756f::t_8c69772479d0e9 49-55,134-154,156-158,160
+  s_8b168bf9e8756f::t_ea9abfb32ef47b 155
+  s_8b168bf9e8756f::t_b18c96c52f0ead 1-48,61,63-71,73-78,79,82-83,89,90,92,95-101,103-133,159,161-196
+  s_8b168bf9e8756f::t_10d990958c678f 86-87,94
+  s_8b168bf9e8756f::t_ec43df5d29dac2 56-60,62,72,80-81,84-85,88,91,93,102
+plus1/web/templates/partials/reasons.html
+  s_8b168bf9e8756f::t_498b9d0be8836e 8
+plus1/web/templates/review.html
+  s_8b168bf9e8756f::t_f9ca40f90f4871 2,11
+plus1/web/templates/partials/noted.html
+  s_8b168bf9e8756f::t_fe94165b3f81df 2
+plus1/web/templates/partials/card_body.html
+  s_8b168bf9e8756f::t_8c69772479d0e9 33,50
+  s_8b168bf9e8756f::t_498b9d0be8836e 105,128
+  s_8b168bf9e8756f::t_d9215a80d4dbe9 10,24-26,28-29,34-35,56,92-101,123
+  s_8b168bf9e8756f::t_e5dfaee74fca6c 27
+plus1/web/routes.py
+  s_a8677c67f85a06::t_bdb001c461643e 171
+  s_8b168bf9e8756f::t_8cbcbf0a10d5d1 169
+  s_8b168bf9e8756f::t_dfbeac85b05b67 64-65,67-71,76,78-88,90-91,99-100,141,145-150,152-154,167-168,170
+  s_8b168bf9e8756f::t_9e1a89c021ed19 63,66,89,155
+  s_8b168bf9e8756f::t_501c91851c6fbd 72-75,77
+plus1/web/templates/inbox.html
+  s_8b168bf9e8756f::t_f9ca40f90f4871 1-3,5-28
+  s_8b168bf9e8756f::t_94fde0a486a5ad 4
+CLAUDE.md
+  s_8b168bf9e8756f::t_19a609132bb417 58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ff240a55a35d87959e46220b30ffe97e536fd0b0",
+  "prompts": {},
+  "sessions": {
+    "s_8b168bf9e8756f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "82ffbaac-eb42-4354-af65-764a959abf7b",
+        "model": "unknown"
+      },
+      "human_author": null
+    },
+    "s_a8677c67f85a06": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "85b17417-28bf-4293-9803-4c3b96f3617d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
