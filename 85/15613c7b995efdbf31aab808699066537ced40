@@ -1,0 +1,37 @@
+tests/test_core.py
+  s_468b49cac4fb5d::t_69f94c1919c616 385,401
+UI-PLAN.md
+  s_468b49cac4fb5d::t_d30f22e7be68e1 15
+plus1/web/templates/partials/todo_list.html
+  s_468b49cac4fb5d::t_c8c81cf8f69a21 22,24,26-28
+tests/test_web.py
+  s_468b49cac4fb5d::t_69f94c1919c616 477,479-494
+  s_468b49cac4fb5d::t_dfbfa3e00129b9 467-470
+  s_468b49cac4fb5d::t_0a033967300a71 471
+plus1/web/words.py
+  s_468b49cac4fb5d::t_6043858683e21a 30
+plus1/web/cards.py
+  s_468b49cac4fb5d::t_a415c976e8541c 200
+  s_468b49cac4fb5d::t_a21df3d1ca5899 13-14
+  s_468b49cac4fb5d::t_5f7ae81154a15e 339,344,347
+  s_468b49cac4fb5d::t_10e8604edc3771 246
+  s_468b49cac4fb5d::t_f933894a97aa7b 201-203
+  s_468b49cac4fb5d::t_56fdf3d8f96d4c 275
+  s_468b49cac4fb5d::t_6921c6c5c69386 227
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8515613c7b995efdbf31aab808699066537ced40",
+  "prompts": {},
+  "sessions": {
+    "s_468b49cac4fb5d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bec58416-cc53-4480-8a78-9de3a4fde334",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
