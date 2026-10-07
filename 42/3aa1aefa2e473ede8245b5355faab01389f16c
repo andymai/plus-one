@@ -1,0 +1,33 @@
+tests/test_core.py
+  s_c52b87c334c54d::t_81b48af5c3ea4e 219,221,223-226
+  s_c52b87c334c54d::t_38701766cfbf6d 257-260
+  s_c52b87c334c54d::t_4cdc9c7c8740a9 282
+  s_c52b87c334c54d::t_9b557b3bd1954c 463-500
+  s_c52b87c334c54d::t_dcb9d0df5e3eb6 8
+plus1/web/words.py
+  s_c52b87c334c54d::t_e65ee98775cf2a 212-214
+  s_c52b87c334c54d::t_60f63edea213fa 186,192-193
+  s_c52b87c334c54d::t_87a4299a742a15 234
+CLAUDE.md
+  s_c52b87c334c54d::t_fa0788a0dc5119 39
+plus1/prompts.py
+  s_c52b87c334c54d::t_7cb848e3f09347 90
+rubric.md
+  s_c52b87c334c54d::t_103a5050a0e287 11-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "423aa1aefa2e473ede8245b5355faab01389f16c",
+  "prompts": {},
+  "sessions": {
+    "s_c52b87c334c54d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "974aca98-80c9-4f51-aae8-3c5bf999f57c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
