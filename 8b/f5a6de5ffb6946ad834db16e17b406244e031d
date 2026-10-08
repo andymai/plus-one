@@ -1,0 +1,42 @@
+plus1/prompts.py
+  s_34e5ae59be7f9a::t_15e2ae9a948749 176,189-196
+plus1/store.py
+  s_34e5ae59be7f9a::t_5e8d885c22e09e 354-357,360-364
+plus1/review.py
+  s_34e5ae59be7f9a::t_2ced788df0626f 6,70-106,108-109,117-125,136,139,144-145
+  s_34e5ae59be7f9a::t_15e2ae9a948749 134-135
+tests/test_store.py
+  s_34e5ae59be7f9a::t_14abcf5c15462e 36,50-52,54-56
+plus1/config.py
+  s_34e5ae59be7f9a::t_5e8d885c22e09e 24
+tests/test_core.py
+  s_34e5ae59be7f9a::t_60b52300253b26 128-140,783-841
+  s_34e5ae59be7f9a::t_14abcf5c15462e 637-642,647-648,651,668-670
+  s_34e5ae59be7f9a::t_51135f2dd915c3 842
+plus1/cli.py
+  s_34e5ae59be7f9a::t_5e8d885c22e09e 263
+config.toml
+  s_34e5ae59be7f9a::t_5e8d885c22e09e 24
+plus1/diffs.py
+  s_34e5ae59be7f9a::t_59c6eee97d8d0f 1,68-92
+CLAUDE.md
+  s_34e5ae59be7f9a::t_30432931a849a9 29
+DESIGN.md
+  s_34e5ae59be7f9a::t_8d2999b623988e 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8bf5a6de5ffb6946ad834db16e17b406244e031d",
+  "prompts": {},
+  "sessions": {
+    "s_34e5ae59be7f9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f896299d-e145-4d54-a1eb-73f4048d75a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
