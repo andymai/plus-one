@@ -1,0 +1,21 @@
+plus1/drafts.py
+  s_34e5ae59be7f9a::t_56df356fc3d19e 49
+tests/test_core.py
+  s_34e5ae59be7f9a::t_23374ddeb614a3 317-318
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1e9048a181a3fa636f0a3d5160f275b449e91a11",
+  "prompts": {},
+  "sessions": {
+    "s_34e5ae59be7f9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f896299d-e145-4d54-a1eb-73f4048d75a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
