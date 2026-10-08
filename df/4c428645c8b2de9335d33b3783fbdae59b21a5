@@ -1,0 +1,34 @@
+README.md
+  s_34e5ae59be7f9a::t_6ee3a1ec7cafed 28
+plus1/actions.py
+  s_34e5ae59be7f9a::t_c1759041a60c80 3
+  s_34e5ae59be7f9a::t_c25abca2101d34 170-177,184-185,192-193,197-208,211-215
+tests/test_web.py
+  s_34e5ae59be7f9a::t_5761ff0dcd0047 270-305
+  s_34e5ae59be7f9a::t_86ff937cf14ae0 267
+CLAUDE.md
+  s_34e5ae59be7f9a::t_adb021180a2c90 62
+plus1/store.py
+  s_34e5ae59be7f9a::t_2a30e7a3ff7545 361-371
+  s_34e5ae59be7f9a::t_553d2bfe83a040 122
+plus1/web/routes.py
+  s_34e5ae59be7f9a::t_41ac81c6b09d7d 234
+plus1/cli.py
+  s_34e5ae59be7f9a::t_89ff9c80499e6b 67-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "df4c428645c8b2de9335d33b3783fbdae59b21a5",
+  "prompts": {},
+  "sessions": {
+    "s_34e5ae59be7f9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f896299d-e145-4d54-a1eb-73f4048d75a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
