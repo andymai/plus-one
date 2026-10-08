@@ -1,0 +1,28 @@
+plus1/review.py
+  s_34e5ae59be7f9a::t_12f0165f7fee07 73-79,124
+plus1/diffs.py
+  s_34e5ae59be7f9a::t_f28cb57f6e2982 71,74-91,96
+tests/test_core.py
+  s_34e5ae59be7f9a::t_352e7ce389cba4 141-153,816-824
+  s_34e5ae59be7f9a::t_ecb2f930ae1f62 825
+plus1/filters.py
+  s_34e5ae59be7f9a::t_12f0165f7fee07 69,77-81
+CLAUDE.md
+  s_34e5ae59be7f9a::t_8a17e89305d3dd 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "180abcd376774b06a5817cb40f13251d458eb583",
+  "prompts": {},
+  "sessions": {
+    "s_34e5ae59be7f9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f896299d-e145-4d54-a1eb-73f4048d75a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
