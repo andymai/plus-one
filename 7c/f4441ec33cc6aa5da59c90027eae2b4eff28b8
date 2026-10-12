@@ -1,0 +1,21 @@
+plus1/peers.py
+  s_1c4422d63dac92::t_778fc0c35ed674 25
+tests/test_core.py
+  s_1c4422d63dac92::t_778fc0c35ed674 982
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7cf4441ec33cc6aa5da59c90027eae2b4eff28b8",
+  "prompts": {},
+  "sessions": {
+    "s_1c4422d63dac92": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d437b0a9-a8a0-45e3-bd79-58930ff176ab",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
