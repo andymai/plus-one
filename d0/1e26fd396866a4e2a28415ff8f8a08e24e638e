@@ -1,0 +1,22 @@
+tests/test_core.py
+  s_ea5bda36bd9036::t_4b1bcb0da661c4 1349-1354
+plus1/config.py
+  s_ea5bda36bd9036::t_4b1bcb0da661c4 11-16,74-81
+  s_ea5bda36bd9036::t_2663bd75f4300b 82-85,100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d01e26fd396866a4e2a28415ff8f8a08e24e638e",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
