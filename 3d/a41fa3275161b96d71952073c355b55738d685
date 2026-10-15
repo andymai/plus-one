@@ -1,0 +1,34 @@
+plus1/filters.py
+  s_ea5bda36bd9036::t_1a609a7790ce44 43-44,47-48,74-75
+plus1/store.py
+  s_ea5bda36bd9036::t_1a609a7790ce44 363-365
+plus1/prompts.py
+  s_ea5bda36bd9036::t_1a609a7790ce44 176,181,193-194,218,251-252,277
+tests/test_core.py
+  s_ea5bda36bd9036::t_8ca98b60fe71d0 262-271,369,1125-1142
+  s_ea5bda36bd9036::t_a5aa4214f83633 1143
+plus1/gh.py
+  s_ea5bda36bd9036::t_1a609a7790ce44 16,167
+plus1/review.py
+  s_ea5bda36bd9036::t_6dfb8bd66cf60f 177,180-181
+  s_ea5bda36bd9036::t_1a609a7790ce44 98-100,102-109,175-176,179,222
+  s_ea5bda36bd9036::t_8ca98b60fe71d0 287-289,299
+CLAUDE.md
+  s_ea5bda36bd9036::t_685a33421fbe9e 33,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3da41fa3275161b96d71952073c355b55738d685",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
