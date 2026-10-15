@@ -1,0 +1,21 @@
+plus1/filters.py
+  s_ea5bda36bd9036::t_4adf1f96641ce9 81-84
+tests/test_core.py
+  s_ea5bda36bd9036::t_97220f6609ffca 299
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78c9e1f8ccd07a2dbe985df5066b17955537e7a9",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
