@@ -1,0 +1,84 @@
+plus1/web/templates/partials/card.html
+  s_02b4ddd5a318cb::t_27cc661ab785b1 57
+plus1/cli.py
+  s_02b4ddd5a318cb::t_4dc08b199fb668 692
+  s_02b4ddd5a318cb::t_9260bbdf48a036 314
+  s_02b4ddd5a318cb::t_78eb04cd69ec07 30,223,264-270,284,315,436-437,439,493-494,576,583-597,604,607,658,660-662,686,690-691,697-703
+  s_02b4ddd5a318cb::t_ba69f146742647 704-705
+plus1/defaults.toml
+  s_02b4ddd5a318cb::t_d3cf00da9c793b 10-12
+plus1/gh.py
+  s_02b4ddd5a318cb::t_09b437a449ab17 19,114-126,254-262
+plus1/web/templates/partials/card_body.html
+  s_02b4ddd5a318cb::t_27cc661ab785b1 19,22,26
+  s_02b4ddd5a318cb::t_25897b8147cc66 21
+plus1/store.py
+  s_02b4ddd5a318cb::t_df646db2cc1edc 201-207,274,398-410,438
+plus1/web/static/app.css
+  s_02b4ddd5a318cb::t_6bdd6eadbd1b14 475-476
+  s_02b4ddd5a318cb::t_25897b8147cc66 572-574
+CLAUDE.md
+  s_02b4ddd5a318cb::t_25897b8147cc66 49,51,85,101
+plus1/web/templates/_icons.html
+  s_02b4ddd5a318cb::t_6bdd6eadbd1b14 35
+plus1/config.py
+  s_02b4ddd5a318cb::t_4dc08b199fb668 187-189
+  s_02b4ddd5a318cb::t_d3cf00da9c793b 95-97,105,117-121,184-186
+plus1/yours.py
+  s_02b4ddd5a318cb::t_4dc08b199fb668 213-215
+  s_02b4ddd5a318cb::t_6ba1f97c6aaad3 5,74,127
+  s_02b4ddd5a318cb::t_9260bbdf48a036 14,117
+  s_02b4ddd5a318cb::t_db251f97ebece3 1-4,6-13,15-27,29-73,75-112,114-116,118-119,121-126,128-174,176-212,216-259
+  s_02b4ddd5a318cb::t_9d45dc7edde692 113,120
+  s_02b4ddd5a318cb::t_09b437a449ab17 28
+  s_02b4ddd5a318cb::t_1c96eec75407b1 175
+plus1/web/templates/partials/pane.html
+  s_02b4ddd5a318cb::t_27cc661ab785b1 24
+tests/test_web.py
+  s_02b4ddd5a318cb::t_3070effe7e9c62 104-131
+plus1/web/routes.py
+  s_02b4ddd5a318cb::t_886063a48e2e10 8,872
+tests/test_store.py
+  s_02b4ddd5a318cb::t_9260bbdf48a036 243-245
+plus1/web/words.py
+  s_02b4ddd5a318cb::t_1c96eec75407b1 19-20,171-183,187-195
+  s_02b4ddd5a318cb::t_7bf745d362e683 184-186
+  s_02b4ddd5a318cb::t_886063a48e2e10 6
+  s_02b4ddd5a318cb::t_4ec7445c72e5b2 196-197
+plus1/web/templates/settings.html
+  s_02b4ddd5a318cb::t_886063a48e2e10 220,242,409-414
+tests/test_settings.py
+  s_02b4ddd5a318cb::t_3070effe7e9c62 135-163,620-621
+UI-PLAN.md
+  s_02b4ddd5a318cb::t_b7101b51bfc16e 15,21
+docs/onboarding.md
+  s_02b4ddd5a318cb::t_b7101b51bfc16e 59-60
+  s_02b4ddd5a318cb::t_7625ff786d30b2 147
+  s_02b4ddd5a318cb::t_ef0ec00abe6509 148
+tests/test_yours.py
+  s_02b4ddd5a318cb::t_81eb3e1e1e7c86 64,69-70,352-354,372-374
+  s_02b4ddd5a318cb::t_cb83075d2d407f 11-15,196
+  s_02b4ddd5a318cb::t_0535e2abbbd535 1-10,16-63,65-68,71-195,197-351,355-371,375-379
+plus1/web/cards.py
+  s_02b4ddd5a318cb::t_831e95f2a96c61 461,535,554
+  s_02b4ddd5a318cb::t_1c96eec75407b1 338,376-377,460
+plus1/settings.py
+  s_02b4ddd5a318cb::t_7bf745d362e683 53-54,109-110,395,404-407,530,540-545,623-624,757-763
+  s_02b4ddd5a318cb::t_450f8b60cdf807 764-765
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f4cd00d24680998352d66857f7649c201c74887",
+  "prompts": {},
+  "sessions": {
+    "s_02b4ddd5a318cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ab94bde0-f972-4d78-a529-c559442c14a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
