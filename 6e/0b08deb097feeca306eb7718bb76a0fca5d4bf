@@ -1,0 +1,34 @@
+plus1/setup.py
+  s_ea5bda36bd9036::t_040be20c1ecde7 1-307
+  s_ea5bda36bd9036::t_4b76ced6325806 308-314
+CLAUDE.md
+  s_ea5bda36bd9036::t_800d2e4521623a 24-27
+bin/plus1
+  s_ea5bda36bd9036::t_0a49fee5f2b0ae 4-24
+config.example.toml
+  s_ea5bda36bd9036::t_9dbcde530082b3 1,14-15,17
+plus1/cli.py
+  s_ea5bda36bd9036::t_d777cae6523c43 10-11,622-633,709-711,733-739
+plus1/doctor.py
+  s_ea5bda36bd9036::t_ec857a25e7598a 1-107
+plus1/units.py
+  s_ea5bda36bd9036::t_81a3d990789b61 126-135
+tests/test_setup.py
+  s_ea5bda36bd9036::t_b7cf65e529c2cb 1-204
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e0b08deb097feeca306eb7718bb76a0fca5d4bf",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
