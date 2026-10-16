@@ -1,0 +1,21 @@
+requirements.txt
+  s_556686ceee93af::t_063cc2ac6ffc4a 1-3
+.github/workflows/ci.yml
+  s_556686ceee93af::t_a707569ab96fac 55-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4b50d3b20fb73adfa6a793e754edf5b714dc818e",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
