@@ -1,0 +1,21 @@
+docs/onboarding.md
+  s_02b4ddd5a318cb::t_aa91a082336d1d 109,111-119
+UI-PLAN.md
+  s_02b4ddd5a318cb::t_aa91a082336d1d 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd40fc57319d3538c4b972ed2bd73d1dec3b3080",
+  "prompts": {},
+  "sessions": {
+    "s_02b4ddd5a318cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ab94bde0-f972-4d78-a529-c559442c14a0",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
