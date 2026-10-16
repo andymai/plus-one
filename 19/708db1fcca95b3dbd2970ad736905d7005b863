@@ -1,0 +1,21 @@
+plus1/store.py
+  s_556686ceee93af::t_915e9ed9234fff 312-313,315-316
+plus1/web/routes.py
+  s_556686ceee93af::t_096037bcfabd31 682-683,687,691,700
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19708db1fcca95b3dbd2970ad736905d7005b863",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
