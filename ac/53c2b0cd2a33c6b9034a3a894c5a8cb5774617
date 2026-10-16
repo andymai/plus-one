@@ -1,0 +1,19 @@
+CLAUDE.md
+  s_ea5bda36bd9036::t_7dabd21ba27ea9 28-32,37-39,53,83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ac53c2b0cd2a33c6b9034a3a894c5a8cb5774617",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
