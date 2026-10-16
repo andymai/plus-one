@@ -1,0 +1,25 @@
+plus1/review.py
+  s_ea5bda36bd9036::t_cf3202c9de0cf2 7,179-187,191-210,222-223
+plus1/config.py
+  s_ea5bda36bd9036::t_cf3202c9de0cf2 65-66
+tests/test_core.py
+  s_ea5bda36bd9036::t_17f84e09faeb6a 1174-1211,1402-1403
+CLAUDE.md
+  s_ea5bda36bd9036::t_a4f14b41cc7389 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0972ccbbcc376c9d7ab1f6612ff635eb665e16cc",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
