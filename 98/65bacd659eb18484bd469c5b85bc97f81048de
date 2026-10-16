@@ -1,0 +1,48 @@
+plus1/web/templates/devices.html
+  s_ea5bda36bd9036::t_f8c28f5fd173c4 7-12,38
+plus1/web/app.py
+  s_ea5bda36bd9036::t_73f7646f3cd859 25,287-307,312-315,376-378,453-455
+  s_ea5bda36bd9036::t_ca545ed1a4482f 39,271-272
+plus1/web/signin.py
+  s_ea5bda36bd9036::t_071d32469c7061 1-5,7-8,10-54
+  s_ea5bda36bd9036::t_07816fe4d1499e 6,9,55-58
+plus1/push.py
+  s_ea5bda36bd9036::t_f8c28f5fd173c4 41-43
+tests/test_core.py
+  s_ea5bda36bd9036::t_06fb2f999b6463 1489-1499
+tests/test_web.py
+  s_ea5bda36bd9036::t_ca545ed1a4482f 1541-1549
+  s_ea5bda36bd9036::t_06fb2f999b6463 24,1491-1540,1550-1568
+  s_ea5bda36bd9036::t_25cdc29ba99d66 1569-1570
+plus1/host.py
+  s_ea5bda36bd9036::t_f8c28f5fd173c4 60-67
+plus1/defaults.toml
+  s_ea5bda36bd9036::t_73f7646f3cd859 109-112
+plus1/config.py
+  s_ea5bda36bd9036::t_73f7646f3cd859 139-145
+plus1/web/routes.py
+  s_ea5bda36bd9036::t_f8c28f5fd173c4 463-464,469-470
+plus1/cli.py
+  s_ea5bda36bd9036::t_f8c28f5fd173c4 12,607-619,695-698
+  s_ea5bda36bd9036::t_174487421092e8 10-11
+plus1/web/templates/base.html
+  s_ea5bda36bd9036::t_f8c28f5fd173c4 42
+CLAUDE.md
+  s_ea5bda36bd9036::t_6b96e8ac9060a5 67-68,72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9865bacd659eb18484bd469c5b85bc97f81048de",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
