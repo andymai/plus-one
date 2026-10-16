@@ -1,0 +1,21 @@
+plus1/host.py
+  s_ea5bda36bd9036::t_74be992da319ec 1-75
+plus1/actions.py
+  s_ea5bda36bd9036::t_c06cc97e7e0f42 8,23-26,177-181,186,233,245
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5ff254e492d55b4a8bedc1cf96d85c4039ad0b71",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
