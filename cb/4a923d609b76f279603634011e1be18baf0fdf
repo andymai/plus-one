@@ -1,0 +1,69 @@
+plus1/web/words.py
+  s_556686ceee93af::t_10c3ad6a45c054 326-331
+plus1/web/cards.py
+  s_556686ceee93af::t_02947d65341209 293
+tests/test_setup.py
+  s_556686ceee93af::t_58cc61b23f38b9 52-55
+pyproject.toml
+  s_556686ceee93af::t_d2b8a4e8a42171 57
+  s_556686ceee93af::t_f7478ad4f35e96 51,53-55,59-61
+  s_556686ceee93af::t_b4ed18a24bcad4 25,48-50,52
+  s_556686ceee93af::t_d13b3390967b82 56,58
+plus1/web/app.py
+  s_556686ceee93af::t_2f7d4cfe2ddbf0 386,390-391
+  s_556686ceee93af::t_6b4c8f713187ca 259
+  s_556686ceee93af::t_557375b8a04cbf 18
+  s_556686ceee93af::t_95b5c4affd6517 53-59
+plus1/learn.py
+  s_556686ceee93af::t_bff0d2aad9292c 140
+  s_556686ceee93af::t_ecb032f64aa59b 408
+plus1/web/queries.py
+  s_556686ceee93af::t_a330e5d4603ae6 711
+  s_556686ceee93af::t_4edfae33b580f6 21,28-31,33
+plus1/review.py
+  s_556686ceee93af::t_4e48f6349b684c 33
+  s_556686ceee93af::t_4151c492db2e4e 290-292,296-297
+  s_556686ceee93af::t_7d43a6067b469e 420
+tests/test_web.py
+  s_556686ceee93af::t_133ebc33ee1010 157
+  s_556686ceee93af::t_630a6d203f3a60 330
+  s_556686ceee93af::t_4d9d9aabdfd5a4 1588-1590
+  s_556686ceee93af::t_1218f9f5b89828 2008
+  s_556686ceee93af::t_7e8aa986e73a52 2302
+  s_556686ceee93af::t_190d06caf4c5e1 2241
+tests/test_settings.py
+  s_556686ceee93af::t_9a5f5e7a0d92f0 388-389,391-392
+  s_556686ceee93af::t_82eec59354432a 215-217
+tests/test_core.py
+  s_556686ceee93af::t_422248c7c1a1c5 2017
+  s_556686ceee93af::t_fb7be3e0a1b39f 1536
+  s_556686ceee93af::t_816e38e2417f91 7
+  s_556686ceee93af::t_4f0ea5ce4094dc 178
+plus1/push.py
+  s_556686ceee93af::t_56f64878421e19 26-27
+plus1/web/routes.py
+  s_556686ceee93af::t_98b14f16e53e1f 508
+  s_556686ceee93af::t_3faa0ab1c28624 325-339
+.github/workflows/ci.yml
+  s_556686ceee93af::t_fb84901fa1f27c 41-52,89
+CLAUDE.md
+  s_556686ceee93af::t_c2273b2d7e3caf 13,22
+uv.lock
+  s_556686ceee93af::t_1944749eff35d5 6,200-211,956-971,983,995-998
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb4a923d609b76f279603634011e1be18baf0fdf",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
