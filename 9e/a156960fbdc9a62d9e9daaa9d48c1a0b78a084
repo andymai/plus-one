@@ -1,0 +1,19 @@
+plus1/_probe.py
+  s_556686ceee93af::t_89792680c9465d 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9ea156960fbdc9a62d9e9daaa9d48c1a0b78a084",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
