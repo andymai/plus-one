@@ -1,0 +1,45 @@
+plus1/__init__.py
+  s_556686ceee93af::t_8a68ae86c508a5 1
+plus1/cli.py
+  s_556686ceee93af::t_39b6d6672e6022 908
+  s_556686ceee93af::t_f5603c3285be21 11
+plus1/doctor.py
+  s_556686ceee93af::t_92c7797af824c7 4,149-151
+  s_556686ceee93af::t_39b6d6672e6022 12,123
+plus1/web/static/app.css
+  s_556686ceee93af::t_39b6d6672e6022 274-275
+.release-please-manifest.json
+  s_556686ceee93af::t_92c7797af824c7 1
+release-please-config.json
+  s_556686ceee93af::t_92c7797af824c7 1-24
+.github/workflows/release.yml
+  s_556686ceee93af::t_b3215efd8e361e 1-51
+CLAUDE.md
+  s_556686ceee93af::t_5fbfb0170069fc 29-30
+plus1/web/app.py
+  s_556686ceee93af::t_39b6d6672e6022 300-302
+  s_556686ceee93af::t_f945e82a267ebe 23
+plus1/web/templates/base.html
+  s_556686ceee93af::t_39b6d6672e6022 49
+tests/test_setup.py
+  s_556686ceee93af::t_e2d556d436a947 1-2,15,308,310,314-322
+.github/workflows/dependabot-lockfile.yml
+  s_556686ceee93af::t_65ba2687626ddf 1-20,27-54
+  s_556686ceee93af::t_bf02bccd1b799f 21-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0a01631d7bbdbda34bbd5ecce52bd1b40e9e7118",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
