@@ -1,0 +1,64 @@
+plus1/cli.py
+  s_ea5bda36bd9036::t_0705ee5094eee8 579-581,584-595,598-604,658,661-662,661,662
+  s_ea5bda36bd9036::t_42d224f514d11f 9-10,659
+  s_ea5bda36bd9036::t_31e6bb1e0ca3e8 582-583,660
+  s_ea5bda36bd9036::t_58df09ac174fff 596-597
+  s_ea5bda36bd9036::t_a512f9bd8f90a9 467-468
+tests/test_web.py
+  s_ea5bda36bd9036::t_04eaa0f15ebc03 1364-1373
+plus1/defaults.toml
+  s_ea5bda36bd9036::t_d8978168b1acb3 30-31
+  s_ea5bda36bd9036::t_d3cc88bc55cb47 59-72
+plus1/store.py
+  s_ea5bda36bd9036::t_64edb0fb440312 153,252-253
+plus1/web/routes.py
+  s_ea5bda36bd9036::t_a512f9bd8f90a9 395-396
+  s_ea5bda36bd9036::t_c4d0bc5845b30f 394
+tests/test_learn.py
+  s_ea5bda36bd9036::t_c43d22d7875e22 1-73,75-84,90-92,95,97-99,102-111,117-126,128-136,148,150-198
+  s_ea5bda36bd9036::t_58df09ac174fff 93-94,96,100-101
+  s_ea5bda36bd9036::t_4e6cd0b1d534ea 112
+  s_ea5bda36bd9036::t_eccd3117006cfc 113,115-116,149
+  s_ea5bda36bd9036::t_59ac6851cee432 127
+  s_ea5bda36bd9036::t_31e6bb1e0ca3e8 74,85-89
+  s_ea5bda36bd9036::t_55e2bfd0fa034e 137-147
+plus1/web/templates/partials/proposal.html
+  s_ea5bda36bd9036::t_f262a5a919ec2a 3,6-9
+plus1/actions.py
+  s_ea5bda36bd9036::t_dbf9cdb79b8ff1 279-280
+  s_ea5bda36bd9036::t_d8978168b1acb3 242-244,246-248,252-278
+  s_ea5bda36bd9036::t_c06cc97e7e0f42 8,23-26,177-181,186,233,245
+plus1/web/templates/insights.html
+  s_ea5bda36bd9036::t_f262a5a919ec2a 150
+plus1/calibrate.py
+  s_ea5bda36bd9036::t_d8978168b1acb3 117-120,140
+plus1/learn.py
+  s_ea5bda36bd9036::t_3937a00d3519ed 1-6,8-18,20-49,52-54,56,58-60,62-75,85-89,96-113,116,118-124,126-127,130-160,164,166-197,166-168,172-187,189-197,199-211,199-200,206-211,213-227,253-256,258,263-269,276-280,282-287,289-301,303,305-321,323-339
+  s_ea5bda36bd9036::t_58df09ac174fff 114-115,117,128-129,161-163,165,198,244-252,270-272
+  s_ea5bda36bd9036::t_4e6cd0b1d534ea 19
+  s_ea5bda36bd9036::t_d3cc88bc55cb47 7,79-83,125
+  s_ea5bda36bd9036::t_31e6bb1e0ca3e8 50-51,55,57,61,76-78,84,90-95,302,304
+  s_ea5bda36bd9036::t_55e2bfd0fa034e 212,228-243,257,259-262,281,288,322
+tests/test_calibrate.py
+  s_ea5bda36bd9036::t_04eaa0f15ebc03 73-74
+plus1/web/templates/proposals.html
+  s_ea5bda36bd9036::t_f262a5a919ec2a 13-14,24
+plus1/host.py
+  s_ea5bda36bd9036::t_74be992da319ec 1-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3ff974b3fbd4ac9a727ae1e1729ddc088f9999c2",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
