@@ -1,0 +1,40 @@
+CLAUDE.md
+  s_556686ceee93af::t_4f773546c98ace 10,26
+pyproject.toml
+  s_556686ceee93af::t_52eccf8cf66e28 1-21
+.github/workflows/ci.yml
+  s_556686ceee93af::t_3a9615e8505a52 22,24-54,58
+bin/ensure-venv
+  s_556686ceee93af::t_b9b6a801227e2f 49
+  s_556686ceee93af::t_1fd541b24f6d19 2-3,6-14,17,36-41,43-47,51
+plus1/doctor.py
+  s_556686ceee93af::t_2bd90e9bbf7f65 95
+.github/dependabot.yml
+  s_556686ceee93af::t_4577df1c4a310d 3
+.github/workflows/macos.yml
+  s_556686ceee93af::t_4577df1c4a310d 17-19,35-37,54,56-58
+.github/workflows/osv-scan.yml
+  s_556686ceee93af::t_4577df1c4a310d 3,26
+.gitignore
+  s_556686ceee93af::t_a56f1b495f8207 6
+requirements.lock
+  s_556686ceee93af::t_ee4639f66245b3 1-1130
+uv.lock
+  s_556686ceee93af::t_26375d815210e9 1-1298
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0c37efbd4076d2c553486a757820c29ae24363af",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
