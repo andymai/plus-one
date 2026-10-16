@@ -1,0 +1,31 @@
+.github/ISSUE_TEMPLATE/bug_report.yml
+  s_556686ceee93af::t_26c45623467cf7 1-50
+.github/ISSUE_TEMPLATE/config.yml
+  s_556686ceee93af::t_8740ac7c83cf64 1-5
+.github/ISSUE_TEMPLATE/feature_request.yml
+  s_556686ceee93af::t_920a591fd71149 1-24
+CODE_OF_CONDUCT.md
+  s_556686ceee93af::t_c102d8f3016c56 1-83
+CONTRIBUTING.md
+  s_556686ceee93af::t_141ae6083ac9a7 1-115
+README.md
+  s_556686ceee93af::t_c80aad01bd4a59 1-2,5-17,68,70
+SECURITY.md
+  s_556686ceee93af::t_d28091acf5f166 1-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "27565c0bc8f56ddc6d0d75516dc0af831afaa51c",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
