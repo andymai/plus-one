@@ -1,0 +1,19 @@
+plus1/settings.py
+  s_02b4ddd5a318cb::t_a032a134d78081 6,54-75,110-119,149-166,168,170,222-232,400-417,450-486,563-568,575-576,578-581,599-604,607-669,790,792-793,797,800,807-819,821,823-824
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57549c8558217cd91c65a51e6108748e2e9808c2",
+  "prompts": {},
+  "sessions": {
+    "s_02b4ddd5a318cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ab94bde0-f972-4d78-a529-c559442c14a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
