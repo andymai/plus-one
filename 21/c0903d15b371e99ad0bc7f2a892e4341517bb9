@@ -1,0 +1,23 @@
+plus1/prs.py
+  s_ea5bda36bd9036::t_ee48532056c395 1-44
+plus1/store.py
+  s_ea5bda36bd9036::t_de720b29032334 7-8,247
+plus1/config.py
+  s_ea5bda36bd9036::t_de720b29032334 106-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "21c0903d15b371e99ad0bc7f2a892e4341517bb9",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
