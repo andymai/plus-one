@@ -1,0 +1,23 @@
+plus1/actions.py
+  s_ea5bda36bd9036::t_f067f086ede186 281-282
+plus1/store.py
+  s_ea5bda36bd9036::t_75f6aaccde56fa 266-267
+tests/test_learn.py
+  s_ea5bda36bd9036::t_b8547a08942128 264-268
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c8ad4b03834a95817e575ba95cfa61e2a0f5b6b9",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
