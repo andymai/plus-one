@@ -1,0 +1,23 @@
+CLAUDE.md
+  s_02b4ddd5a318cb::t_3ba5398dd68ae0 89
+docs/onboarding.md
+  s_02b4ddd5a318cb::t_066cee781325bd 63
+UI-PLAN.md
+  s_02b4ddd5a318cb::t_066cee781325bd 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f7ca9f21b0cf19e51cd5c839d44243b1e5a93d80",
+  "prompts": {},
+  "sessions": {
+    "s_02b4ddd5a318cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ab94bde0-f972-4d78-a529-c559442c14a0",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
