@@ -1,0 +1,51 @@
+plus1/actions.py
+  s_ea5bda36bd9036::t_c06cc97e7e0f42 8,23-26,177-181,186,233,245
+tests/test_learn.py
+  s_ea5bda36bd9036::t_4d93d9a8b16552 169,179,189
+plus1/defaults.toml
+  s_ea5bda36bd9036::t_9da1010fdbe924 101,104
+plus1/slack.py
+  s_ea5bda36bd9036::t_9da1010fdbe924 3,8,20-33,35
+CLAUDE.md
+  s_ea5bda36bd9036::t_1a3c577a2765ab 22,75
+tests/test_core.py
+  s_ea5bda36bd9036::t_4d93d9a8b16552 580-581,586
+  s_ea5bda36bd9036::t_89fbc862934d4c 573
+plus1/cli.py
+  s_ea5bda36bd9036::t_3155f4740c526c 11,608-624,683-687
+  s_ea5bda36bd9036::t_9da1010fdbe924 7
+plus1/host.py
+  s_ea5bda36bd9036::t_74be992da319ec 1-33,35-75
+  s_ea5bda36bd9036::t_cb2a3c03ea64d2 34
+README.md
+  s_ea5bda36bd9036::t_1a3c577a2765ab 33
+.github/workflows/macos.yml
+  s_ea5bda36bd9036::t_1a3c577a2765ab 1-44
+  s_ea5bda36bd9036::t_ff03b6270625d3 45-53
+tests/test_host.py
+  s_ea5bda36bd9036::t_18247b5a62ad6e 138
+  s_ea5bda36bd9036::t_7ef365f06ad8fa 1-137,139-144
+plus1/units.py
+  s_ea5bda36bd9036::t_5e8f2078dc0eb0 1-12,15-143
+  s_ea5bda36bd9036::t_cb2a3c03ea64d2 13-14
+DESIGN.md
+  s_ea5bda36bd9036::t_1a3c577a2765ab 27
+tests/test_web.py
+  s_ea5bda36bd9036::t_4d93d9a8b16552 294,350,397
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f7b1ef251a193b612ef18f4b7441b4c700216b3f",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
