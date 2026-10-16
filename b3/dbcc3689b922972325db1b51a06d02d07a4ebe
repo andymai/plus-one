@@ -1,0 +1,87 @@
+plus1/web/templates/partials/status.html
+  s_556686ceee93af::t_61592ebc39cab1 4-5,15
+plus1/web/templates/insights.html
+  s_556686ceee93af::t_a9b8891332ec11 15,18-19,21-22,24,26-31
+  s_556686ceee93af::t_377c4b256e250a 32
+plus1/cli.py
+  s_556686ceee93af::t_028791976e98e2 97,127-130,186,336-337,414,460,497
+plus1/web/templates/grade.html
+  s_556686ceee93af::t_61592ebc39cab1 7
+tests/rubric.md
+  s_556686ceee93af::t_9c6e353b92d539 9
+plus1/setup.py
+  s_556686ceee93af::t_0c2b17e9c6007f 150,267-268,309
+plus1/web/templates/partials/grade_card.html
+  s_556686ceee93af::t_61592ebc39cab1 6,68
+DESIGN.md
+  s_556686ceee93af::t_5e636d1041c829 3,13-14,42
+plus1/settings.py
+  s_556686ceee93af::t_ec5ebba634f076 16-17,101-102,149,198-201
+  s_556686ceee93af::t_bb6608ab5f47ce 150
+plus1/web/app.py
+  s_556686ceee93af::t_e4cb8501dfd16f 285
+docs/onboarding.md
+  s_556686ceee93af::t_5e636d1041c829 3,55,63,70,109,111,127
+plus1/web/queries.py
+  s_556686ceee93af::t_5640c8600ef5f9 83,182,199,204,216,220,237,244
+  s_556686ceee93af::t_0714472bc4b588 8
+plus1/web/static/app.css
+  s_556686ceee93af::t_377c4b256e250a 844
+tests/test_store.py
+  s_556686ceee93af::t_98eb60fdbc4bf3 90,104,111,116,122,131,138-140,187,205-206,213,225-227,244-249,271,273
+README.md
+  s_556686ceee93af::t_5e636d1041c829 5
+tests/test_settings.py
+  s_556686ceee93af::t_596c744f05dd9a 82-95
+UI-PLAN.md
+  s_556686ceee93af::t_5e636d1041c829 14,20-21,28
+plus1/web/routes.py
+  s_556686ceee93af::t_ec5ebba634f076 138,144-145,308,452-453,577
+plus1/web/templates/partials/todo_list.html
+  s_556686ceee93af::t_61592ebc39cab1 2-3,15
+config.example.toml
+  s_556686ceee93af::t_c05f8b1675902b 21-22
+tests/test_core.py
+  s_556686ceee93af::t_21742342c8d526 1428-1434,1456,1542-1548
+plus1/web/cards.py
+  s_556686ceee93af::t_e4cb8501dfd16f 179-180
+tests/test_web.py
+  s_556686ceee93af::t_596c744f05dd9a 890,1048-1050,1052-1054,1402,1407-1413
+plus1/starter_rubric.md
+  s_556686ceee93af::t_9c6e353b92d539 9
+plus1/config.py
+  s_556686ceee93af::t_ad83be702db735 79-81,87,92-95
+  s_556686ceee93af::t_83321160afa6ae 96-97
+docs/admin.md
+  s_556686ceee93af::t_5e636d1041c829 11,31,38-39,66
+plus1/web/templates/base.html
+  s_556686ceee93af::t_61592ebc39cab1 55
+tests/test_calibrate.py
+  s_556686ceee93af::t_21742342c8d526 135
+  s_556686ceee93af::t_43021ef1be9506 16
+CLAUDE.md
+  s_556686ceee93af::t_42c763eeea26b3 32
+  s_556686ceee93af::t_f7b7c9230e186e 5,26,44-45,59,61,92
+plus1/state.py
+  s_556686ceee93af::t_c05f8b1675902b 63
+plus1/web/templates/settings.html
+  s_556686ceee93af::t_61592ebc39cab1 40,43-45,71-72
+plus1/calibrate.py
+  s_556686ceee93af::t_377c4b256e250a 23,149-150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b3dbcc3689b922972325db1b51a06d02d07a4ebe",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
