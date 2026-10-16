@@ -1,0 +1,27 @@
+tests/test_calibrate.py
+  s_ea5bda36bd9036::t_327cf221f98298 164-168,183-188
+tests/test_core.py
+  s_ea5bda36bd9036::t_327cf221f98298 1301-1307
+plus1/config.py
+  s_ea5bda36bd9036::t_327cf221f98298 77-78
+plus1/drafts.py
+  s_ea5bda36bd9036::t_327cf221f98298 30
+config.example.toml
+  s_ea5bda36bd9036::t_327cf221f98298 1,3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "47f54fed7ed14be2e507ee0bcc89d62b762a122c",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
