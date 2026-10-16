@@ -1,0 +1,25 @@
+pyproject.toml
+  s_556686ceee93af::t_582ec9e817c78d 25,62-70
+tests/test_web.py
+  s_556686ceee93af::t_c88ffc226d3ef7 72-74,2212-2214
+tests/test_settings.py
+  s_556686ceee93af::t_c88ffc226d3ef7 219-221
+uv.lock
+  s_556686ceee93af::t_48b57ce74c3e9e 6,466-579,1098,1112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "eb165887b29fcf494ff851083f69e4c17bd439fc",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
