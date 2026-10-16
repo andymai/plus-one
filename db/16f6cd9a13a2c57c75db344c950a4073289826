@@ -1,0 +1,137 @@
+plus1/review.py
+  s_556686ceee93af::t_227176a50fc307 1,74-77,114,383
+  s_556686ceee93af::t_4e48f6349b684c 33
+  s_556686ceee93af::t_4151c492db2e4e 290-292,296-297
+  s_556686ceee93af::t_7d43a6067b469e 420
+tests/test_core.py
+  s_556686ceee93af::t_57a489b62fac7a 267,285,666
+  s_556686ceee93af::t_e5268d932189f3 2114-2122
+  s_556686ceee93af::t_bd8d441069ec2e 8,14-15,30-34,127,522,897,2573
+  s_556686ceee93af::t_422248c7c1a1c5 2017
+  s_556686ceee93af::t_fb7be3e0a1b39f 1536
+  s_556686ceee93af::t_816e38e2417f91 7
+  s_556686ceee93af::t_4f0ea5ce4094dc 178
+plus1/prompts.py
+  s_556686ceee93af::t_227176a50fc307 352
+plus1/cli.py
+  s_556686ceee93af::t_bd8d441069ec2e 30-32
+  s_556686ceee93af::t_227176a50fc307 325
+plus1/web/refs.py
+  s_556686ceee93af::t_227176a50fc307 42,109
+plus1/setup.py
+  s_556686ceee93af::t_227176a50fc307 143
+tests/test_store.py
+  s_556686ceee93af::t_e5268d932189f3 2,108
+  s_556686ceee93af::t_bd8d441069ec2e 10,291
+plus1/web/routes.py
+  s_556686ceee93af::t_227176a50fc307 842
+  s_556686ceee93af::t_98b14f16e53e1f 508
+  s_556686ceee93af::t_3faa0ab1c28624 325-339
+tests/test_learn.py
+  s_556686ceee93af::t_e5268d932189f3 3,403
+plus1/web/queries.py
+  s_556686ceee93af::t_227176a50fc307 1,690
+  s_556686ceee93af::t_57a489b62fac7a 160,181,276,283
+  s_556686ceee93af::t_bd8d441069ec2e 12
+  s_556686ceee93af::t_a330e5d4603ae6 711
+  s_556686ceee93af::t_4edfae33b580f6 21,28-31,33
+tests/test_web.py
+  s_556686ceee93af::t_bd8d441069ec2e 484,1442,1726,1794,1928
+  s_556686ceee93af::t_e5268d932189f3 335,357,400-412,552,737,746,1596-1597,1873-1875
+  s_556686ceee93af::t_133ebc33ee1010 159
+  s_556686ceee93af::t_630a6d203f3a60 332
+  s_556686ceee93af::t_4d9d9aabdfd5a4 1590-1592
+  s_556686ceee93af::t_1218f9f5b89828 2010
+  s_556686ceee93af::t_7e8aa986e73a52 2306
+  s_556686ceee93af::t_190d06caf4c5e1 2245
+  s_556686ceee93af::t_c88ffc226d3ef7 72-74,2212-2214
+pyproject.toml
+  s_556686ceee93af::t_57a489b62fac7a 40-45
+  s_556686ceee93af::t_e5268d932189f3 46-47
+  s_556686ceee93af::t_d2b8a4e8a42171 57
+  s_556686ceee93af::t_f7478ad4f35e96 51,53-55,59-61
+  s_556686ceee93af::t_b4ed18a24bcad4 48-50,52
+  s_556686ceee93af::t_d13b3390967b82 56,58
+  s_556686ceee93af::t_582ec9e817c78d 25,62-70
+plus1/doctor.py
+  s_556686ceee93af::t_227176a50fc307 38
+plus1/learn.py
+  s_556686ceee93af::t_bd8d441069ec2e 6,127,320
+  s_556686ceee93af::t_227176a50fc307 206,463-468
+  s_556686ceee93af::t_bff0d2aad9292c 140
+  s_556686ceee93af::t_ecb032f64aa59b 408
+plus1/web/cards.py
+  s_556686ceee93af::t_227176a50fc307 329-332
+  s_556686ceee93af::t_02947d65341209 293
+plus1/web/signin.py
+  s_556686ceee93af::t_227176a50fc307 7,54-55
+plus1/web/app.py
+  s_556686ceee93af::t_227176a50fc307 131,209-210
+  s_556686ceee93af::t_2f7d4cfe2ddbf0 386,390-391
+  s_556686ceee93af::t_6b4c8f713187ca 259
+  s_556686ceee93af::t_557375b8a04cbf 18
+  s_556686ceee93af::t_95b5c4affd6517 53-59
+plus1/slack.py
+  s_556686ceee93af::t_227176a50fc307 62
+plus1/calibrate.py
+  s_556686ceee93af::t_bd8d441069ec2e 3,188
+scripts/make_icons.py
+  s_556686ceee93af::t_bd8d441069ec2e 11
+plus1/actions.py
+  s_556686ceee93af::t_227176a50fc307 1,23,25-26
+tests/test_calibrate.py
+  s_556686ceee93af::t_bd8d441069ec2e 9-10
+plus1/prs.py
+  s_556686ceee93af::t_227176a50fc307 33
+tests/test_settings.py
+  s_556686ceee93af::t_57a489b62fac7a 132
+  s_556686ceee93af::t_e5268d932189f3 301-306,368
+  s_556686ceee93af::t_9a5f5e7a0d92f0 390-391,393-394
+  s_556686ceee93af::t_82eec59354432a 215-217
+  s_556686ceee93af::t_c88ffc226d3ef7 219-221
+tests/selftest_sandbox.py
+  s_556686ceee93af::t_bd8d441069ec2e 9
+  s_556686ceee93af::t_227176a50fc307 67-75
+plus1/web/words.py
+  s_556686ceee93af::t_227176a50fc307 351,353-355
+  s_556686ceee93af::t_10c3ad6a45c054 326-331
+tests/test_host.py
+  s_556686ceee93af::t_bd8d441069ec2e 181
+plus1/state.py
+  s_556686ceee93af::t_227176a50fc307 29
+.git-blame-ignore-revs
+  s_556686ceee93af::t_5ddc0498f174ca 1-4
+.github/workflows/ci.yml
+  s_556686ceee93af::t_7122c7fd3d0437 56
+  s_556686ceee93af::t_fb84901fa1f27c 58-69,106
+  s_556686ceee93af::t_59801e8e9abd9b 18,21-25,31,33-43
+CLAUDE.md
+  s_556686ceee93af::t_7f38a9c195b8bc 13
+  s_556686ceee93af::t_c2273b2d7e3caf 14
+  s_556686ceee93af::t_0fd1423c4f9530 11-12,23
+tests/test_setup.py
+  s_556686ceee93af::t_58cc61b23f38b9 52-55
+plus1/push.py
+  s_556686ceee93af::t_56f64878421e19 26-27
+uv.lock
+  s_556686ceee93af::t_1944749eff35d5 200-211,1070-1085,1097,1110-1111,1113-1114
+  s_556686ceee93af::t_48b57ce74c3e9e 6,466-579,1098,1112
+.gitignore
+  s_556686ceee93af::t_59801e8e9abd9b 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "db16f6cd9a13a2c57c75db344c950a4073289826",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
