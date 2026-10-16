@@ -1,0 +1,29 @@
+tests/test_host.py
+  s_02b4ddd5a318cb::t_c0192b90fc61cd 105-126
+plus1/settings.py
+  s_02b4ddd5a318cb::t_6c25dc277e97e4 95,232-237,360
+tests/test_settings.py
+  s_02b4ddd5a318cb::t_c0192b90fc61cd 385-392
+plus1/web/templates/settings.html
+  s_02b4ddd5a318cb::t_6c25dc277e97e4 149-151
+plus1/slack.py
+  s_02b4ddd5a318cb::t_6c25dc277e97e4 2,21-46,65-67
+CLAUDE.md
+  s_02b4ddd5a318cb::t_7604ca0683a6e9 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f0fdbf18f18273d232aaed94d2f004aca1b8def5",
+  "prompts": {},
+  "sessions": {
+    "s_02b4ddd5a318cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ab94bde0-f972-4d78-a529-c559442c14a0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
