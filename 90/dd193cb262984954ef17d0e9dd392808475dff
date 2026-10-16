@@ -1,0 +1,21 @@
+plus1/review.py
+  s_ea5bda36bd9036::t_2aaa00025a4bed 177,205,208-215,222
+tests/test_core.py
+  s_ea5bda36bd9036::t_2aaa00025a4bed 1200-1202
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "90dd193cb262984954ef17d0e9dd392808475dff",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
