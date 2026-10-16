@@ -1,0 +1,42 @@
+.pre-commit-config.yaml
+  s_556686ceee93af::t_976cb3929cb0f6 1-28
+plus1/cli.py
+  s_556686ceee93af::t_5b6065cc0cef9b 26
+plus1/web/app.py
+  s_556686ceee93af::t_5b6065cc0cef9b 23,26
+CLAUDE.md
+  s_556686ceee93af::t_5b6065cc0cef9b 79
+tests/test_web.py
+  s_556686ceee93af::t_5b6065cc0cef9b 21-28,31
+plus1/setup.py
+  s_556686ceee93af::t_5b6065cc0cef9b 479
+vulture_whitelist.py
+  s_556686ceee93af::t_acba478eb7efc3 1-24
+scripts/commit_msg.py
+  s_556686ceee93af::t_976cb3929cb0f6 1-38
+plus1/signin.py
+  s_556686ceee93af::t_9330f5d42e16da 1-137
+pyproject.toml
+  s_556686ceee93af::t_976cb3929cb0f6 48-49
+  s_556686ceee93af::t_95fe9bac6852a0 25
+  s_556686ceee93af::t_2d931a42eed0c4 73-82
+  s_556686ceee93af::t_acba478eb7efc3 83-88
+uv.lock
+  s_556686ceee93af::t_4ff1e457edffa6 6,466-474,763-867,886-900,913-924,1053-1061,1249-1250,1252,1266-1267,1269-1286,1438-1446,1478-1490,1543-1551
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a927251f3d10cde6d29c55c3556a227f3113375",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
