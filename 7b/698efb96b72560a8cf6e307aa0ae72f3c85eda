@@ -1,0 +1,23 @@
+.github/workflows/dependabot-lockfile.yml
+  s_556686ceee93af::t_4eac06270fee13 5-6,35-36
+.github/workflows/release.yml
+  s_556686ceee93af::t_9c66bf1e373418 26-27
+CLAUDE.md
+  s_556686ceee93af::t_46a8f568dbb796 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b698efb96b72560a8cf6e307aa0ae72f3c85eda",
+  "prompts": {},
+  "sessions": {
+    "s_556686ceee93af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "afdb0925-80df-4ad1-a7cb-d8ad91a618ea",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
