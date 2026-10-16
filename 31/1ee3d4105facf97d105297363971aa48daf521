@@ -1,0 +1,62 @@
+bin/plus1
+  s_ea5bda36bd9036::t_99f9822598832a 3-4
+requirements.txt
+  s_ea5bda36bd9036::t_a37eacbaf3e0bf 3
+plus1/web/templates/_icons.html
+  s_ea5bda36bd9036::t_2074997449bc52 23
+plus1/web/static/app.css
+  s_ea5bda36bd9036::t_348bc5193f6f99 331,413,1194,1259-1261,1263-1275
+  s_ea5bda36bd9036::t_34e0e7542eec44 1262
+bin/plus1-web
+  s_ea5bda36bd9036::t_99f9822598832a 3
+plus1/settings.py
+  s_ea5bda36bd9036::t_38bbb3d2b26dba 1-20,25-129,135-137,139-140,142,144,146-148,153,157-172,174-175,177-178,181-193
+  s_ea5bda36bd9036::t_957f8a5de89216 21-24,173
+  s_ea5bda36bd9036::t_c43697c264f3b2 130-134,138,141,143,145,149-152,154-156,176,179-180
+plus1/web/static/app.js
+  s_ea5bda36bd9036::t_68a72af0a7d3d3 355-356
+plus1/propose.py
+  s_ea5bda36bd9036::t_2074997449bc52 120-136
+plus1/web/templates/insights.html
+  s_ea5bda36bd9036::t_68a72af0a7d3d3 8
+plus1/web/templates/rubric_edit.html
+  s_ea5bda36bd9036::t_d0023f7902c2c4 1-26
+plus1/web/app.py
+  s_ea5bda36bd9036::t_2074997449bc52 229,233-257,349
+  s_ea5bda36bd9036::t_34e0e7542eec44 202,209-210,225
+  s_ea5bda36bd9036::t_96215390069a6b 203-208
+  s_ea5bda36bd9036::t_dfa1437cf1001f 482-483
+plus1/web/templates/base.html
+  s_ea5bda36bd9036::t_68a72af0a7d3d3 42
+plus1/web/templates/settings.html
+  s_ea5bda36bd9036::t_34e0e7542eec44 16,18,38,49,58,63,76,86,92,98,100,108,116
+  s_ea5bda36bd9036::t_a964c50a50f532 91,111
+  s_ea5bda36bd9036::t_dd89facffc1757 1-15,17,19-37,39-48,50-57,59-62,64-75,77-85,87-90,93-97,99,101-107,109-110,112-115,117-119
+tests/test_settings.py
+  s_ea5bda36bd9036::t_b5bf359b709ee5 1-213
+plus1/web/routes.py
+  s_ea5bda36bd9036::t_a964c50a50f532 472-473
+  s_ea5bda36bd9036::t_957f8a5de89216 474-475,484-485
+  s_ea5bda36bd9036::t_9e0b8f010d977e 6,460-471,476-483,486-532
+  s_ea5bda36bd9036::t_99b6a7b537c34a 533
+bin/ensure-venv
+  s_ea5bda36bd9036::t_99f9822598832a 1-36
+CLAUDE.md
+  s_ea5bda36bd9036::t_a6d25b64516236 20,26,90-93,96-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "311ee3d4105facf97d105297363971aa48daf521",
+  "prompts": {},
+  "sessions": {
+    "s_ea5bda36bd9036": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4dd92a8a-9c34-4665-aca4-cb67e7f1d191",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
