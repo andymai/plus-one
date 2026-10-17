@@ -1,0 +1,22 @@
+plus1/web/static/app.css
+  s_8a10829437f8d3::t_bd153090939e93 1024
+  s_8a10829437f8d3::t_cd572372e58e1f 1035,1430
+  s_8a10829437f8d3::t_66b547260db919 624
+  s_8a10829437f8d3::t_29a2aea8732554 1177-1178
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7be5a5336da14adea069a0b0d18dd6b11081d733",
+  "prompts": {},
+  "sessions": {
+    "s_8a10829437f8d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "57567ee4-a587-4934-ba4a-250dd03eba34",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
