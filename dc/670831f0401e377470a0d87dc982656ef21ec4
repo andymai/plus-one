@@ -1,0 +1,40 @@
+plus1/propose.py
+  s_9501dd5a643523::t_dfc5b5461e570a 155
+  s_9501dd5a643523::t_e15d9c2211f560 145
+plus1/store.py
+  s_9501dd5a643523::t_204bd3c45c23b8 175,304
+  s_9501dd5a643523::t_3aec088408e704 697-702,704-705
+  s_9501dd5a643523::t_0273bf919104d2 720-724
+tests/test_calibrate.py
+  s_9501dd5a643523::t_371e8186a2b6d5 264-265,272
+tests/test_web.py
+  s_9501dd5a643523::t_dfc5b5461e570a 848,888-922
+  s_9501dd5a643523::t_371e8186a2b6d5 847,849,978-981
+  s_9501dd5a643523::t_2d68efde7663be 923
+plus1/web/static/app.js
+  s_9501dd5a643523::t_fb85a6e578a48b 258-264
+plus1/actions.py
+  s_9501dd5a643523::t_204bd3c45c23b8 336-337,361,468-469
+plus1/web/templates/partials/card_body.html
+  s_9501dd5a643523::t_ff6238f7332795 129,168,184,235
+UI-PLAN.md
+  s_9501dd5a643523::t_c9822f2c1d01b4 17
+CLAUDE.md
+  s_9501dd5a643523::t_7a5c350c78c2d1 95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc670831f0401e377470a0d87dc982656ef21ec4",
+  "prompts": {},
+  "sessions": {
+    "s_9501dd5a643523": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9717e2f6-b491-4a72-9824-75d6b01576a9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
