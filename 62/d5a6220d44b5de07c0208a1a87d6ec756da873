@@ -1,0 +1,42 @@
+DESIGN.md
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 13
+docs/onboarding.md
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 231
+CLAUDE.md
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 109
+plus1/web/static/app.js
+  s_eb8a88e21f0d8b::t_fbf62de209a0fc 835-836
+plus1/web/app.py
+  s_eb8a88e21f0d8b::t_fbf62de209a0fc 363
+plus1/doctor.py
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 164-166
+docs/admin.md
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 44,46
+tests/test_settings.py
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 776-778,818-822
+  s_eb8a88e21f0d8b::t_f8e2705b679376 823
+plus1/web/executor.py
+  s_eb8a88e21f0d8b::t_fbf62de209a0fc 6,123-124
+tests/test_updates.py
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 21,85-86,92,113-114,439-450,504-515,541-618,916-926
+  s_eb8a88e21f0d8b::t_8046ce2a72f14d 927
+plus1/updates.py
+  s_eb8a88e21f0d8b::t_fbf62de209a0fc 22,32-35,43,141,199-200,202,313-334,390,395,425,429,464,483,492,494
+  s_eb8a88e21f0d8b::t_db4e0408388cb1 484
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "62d5a6220d44b5de07c0208a1a87d6ec756da873",
+  "prompts": {},
+  "sessions": {
+    "s_eb8a88e21f0d8b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03cd6fc3-4e00-438c-a4ed-76362d668136",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
