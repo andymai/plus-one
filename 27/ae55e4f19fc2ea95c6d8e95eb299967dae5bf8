@@ -1,0 +1,43 @@
+UI-PLAN.md
+  s_eb8a88e21f0d8b::t_25692ee1181b85 21-22
+CLAUDE.md
+  s_eb8a88e21f0d8b::t_25692ee1181b85 27,29,33,103-111
+docs/admin.md
+  s_eb8a88e21f0d8b::t_25692ee1181b85 44-46,52,54
+README.md
+  s_eb8a88e21f0d8b::t_25692ee1181b85 50
+docs/onboarding.md
+  s_eb8a88e21f0d8b::t_25692ee1181b85 231-233,237
+DESIGN.md
+  s_eb8a88e21f0d8b::t_25692ee1181b85 13
+plus1/web/static/app.css
+  s_169ca198965180::t_05049fcc223955 278,280-281
+plus1/web/static/app.js
+  s_169ca198965180::t_281ddcd1a7bbf0 850
+plus1/web/templates/settings.html
+  s_169ca198965180::t_7a808ce82cbbac 473,476
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "27ae55e4f19fc2ea95c6d8e95eb299967dae5bf8",
+  "prompts": {},
+  "sessions": {
+    "s_169ca198965180": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7cae772c-5519-4831-875c-a4d30af16b6f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    },
+    "s_eb8a88e21f0d8b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03cd6fc3-4e00-438c-a4ed-76362d668136",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
