@@ -1,0 +1,23 @@
+CLAUDE.md
+  s_eb8a88e21f0d8b::t_025905e9aca35d 72
+plus1/updates.py
+  s_eb8a88e21f0d8b::t_42fafa1f053f51 165
+tests/test_updates.py
+  s_eb8a88e21f0d8b::t_24ffb674c767c9 171-178
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25f5bc98f38be61fab8dc92f54b658be01ea59f8",
+  "prompts": {},
+  "sessions": {
+    "s_eb8a88e21f0d8b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03cd6fc3-4e00-438c-a4ed-76362d668136",
+        "model": "unknown"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
