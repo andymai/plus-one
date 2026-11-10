@@ -1,0 +1,23 @@
+tests/test_web.py
+  s_620b63cf9597cb::t_6efa6b7c8ac437 197,206,208,2628-2642
+  s_620b63cf9597cb::t_6e890a8719b72b 198-205
+  s_620b63cf9597cb::t_ada93f21828039 2643
+plus1/web/routes.py
+  s_620b63cf9597cb::t_379bb951e635c3 343-345,347-348
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f3ceb97f2201669e3a8e92297fe3e598e502f54",
+  "prompts": {},
+  "sessions": {
+    "s_620b63cf9597cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "57fb3cd8-7eeb-4464-8f7b-f7bf4ba504f8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
