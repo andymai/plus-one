@@ -1,0 +1,47 @@
+README.md
+  s_89896d250217aa::t_6955ecabb929f4 29
+tests/config.toml
+  s_89896d250217aa::t_20cc7bd73c38eb 15,17,20,28,31
+tests/test_calibrate.py
+  s_89896d250217aa::t_20cc7bd73c38eb 18-19
+tests/test_settings.py
+  s_89896d250217aa::t_20cc7bd73c38eb 24,39,60,113,115,118,120,250,255,259,305,417,448,466,539,560,571,573,578-579,581-582,589-591,618,621-623,900,902,904-907,914,916,918-919,990,997,1038,1046,1055,1060,1099,1120-1123
+  s_89896d250217aa::t_3d17c276ea2144 540
+tests/test_store.py
+  s_89896d250217aa::t_20cc7bd73c38eb 17,134,138,262-263
+tests/test_web.py
+  s_89896d250217aa::t_20cc7bd73c38eb 36,73,142,248,257,289,355,1177,1316,1326,1382,1488,1533,1538,1556-1557,1566,1575,1609,1802,2221,2285,2520,2547
+CHANGELOG.md
+  s_89896d250217aa::t_6955ecabb929f4 3,8,10,15,17,22,24,29,31,36,38,43,45,50,55,57,62,64,69,71,76,78,83,85,90,92,97,99,104,111,115-150,155-174,179,184
+CONTRIBUTING.md
+  s_89896d250217aa::t_6955ecabb929f4 10
+tests/selftest_sandbox.py
+  s_89896d250217aa::t_20cc7bd73c38eb 86-87
+docs/onboarding.md
+  s_89896d250217aa::t_6955ecabb929f4 24
+tests/test_learn.py
+  s_89896d250217aa::t_20cc7bd73c38eb 112,131,153,163,232,299
+tests/test_core.py
+  s_89896d250217aa::t_20cc7bd73c38eb 38-45,57,60,64,68,71,74,78,148,174,342,355,461,976-980,982,1031,1037,1094,1112,1117,1119,1123,1127,1187-1189,1404,1443,1448-1449,1451,1454,1457,1562,1629,1793,2099,2448,2466,2474,2483,2488,2506
+  s_89896d250217aa::t_5cabba99b7f1c5 2566
+tests/test_team.py
+  s_89896d250217aa::t_20cc7bd73c38eb 284,427
+tests/test_public.py
+  s_89896d250217aa::t_da17d67980fbcc 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1fb7ba1685fd443ef7d0ed010d3a3b80f2df9442",
+  "prompts": {},
+  "sessions": {
+    "s_89896d250217aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "05aabe45-af7c-478b-acb1-113b0e372d3f",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
