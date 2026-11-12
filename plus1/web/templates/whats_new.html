@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, chip %}
+{% block title %}What's new{% endblock %}
+{% block page_class %}page-narrow{% endblock %}
+{% block head %}<div class="ph-title"><h1>What's new</h1></div>{% endblock %}
+{% block main %}
+{% if releases %}
+{% for r in releases %}
+<section class="wn-release">
+  <header class="wn-head"><h2>{{ r.version }}</h2>{% if r.version == version %}{{ chip('Installed', 'ok') }}{% endif %}<span class="wn-date">{{ r.date }}</span></header>
+  {% for group, items in r.groups.items() %}
+  <h3>{{ group }}</h3>
+  <ul>{% for item in items %}<li>{{ item|ticks }}</li>{% endfor %}</ul>
+  {% endfor %}
+</section>
+{% endfor %}
+{% else %}
+<div class="empty">
+  <span class="empty-mark">{{ icon('sparkles') }}</span>
+  <h2>No release notes here</h2>
+  <p>This copy of Plus One doesn't have a changelog to show.</p>
+</div>
+{% endif %}
+{% endblock %}

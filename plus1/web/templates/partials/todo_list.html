@@ -1,0 +1,28 @@
+{% from "_macros.html" import icon, status_icon %}
+{% with compact=True %}{% include "partials/live.html" %}{% endwith %}
+<div class="todo-root" data-todo-keys="{% for c in cards %}{{ c.pr }}:{{ c.review_id }}{{ ',' if not loop.last }}{% endfor %}">
+<button type="button" class="new-pill" data-new-pill hidden>{{ icon('refresh', 'i-xs') }}<span></span></button>
+{% if cards %}
+  {% set groups = words.GROUP %}
+  {% set ns = namespace(group=None, first=True) %}
+  {% for e in entries %}
+    {% if e.group != ns.group %}
+      {% if not loop.first %}</div></section>{% endif %}
+      {% set ns.group = e.group %}
+      <section class="group" aria-label="{{ groups[e.group] }}">
+      <h2 class="group-head">{{ status_icon(e.tone) }}<span>{{ groups[e.group] }}</span><span class="group-count">{{ entries|selectattr('group', 'equalto', e.group)|list|length }}</span></h2>
+      <div class="tlist">
+    {% endif %}
+    {% if e.kind == 'card' %}
+      {% set card = e.card %}{% set number = card.pr %}{% set pending = card.pending %}{% set variant = 'card' %}{% set expanded = ns.first and not pending %}
+      {% include "partials/card.html" %}
+      {% if not pending %}{% set ns.first = False %}{% endif %}
+    {% else %}
+      {% set stack_open = ns.first %}
+      {% include "partials/stack.html" %}
+      {% set ns.first = False %}
+    {% endif %}
+    {% if loop.last %}</div></section>{% endif %}
+  {% endfor %}
+{% endif %}
+</div>

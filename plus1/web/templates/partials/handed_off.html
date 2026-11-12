@@ -1,0 +1,4 @@
+{% from "_macros.html" import icon %}
+<div class="banner">{{ icon('user-x') }}<p><strong>You handed this PR off {{ h.at|ago }}.</strong> Checks skip it until you bring it back.</p>
+  <form method="post" action="/pr/{{ h.pr }}/unignore" class="inline push-right"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="next" value="{{ path }}"><button type="submit" class="sm">Bring it back</button></form>
+</div>

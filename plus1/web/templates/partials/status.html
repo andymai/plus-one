@@ -1,0 +1,16 @@
+{% from "_macros.html" import icon %}
+<div id="status" class="sb-status" hx-get="/partials/status" hx-trigger="every 20s, plus1:progress from:body throttle:2s" hx-swap="outerHTML">
+  <div class="sb-status-row">
+    {% if status.auto_repos %}<span class="mode-chip is-live" title="It approves clean PRs on its own in {{ status.auto_repos|join(', ') }}">Auto-approve</span>
+    {% else %}<span class="mode-chip" title="Nothing is posted to GitHub without you">You approve</span>{% endif %}
+    {% if status.paused %}<span class="mode-chip is-paused">Paused</span>{% endif %}
+  </div>
+  <div class="sb-status-line">
+    {% if status.paused %}{{ icon('pause') }}<span>Not checking PRs</span>
+    {% elif status.running %}<a href="/activity"><span class="pulse"></span><span>Checking PRs now</span></a>
+    {% elif status.next_run %}{{ icon('clock') }}<span>Next check {{ status.next_run }}</span>
+    {% else %}{{ icon('clock') }}<span>Not scheduled</span>{% endif %}
+  </div>
+  {% if status.slack_enabled and status.slack_ok == False %}<div class="sb-status-line is-warn" title="Slack links aren't being read, so only review requests come in. Opening an interactive Claude session refreshes the Slack token.">{{ icon('alert') }}<span>Slack off{% if status.slack_down_since %} since {{ status.slack_down_since|clock }}{% endif %}</span></div>{% endif %}
+  <div class="sb-status-line is-quiet">{{ icon('dollar') }}<span>{{ status.spend_today|money }} today{% if status.spend_capped %} · cap of {{ status.spend_cap|money }} reached{% endif %}{% if status.auto_repos %} · {{ status.approvals_today }}/{{ status.approvals_cap }} approvals{% endif %}</span></div>
+</div>

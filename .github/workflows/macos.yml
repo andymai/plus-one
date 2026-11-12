@@ -1,0 +1,64 @@
+name: macOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "bin/**"
+      - "plus1/host.py"
+      - "plus1/actions.py"
+      - "plus1/config.py"
+      - "plus1/defaults.toml"
+      - "plus1/web/**"
+      - "plus1/units.py"
+      - "plus1/slack.py"
+      - "plus1/review.py"
+      - "plus1/cli.py"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "requirements.lock"
+      - "tests/test_host.py"
+      - ".github/workflows/macos.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "bin/**"
+      - "plus1/host.py"
+      - "plus1/actions.py"
+      - "plus1/config.py"
+      - "plus1/defaults.toml"
+      - "plus1/web/**"
+      - "plus1/units.py"
+      - "plus1/slack.py"
+      - "plus1/review.py"
+      - "plus1/cli.py"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "requirements.lock"
+      - "tests/test_host.py"
+      - ".github/workflows/macos.yml"
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run --frozen python -m unittest discover -s tests
+      - name: Agents are valid launchd plists
+        env:
+          PLUS1_CONFIG: tests/config.toml
+        run: |
+          bin/plus1 install --out "$RUNNER_TEMP/agents"
+          plutil -lint "$RUNNER_TEMP"/agents/*.plist

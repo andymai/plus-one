@@ -1,0 +1,4 @@
+# Commits that only reformat. GitHub's blame skips them; locally, run once:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+# style: format with ruff at 100 columns, checked in CI (#41)
+adcefa549620b5a0bda54d418279ba762ad54cef

@@ -1,0 +1,32 @@
+# Fixture config for the unit tests. Tests point state_dir at a temp dir before using it.
+me = "andymai"
+name = "Andy"
+timezone = "America/Los_Angeles"
+state_dir = "~/.local/state/plus1-tests-unused"
+
+[window]
+jitter_minutes = 0
+
+# So a timer tick in a test can never update the clone the tests run from.
+[updates]
+mode = "off"
+
+[[repos]]
+name = "globex/web"
+checkout = ""
+issues = "https://linear.app/globex/issue"
+
+[repos.lanes]
+never_approve_owners = ["db-reviewers", "health-eng", "money", "finance"]
+
+[slack]
+enabled = true
+token_path = "/nonexistent/credentials.json"
+token_key = "plugin:slack:slack|test"
+
+[slack.channels]
+storefront = "C0123456789"
+
+[web]
+allowed_login = "owner@example.com"
+public_url = "https://plus1.test"

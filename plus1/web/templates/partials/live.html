@@ -1,0 +1,32 @@
+{% from "_macros.html" import icon, status_icon %}
+{% set is_compact = compact or path == '/' %}
+<div id="live" class="live" hx-get="/partials/live{{ '?compact=1' if is_compact }}" hx-trigger="plus1:progress from:body throttle:1s, plus1:refresh from:body, every 10s" hx-swap="outerHTML">
+{% if live.run and not live.run.finished_at %}
+  {% set active = live.rows|rejectattr('finished_at')|list %}
+  {% set done = live.rows|selectattr('finished_at')|list %}
+  <section class="live-card">
+    <header class="live-head">
+      <span class="pulse"></span>
+      <strong>Checking PRs now</strong>
+      <span class="muted">Looked at {{ live.checked }}{% if done %}, reviewed {{ done|length }}{% endif %} · started {{ live.run.started_at|elapsed }} ago</span>
+    </header>
+    {% set rows = active if is_compact else live.rows %}
+    {% if rows %}
+    <ul class="live-rows">
+    {% for row in rows %}
+      {% set tone = 'run' if not row.finished_at else ('err' if row.error else words.VERDICT_TONE.get(row.verdict, 'muted')) %}
+      <li class="live-row{{ ' is-active' if not row.finished_at }}">
+        {{ status_icon(tone) }}
+        <a class="live-title" href="/review/{{ row.id }}"><span class="mono">{{ row.pr|prlabel }}</span> {{ row.title }}</a>
+        <span class="live-step">{{ (row.step or 'starting') if not row.finished_at else words.OUTCOME.get(row.verdict, 'Couldn’t finish') }}</span>
+        <span class="live-num">{{ row.started_at|elapsed(row.finished_at) }}</span>
+        <span class="live-num">{{ row.cost|money }}</span>
+      </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+{% elif not is_compact and live.run %}
+  <p class="live-last">{{ icon('clock') }}<span>Last check {{ live.run.started_at|ago }}: looked at {{ live.run.candidates or 0 }} PRs, reviewed {{ live.run.reviewed or 0 }}{% if live.run.errors %}, <span class="err">{{ live.run.errors }} problem{{ 's' if live.run.errors != 1 }}</span>{% endif %}.</span></p>
+{% endif %}
+</div>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, status_icon, chip %}
+{% block title %}Rubric changes{% endblock %}
+{% block page_class %}page-narrow{% endblock %}
+{% block head %}<div class="ph-title"><h1>Rubric changes</h1>{% if rows %}<span class="ph-count">{{ rows|length }}</span>{% endif %}</div>{% endblock %}
+{% block main %}
+{% if rows %}
+<ul class="list">
+{% for p in rows %}
+  <li class="row is-tall" data-nav-item data-href="/proposals/{{ p.id }}">
+    <a class="row-link" href="/proposals/{{ p.id }}">
+      {{ status_icon('run' if p.status == 'pending' else words.PROPOSAL_TONE.get(p.status, 'muted')) }}
+      <span class="row-num">{{ p.pr|prlabel if p.pr else 'All' }}</span>
+      <span class="row-title">{{ p.title if p.pr else 'Learned from your reviews on GitHub' }}{% if p.note %}<span class="row-note">{{ p.note }}</span>{% endif %}</span>
+      <span class="row-meta">{{ chip(p.status, words.PROPOSAL_TONE.get(p.status, 'muted')) }}<span class="row-time">{{ p.created_at|ago }}</span></span>
+    </a>
+  </li>
+{% endfor %}
+</ul>
+{% else %}
+<div class="empty">
+  <span class="empty-mark">{{ icon('book') }}</span>
+  <h2>No rubric changes yet</h2>
+  <p>When it gets a call wrong, grade it as wrong on that review, then use “Teach it” to draft a rubric edit. When your own review on GitHub differs from its call, it drafts one on its own, and <code>bin/plus1 learn</code> rewrites the rubric from your recent reviews.</p>
+</div>
+{% endif %}
+{% endblock %}

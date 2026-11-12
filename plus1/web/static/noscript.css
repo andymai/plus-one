@@ -1,0 +1,4 @@
+/* Without JavaScript the settings page still saves: each section shows its Save button and plain text boxes. */
+.st-savebar { display: flex !important; }
+.st-fallback[hidden] { display: block !important; width: 100%; }
+.st-enhanced, .chip-x, .st-team-suggest, .step, [data-discard], .st-search, .st-crumb, .sched svg, .spend svg.chart, .st-savebar kbd { display: none !important; }

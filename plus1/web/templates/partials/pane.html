@@ -1,0 +1,201 @@
+{% from "_macros.html" import icon, status_icon, creator, chip, file_label, diff_table %}
+{% set kept = r.findings|selectattr('verified')|list %}
+{% set dropped = r.findings|rejectattr('verified')|list %}
+{% set has_p0 = kept|selectattr('severity', 'equalto', 'P0')|list|length > 0 %}
+{% if r.error %}{% set tone = 'err' %}
+{% elif not r.finished_at %}{% set tone = 'run' %}
+{% elif r.verdict == 'DRAFT' %}{% set tone = 'bad' if has_p0 else 'warn' %}
+{% else %}{% set tone = words.VERDICT_TONE.get(r.verdict, 'muted') %}{% endif %}
+{% set who = words.creator(r) %}
+<article class="pane" data-review="{{ r.id }}" data-pr="{{ r.pr }}">
+    <header class="pane-head">
+      <h1 class="detail-title">{{ r.title or ('PR #' ~ r.pr) }}</h1>
+      <div class="pane-tools">
+        <a class="button ghost icon-only" href="/pr/{{ r.pr }}" title="History of {{ r.pr|prlabel }}" aria-label="History">{{ icon('clock') }}</a>
+        <a class="button" href="{{ r.pr|prurl }}" target="_blank" rel="noopener noreferrer">{{ icon('pr') }}<span>{{ r.pr|prlabel }}</span>{{ icon('external', 'i-xs') }}</a>
+      </div>
+    </header>
+    <p class="meta-strip">
+      {{ creator(who) }}
+      {% if ticket %}<a class="ext" href="{{ cfg.issues }}/{{ ticket }}" target="_blank" rel="noopener noreferrer">{{ ticket }}{{ icon('external', 'i-xs') }}</a>{% endif %}
+      {% if parts %}{% set here = parts|selectattr('pr', 'equalto', r.pr)|first %}<span class="meta-item">{% if here %}part {{ here.part }} of {{ parts|length }}{% else %}stack of {{ parts|length }}{% endif %}<span class="stack-dots">{% for p in parts %}{% if p.pr %}<a href="/review/{{ p.review_id }}" title="{{ p.part }}/{{ parts|length }}: {{ p.label }}">{{ status_icon(p.tone) }}</a>{% else %}<span title="{{ p.part }}/{{ parts|length }}: {{ p.label }}">{{ status_icon(p.tone) }}</span>{% endif %}{% endfor %}</span></span>{% endif %}
+      {% if r.additions is not none %}<span class="meta-item"><span class="add-text">+{{ r.additions or 0 }}</span><span class="del-text">−{{ r.deletions or 0 }}</span></span>{% endif %}
+      {% if card and card.source %}<span class="source-chip">{{ card.source }}</span>{% endif %}
+      {% for y in (card.yours if card else []) %}<span class="yours-chip">{{ y }}</span>{% endfor %}
+      {% for f in (card.flags if card else []) if f in ('sensitive area', 'agent-written') and not (f == 'agent-written' and who[1]) %}<span class="meta-item">{{ icon('shield' if f == 'sensitive area' else 'sparkles') }}{{ f }}</span>{% endfor %}
+      <span class="meta-when">reviewed {{ r.started_at|ago }}</span>
+    </p>
+    {% if handed_off %}{% set h = handed_off %}{% include "partials/handed_off.html" %}{% endif %}
+    {% if not is_latest %}<div class="banner is-warn">{{ icon('alert') }}<p>This is an older review. <a href="/review/{{ latest_id }}">See the latest one</a>.</p></div>{% endif %}
+
+    {% if card or pending or reviewing %}
+      {% set variant = 'page' %}{% set number = r.pr %}
+      {% include "partials/card.html" %}
+    {% else %}
+      {% set acts = r.actions|map(attribute='action')|list %}
+      <div class="outcome tone-{{ tone }}">
+        <p class="headline">{{ status_icon(tone) }}<span>
+        {% if r.error %}It couldn't finish this review: {{ r.error }}
+        {% elif r.verdict == 'APPROVE' %}It thought this looked good.{% if 'approve' in acts %} It's approved.{% endif %}
+        {% elif r.verdict == 'DRAFT' %}It found something worth commenting on.{% if 'release' in acts %} You posted the comment.{% elif 'dismiss' in acts %} You chose not to post it.{% endif %}
+        {% elif r.verdict == 'DEFER' %}It left this one to you.
+        {% else %}This review didn't finish.{% endif %}
+        </span></p>
+        {% if r.raw_review and r.raw_review.about %}<p class="about">{{ r.raw_review.about|ticks|refs(rr) }}</p>{% endif %}
+        {% if r.verdict == 'DEFER' %}{% set lead, detail = words.waiting(r) %}<p class="summary">{{ lead|ticks|refs(rr) }}</p>{% if detail %}<p class="summary-detail">{{ detail|ticks|refs(rr) }}</p>{% endif %}
+        {% elif r.reason %}<p class="summary">{{ r.reason|ticks|refs(rr) }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    {% if parts %}
+    <details class="section">
+      <summary><h2>Stack</h2><span class="count">{{ parts|length }} parts</span></summary>
+      <ol class="stack-list">{% for p in parts %}<li{% if p.pr == r.pr %} class="is-current"{% endif %}>{{ status_icon(p.tone) }}<span class="sl-part">{{ p.part }}/{{ parts|length }}</span>{% if p.pr %}<a href="/review/{{ p.review_id }}" title="{{ p.title }}">{{ p.title }}</a>{% else %}<span class="muted">{{ p.label }}</span>{% endif %}{% if p.pr %}<span class="sl-status">{{ p.label }}</span>{% endif %}</li>{% endfor %}</ol>
+    </details>
+    {% endif %}
+
+    {% set drafted = card.drafts|map(attribute='finding_id')|list if card and not pending else [] %}
+    {% set loose = kept|rejectattr('id', 'in', drafted)|list %}
+    {% set eyes = card and card.state == 'needs_eyes' and card.clean and not pending %}
+    <details class="section" {% if loose %}open{% endif %}>
+      <summary><h2>Reasoning</h2>{% if loose %}<span class="count">{{ loose|length }}</span>{% endif %}</summary>
+      {# The card, or the outcome above when there's none, already says these, so Reasoning adds only what's new. #}
+      {% if card %}{% set shown = [card.summary, card.detail] %}{% elif pending or reviewing %}{% set shown = [] %}{% else %}{% set shown = words.waiting(r)|list if r.verdict == 'DEFER' else [r.reason] %}{% endif %}
+      {% set why = ((words.waiting(r)[1] or words.waiting(r)[0]) if r.verdict == 'DEFER' else r.reason) if r.reason and (card or pending or reviewing) else '' %}
+      {% set said = r.raw_review.summary if r.raw_review and r.raw_review.summary else '' %}
+      {% if why and why not in shown %}<p class="prose">{{ why|ticks|refs(rr) }}</p>{% endif %}
+      {% for f in loose %}
+      <article class="finding">
+        <header class="finding-head">
+          {{ chip(words.SEVERITY.get(f.severity, f.severity), 'bad' if f.severity == 'P0' else 'warn') }}
+          <h3>{{ f.title|ticks }}</h3>
+        </header>
+        <a class="file-link" href="#L-{{ (f.final_path or f.path)|anchor }}-{{ f.final_line or f.line }}">{{ icon('file') }}<code>{{ f.final_path or f.path }}:{{ f.final_line or f.line }}</code></a>
+        <dl class="finding-body">
+          <div><dt>What it saw</dt><dd class="clamp">{{ f.evidence|ticks|refs(rr) }}</dd></div>
+          <div><dt>Why it matters</dt><dd>{{ f.impact|ticks|refs(rr) }}</dd></div>
+          <div><dt>What to do</dt><dd>{{ f.suggestion|ticks|refs(rr) }}</dd></div>
+        </dl>
+        <details class="verify">
+          <summary>{{ icon('check') }}<span>How it double-checked this</span>{{ icon('chevron-down', 'i-xs chev') }}</summary>
+          <p>{{ f.verify_reason|ticks|refs(rr) }}</p>
+        </details>
+      </article>
+      {% endfor %}
+      {% if not kept %}<p class="muted">It didn't find anything worth a comment.{% if said and said != why and said not in shown %} {{ said }}{% endif %}</p>
+      {% elif not loose %}<p class="muted">Each comment above carries the evidence behind it.</p>{% endif %}
+    </details>
+
+    {% set sensitive = files|selectattr('sensitive')|list %}
+    {% set focus = files|selectattr('marked')|list %}
+    {% set by_owner = eyes and sensitive|length > 0 %}
+    {% set lead = sensitive if by_owner else (focus or files[:3]) %}
+    <details class="section" {% if kept or (eyes and files) or (focus and r.verdict == 'DEFER') %}open{% endif %}>
+      <summary><h2>The code</h2>{% if files %}<span class="count">{{ files|length }} file{{ 's' if files|length != 1 }}</span>{% endif %}</summary>
+      {% if not files %}<p class="muted">No copy of the code was saved for this review.</p>{% endif %}
+      {% for f in lead %}
+        <div class="file">
+          <div class="file-name">{{ icon('file') }}{{ file_label(f) }}{% if f.sensitive %}<span class="file-why">{{ icon('shield', 'i-xs') }}{{ f.sensitive }}</span>{% endif %}</div>
+          {{ diff_table(f.path, f.rows|focus_rows if (focus and not by_owner) else f.rows, 'L') }}
+        </div>
+      {% endfor %}
+      {% if files %}
+      <details class="full-diff">
+        <summary class="button ghost">{{ icon('chevron-right', 'chev') }}<span>Show every changed file ({{ files|length }})</span></summary>
+        {% for f in files %}
+        <details class="file file-block">
+          <summary class="file-name">{{ icon('chevron-right', 'i-xs chev') }}{{ file_label(f) }}{% if f.sensitive %}<span class="file-why">{{ icon('shield', 'i-xs') }}{{ f.sensitive }}</span>{% endif %}</summary>
+          {{ diff_table(f.path, f.rows, 'D') }}
+        </details>
+        {% endfor %}
+      </details>
+      {% endif %}
+    </details>
+
+    <details class="section" id="behind">
+      <summary><h2>Behind the scenes</h2></summary>
+      <div class="subsection">
+        <h3>Was this the right call?</h3>
+        {% if r.grade %}<p class="graded">{{ status_icon('ok' if r.grade.grade == 'agree' else 'err') }}<span>Graded <strong>{{ 'right' if r.grade.grade == 'agree' else 'wrong' }}</strong>{% if r.grade.tag %} ({{ r.grade.tag }}){% endif %}{% if r.grade.andy_action %}, because {{ r.grade.andy_action }}{% endif %}.{% if r.grade.note %} “{{ r.grade.note }}”{% endif %}</span></p>{% endif %}
+        <form method="post" action="/review/{{ r.id }}/grade" class="grade-form">
+          <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="next" value="/review/{{ r.id }}">
+          <textarea name="note" rows="2" placeholder="Optional: what you would have done" aria-label="Note">{{ r.grade.note if r.grade and r.grade.note else '' }}</textarea>
+          <div class="grade-actions">
+            <button type="submit" name="grade" value="agree">{{ icon('thumbs-up') }}<span>Right call</span></button>
+            <span class="joined">
+              <select name="tag" aria-label="What went wrong"><option value="">What went wrong?</option>{% for t in tags %}<option {% if r.grade and r.grade.tag == t %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+              <button type="submit" name="grade" value="disagree">{{ icon('thumbs-down') }}<span>Wrong call</span></button>
+            </span>
+            {% if r.grade %}<button type="submit" name="grade" value="clear" class="ghost">Clear</button>{% endif %}
+          </div>
+        </form>
+        {% if r.grade and r.grade.grade == 'disagree' %}
+        <form method="post" action="/review/{{ r.id }}/propose" class="inline teach">
+          <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="note" value="{{ r.grade.note or '' }}">
+          <button type="submit" class="primary">{{ icon('book') }}<span>Teach it: suggest a rubric change</span></button>
+        </form>
+        {% endif %}
+        {% for p in proposals %}<p class="small"><a href="/proposals/{{ p.id }}">Rubric change from this review</a>: {{ p.status }}</p>{% endfor %}
+      </div>
+
+      <div class="subsection">
+        <h3>About this review</h3>
+        <dl class="props props-grid">
+          {% if r.lane %}<div><dt>Lane</dt><dd>{{ words.lane(r.lane) }}{% if r.lane_reason and not (card and card.state == 'needs_eyes') %}<span class="muted"> · {{ r.lane_reason }}</span>{% endif %}</dd></div>{% endif %}
+          <div><dt>Found via</dt><dd>{{ {'requested': 'Review request', 'slack': 'Slack channel', 'both': 'Request and Slack', 'manual': 'Manual run', 'legacy': 'First version'}.get(r.source, r.source) }}</dd></div>
+          <div><dt>Commit</dt><dd><code>{{ r.sha|short }}</code>{% if r.latest_sha and r.latest_sha != r.sha %} <span class="warn-text">· newer exists</span>{% endif %}</dd></div>
+          <div><dt>Reviewed</dt><dd>{{ r.started_at|clock }}{% if r.finished_at %}<span class="muted"> · took {{ r.started_at|elapsed(r.finished_at) }}</span>{% endif %}</dd></div>
+          <div><dt>Cost</dt><dd>{{ r.cost_usd|money }}</dd></div>
+          <div><dt>Grade</dt><dd>{% if r.grade %}{{ chip('Right call' if r.grade.grade == 'agree' else 'Wrong call', 'ok' if r.grade.grade == 'agree' else 'bad') }}{% else %}<span class="muted">Not graded</span>{% endif %}</dd></div>
+        </dl>
+      </div>
+
+      {% if r.actions %}
+      <div class="subsection">
+        <h3>What happened after</h3>
+        <ol class="timeline">{% for a in r.actions %}<li class="{{ 'is-bad' if not a.ok }}"><span class="tl-dot"></span><span class="tl-text">{{ words.ACTION.get(a.action, a.action) }}{% if not a.ok %} <span class="err">(failed: {{ a.error }})</span>{% endif %}</span><span class="tl-time">{{ a.at|clock }}</span></li>{% endfor %}</ol>
+      </div>
+      {% endif %}
+
+      {% if not (card and card.facts) and r.raw_review and r.raw_review.checked %}
+      <div class="subsection">
+        <h3>What it checked</h3>
+        <ul class="checked">{% for item in r.raw_review.checked %}<li>{{ icon('check') }}<span>{{ item|ticks|refs(rr) }}</span></li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+
+      {% if dropped %}
+      <div class="subsection">
+        <h3>Things it considered and dropped</h3>
+        <ul class="notes">{% for f in dropped %}<li><strong>{{ f.title|ticks }}</strong>: {{ f.verify_reason|ticks|refs(rr) }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+      {% set notes = words.quiet_notes(r.p2_notes) %}
+      {% if notes %}
+      <div class="subsection">
+        <h3>Small things it noticed but kept to itself</h3>
+        <ul class="notes">{% for n in notes %}<li>{{ n|ticks|refs(rr) }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+
+      {% if r.stages %}
+      <div class="subsection">
+        <h3>Steps</h3>
+        <table class="grid">
+          <thead><tr><th>Step</th><th>Model</th><th class="num">Time</th><th class="num">Cost</th></tr></thead>
+          <tbody>{% for s in r.stages %}<tr class="{{ '' if s.ok else 'is-bad' }}"><td>{{ words.STAGE.get(s.stage, s.stage) }}{% if s.idx %} {{ s.idx }}{% endif %}</td><td class="muted">{{ (s.model or '')|replace('claude-', '') }}{% if s.effort %} · {{ s.effort }}{% endif %}</td><td class="num">{{ s.duration_s|duration }}</td><td class="num">{{ s.cost_usd|money if s.cost_usd is not none else '' }}</td></tr>{% if s.error %}<tr class="is-bad"><td colspan="4">{{ s.error }}</td></tr>{% endif %}{% endfor %}</tbody>
+        </table>
+      </div>
+      {% endif %}
+    </details>
+
+    <div class="action-bar" data-action-bar data-card="pane-{{ r.pr }}">
+      <div class="action-bar-actions" data-bar-actions></div>
+      <div class="action-bar-nav">
+        {% if nav.prev %}<a class="button ghost icon-only sm" href="/review/{{ nav.prev.review_id }}" data-prev title="Previous: {{ nav.prev.pr|prlabel }} (K)" aria-label="Previous">{{ icon('arrow-left') }}</a>{% endif %}
+        {% if nav.position %}<span class="bar-pos">{{ nav.position }} of {{ nav.total }}</span>{% endif %}
+        {% if nav.next %}<a class="button sm" href="/review/{{ nav.next.review_id }}" data-next title="Next: {{ nav.next.pr|prlabel }} {{ nav.next.title }}"><span>{{ 'Next' if nav.position else 'Next waiting' }}</span>{{ icon('arrow-right') }}<kbd class="kbd-hint">J</kbd></a>
+        {% else %}<span class="bar-pos">{{ icon('check', 'i-xs') }} All caught up</span>{% endif %}
+      </div>
+    </div>
+</article>

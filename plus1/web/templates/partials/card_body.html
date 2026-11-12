@@ -1,0 +1,296 @@
+{% from "_macros.html" import act, card_fields, icon, status_icon, excerpt, filepath with context %}
+{% macro rewrite_form(dr, parent=None) %}
+<form method="post" action="/card/{{ number }}/rewrite" hx-post="/card/{{ number }}/rewrite" hx-target="#{{ cid }}" hx-swap="outerHTML" class="rewrite-form">
+  {{ card_fields(nxt, variant) }}<input type="hidden" name="draft_id" value="{{ dr.id }}"><input type="hidden" name="review_id" value="{{ c.review_id }}">{% if parent %}<input type="hidden" name="parent_id" value="{{ parent }}">{% endif %}
+  <textarea name="suggestion" rows="2" maxlength="500" required aria-label="How should it change?" placeholder="How should it change? Ask it as a question, mention the migration…" data-rewrite-box></textarea>
+  <div class="rewrite-chips">{% for label, text in (('Shorter', 'Make it shorter.'), ('As a question', 'Ask it as a question.'), ('Softer', 'Make it softer.')) %}<button type="submit" class="chip-btn" name="chip" value="{{ text }}" data-chip="{{ text }}" formnovalidate>{{ label }}</button>{% endfor %}</div>
+  <div class="edit-actions"><span class="muted small"><kbd data-mod>⌘</kbd><kbd>↵</kbd> to rewrite</span><span class="edit-buttons"><button type="button" class="ghost sm" data-close-details>Cancel</button><button type="submit" class="primary sm">Rewrite</button></span></div>
+</form>
+{% endmacro %}
+  {% set n_comments = c.drafts|length %}
+  {% set unchecked = c.drafts|selectattr('needs_edit')|list|length > 0 %}
+  {% set in_stack = c.stack and variant == 'part' %}
+  <div class="decision">
+    <p class="decision-line is-{{ c.tone }}">{{ c.decision }}</p>
+    {% if c.stale %}{{ act(number, 'review_now', 'Review again', 'primary', variant, nxt, ic='refresh', kbd='⌘↵') }}
+    {% elif c.state == 'blocking' %}{{ act(number, 'post', 'Request changes', 'primary', variant, nxt, unchecked, ic='message', kbd='⌘↵') }}
+    {% elif c.state == 'worth_fixing' %}{{ act(number, 'approve_with_comment', 'Post comments' if c.waiting else 'Approve', 'primary', variant, nxt, unchecked, ic='message' if c.waiting else 'check', kbd='⌘↵') }}
+    {% elif c.state == 'needs_eyes' and c.clean %}{{ act(number, 'approve', 'Approve', 'primary', variant, nxt, ic='check', kbd='⌘↵') }}
+    {% elif c.state == 'needs_eyes' %}<a class="button primary" href="{{ c.url }}" target="_blank" rel="noopener noreferrer">{{ icon('external') }}<span>Open on GitHub</span><kbd class="kbd-hint">⌘↵</kbd></a>
+    {% elif c.state == 'looks_good' %}{{ act(number, 'approve', 'Approve', 'primary', variant, nxt, ic='check', kbd='⌘↵') }}
+    {% elif c.state == 'error' %}{{ act(number, 'review_now', 'Try again', 'primary', variant, nxt, ic='refresh', kbd='⌘↵') }}
+    {% elif c.state == 'fixed' %}{{ act(number, 'approve_followup', 'Approve', 'primary', variant, nxt, ic='check', kbd='⌘↵') }}
+    {% elif c.state == 'still_open' %}{{ act(number, 'keep_waiting', 'Keep waiting', 'primary', variant, nxt, ic='clock', kbd='⌘↵') }}
+    {% endif %}
+  </div>
+  {% if c.about %}<p class="about">{{ c.about|ticks|refs(c.refs) }}</p>{% endif %}
+  {% if (variant != 'page' and (c.ticket or (c.stack and not in_stack) or c.flags)) or c.yours_lines %}
+  <p class="context">
+    {% for line in c.yours_lines %}<span class="yours-line">{{ icon('user') }}<span>{{ line|ticks }}</span></span>{% endfor %}
+    {% if variant != 'page' %}
+    {% if c.ticket %}<a class="ext" href="{{ c.ticket_url }}" target="_blank" rel="noopener noreferrer">{{ c.ticket }}{{ icon('external', 'i-xs') }}</a>{% endif %}
+    {% if c.stack and not in_stack %}<span class="meta-item">part {{ c.stack[1] }} of {{ c.stack[2] }}{% if c.parts %}<span class="stack-dots">{% for p in c.parts %}{{ status_icon(p.tone, p.part ~ '/' ~ c.stack[2] ~ ': ' ~ p.label) }}{% endfor %}</span>{% endif %}</span>{% endif %}
+    {% for f in c.flags %}<span class="meta-item">{% if f == 'sensitive area' %}{{ icon('shield') }}{% elif f == 'agent-written' %}{{ icon('sparkles') }}{% endif %}{{ f }}</span>{% endfor %}
+    {% endif %}
+  </p>
+  {% endif %}
+  {% if c.summary %}<p class="summary">{{ c.summary|ticks|refs(c.refs) }}</p>{% endif %}
+  {% if c.followup and c.followup['items'] %}
+  <section class="quiet-notes">
+    <h4>Since you asked for changes</h4>
+    <ul class="asked">
+      {% for i in c.followup['items'] %}
+      <li>{{ status_icon('warn' if i.open else 'ok') }}
+        <div>
+          {% if i.url %}<a class="asked-title" href="{{ i.url }}" target="_blank" rel="noopener noreferrer">{{ i.title|ticks }}</a>{% else %}<span class="asked-title">{{ i.title|ticks }}</span>{% endif %}
+          <span class="asked-where">{{ 'Still open' if i.open else 'Fixed' }}{% if i.resolved %}, though {{ i.resolved_by or 'someone else' }} marked it resolved{% endif %} · {% if i.path %}{{ filepath(i.path ~ ':' ~ i.line) }}{% else %}your review summary{% endif %}</span>
+          {% if i.why %}<span class="asked-why">{{ i.why|ticks|refs(c.refs) }}</span>{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if c.facts and c.facts.focus %}
+  <section class="quiet-notes">
+    <h4>Where to look first</h4>
+    <ol class="look-first">
+      {% for x in c.facts.focus %}{% set href = c.refs.url(x.path, x.line) if c.refs else None %}
+      <li>{% if href %}<a class="ref" href="{{ href }}"{% if href.startswith('https://') %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ filepath(x.path ~ ':' ~ x.line) }}</a>{% else %}{{ filepath(x.path ~ ':' ~ x.line) }}{% endif %}<span>{{ x.why|ticks|refs(c.refs) }}</span></li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+  {% if c.facts and variant == 'page' and c.state == 'needs_eyes' and c.clean and c.facts.all_notes %}
+  <section class="quiet-notes">
+    <h4>Small things it noticed but kept to itself</h4>
+    <ul class="fact-notes clamp-list">{% for n in c.facts.all_notes %}<li>{{ n|ticks|refs(c.refs) }}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+  {% if c.facts or c.detail %}
+  {% set f = c.facts or {} %}
+  {% set nf = (f.files or [])|length + (f.more_files or 0) %}
+  {% set nc = (f.checked or [])|length %}
+  {% set notes_inline = variant == 'page' and c.state == 'needs_eyes' and c.clean and f.all_notes %}
+  {% set nn = 0 if notes_inline else (f.notes or [])|length + (f.more_notes or 0) %}
+  <details class="card-more">
+    <summary>{{ icon('chevron-right', 'i-xs chev') }}<span>Details</span><span class="card-more-counts">{{ [(nf ~ ' file' ~ ('' if nf == 1 else 's')) if nf, ('checked ' ~ nc ~ ' thing' ~ ('' if nc == 1 else 's')) if nc, (nn ~ ' note' ~ ('' if nn == 1 else 's')) if nn]|select|join(' · ') }}</span></summary>
+    {% if c.detail %}<p class="summary-detail">{{ c.detail|ticks|refs(c.refs) }}</p>{% endif %}
+    {% if c.facts %}
+    <div class="facts">
+      {% if f.files %}
+      <section class="fact">
+        <h4>Files</h4>
+        <ul class="files-touched">
+          {% for file in f.files %}<li>{{ filepath(file.path) }}<span class="add-text">+{{ file.add }}</span><span class="del-text">−{{ file.del }}</span></li>{% endfor %}
+          {% if f.more_files %}<li class="muted">and {{ f.more_files }} more</li>{% endif %}
+        </ul>
+      </section>
+      {% endif %}
+      {% if f.checked %}
+      <section class="fact">
+        <h4>What it checked</h4>
+        <ul class="checked">{% for item in f.checked %}<li>{{ icon('check') }}<span>{{ item|ticks|refs(c.refs) }}</span></li>{% endfor %}</ul>
+      </section>
+      {% endif %}
+      {% if f.notes and not notes_inline %}
+      <section class="fact is-wide">
+        <h4>Noticed but kept to itself</h4>
+        <ul class="fact-notes clamp-list">{% for n in f.notes %}<li>{{ n|ticks|refs(c.refs) }}</li>{% endfor %}</ul>
+        {% if f.more_notes %}<a class="small" href="/review/{{ c.review_id }}#behind">{{ f.more_notes }} more</a>{% endif %}
+      </section>
+      {% endif %}
+      {% if f.excerpt %}{{ excerpt(f.excerpt, show_path=True, mark=False) }}{% endif %}
+    </div>
+    {% endif %}
+  </details>
+  {% endif %}
+  {% if c.rejected %}
+  <section class="quiet-notes rejected">
+    <h4>What it couldn't confirm</h4>
+    {% for f in c.rejected %}{% set where = (f.final_path or f.path) ~ ':' ~ (f.final_line or f.line) %}
+    <div class="draft is-rejected">
+      <div class="draft-head">
+        {{ icon('alert') }}
+        <code class="file-chip" title="{{ where }}"><span class="fc-name">{{ (f.final_path or f.path).split('/')[-1] }}</span>:{{ f.final_line or f.line }}</code>
+        <span>{{ 'blocking' if f.severity == 'P0' else 'non-blocking' }}</span>
+      </div>
+      <p class="comment">{{ f.title|ticks|refs(c.refs) }}</p>
+      <details class="why">
+        <summary>{{ icon('chevron-right', 'i-xs chev') }}<span>Why it was dropped</span></summary>
+        <dl class="finding-body">
+          <div><dt>What it saw</dt><dd>{{ f.evidence|ticks|refs(c.refs) }}</dd></div>
+          <div><dt>Why it matters</dt><dd>{{ f.impact|ticks|refs(c.refs) }}</dd></div>
+          <div><dt>Why the double-check dropped it</dt><dd>{{ f.verify_reason|ticks|refs(c.refs) }}</dd></div>
+        </dl>
+      </details>
+      <div class="rejected-actions">
+      {% if f.writing %}
+        <p class="writing" data-poll hx-get="/partials/card/{{ number }}?variant={{ variant }}" hx-trigger="every 3s" hx-target="#{{ cid }}" hx-swap="outerHTML"><span class="spinner" aria-hidden="true"></span><span>Writing the comment. It shows up here when it's ready.</span></p>
+      {% elif not c.stale %}
+        {% if f.write_error %}<p class="write-error">{{ icon('alert', 'i-xs') }}<span>Couldn't write it: {{ f.write_error }}</span></p>{% endif %}
+        {{ act(number, 'write_up', 'Write it up', 'sm', variant, nxt, extra={'finding_id': f.id}, ic='pencil') }}
+        <span class="muted small">Drafts a comment for you to check before anything posts.</span>
+      {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% if error %}<div class="notice err">{{ icon('alert') }}<span>{{ error }}</span></div>{% endif %}
+  {% if note %}<div class="notice ok">{{ icon('check') }}<span>{{ note }}</span></div>{% endif %}
+  {% set fail = c.failure or (words.action_failure(result.kind, result.status, result.error) if result and result.status in ('failed', 'expired') else None) %}
+  {% if fail %}<div class="notice err">{{ icon('alert') }}<span><strong>{{ fail[0] }}.</strong> {{ fail[1] }}</span></div>{% endif %}
+
+  {% for dr in c.drafts %}
+  {% set rw = dr.rewrite or {} %}
+  {% set editable = not c.stale and c.state != 'error' %}
+  <div class="draft{{ ' needs-edit' if dr.needs_edit }}">
+    <div class="draft-head">
+      {{ icon('message') }}
+      <code class="file-chip" title="{{ dr.path }}:{{ dr.line }}"><span class="fc-name">{{ dr.path.split('/')[-1] }}</span>:{{ dr.line }}</code>
+    </div>
+    {% if dr.excerpt %}<details class="draft-code"><summary class="button ghost sm">{{ icon('chevron-right', 'i-xs chev') }}<span>Code</span></summary>{{ excerpt(dr.excerpt) }}</details>
+    {% elif not dr.inline %}<p class="outside-diff">{{ icon('file', 'i-xs') }}<span>{{ dr.path }}:{{ dr.line }} is outside the diff, so this goes in the review summary.</span></p>{% endif %}
+    <div class="comment">{{ (dr.body|flagged(dr.unsupported) if dr.needs_edit and not dr.draft_failed else dr.body|ticks)|refs(c.refs) }}</div>
+    {% if dr.draft_failed %}
+    <div class="flags">{{ icon('alert') }}<div>
+      <p><strong>Edit or rewrite this before posting.</strong> The comment writer failed, so this is the reviewer's raw finding, not a comment in your voice.</p>
+    </div></div>
+    {% elif dr.needs_edit %}
+    <div class="flags">{{ icon('alert') }}<div>
+      <p><strong>Check this before posting.</strong> The fact-check couldn't back the highlighted part with the evidence:</p>
+      <ul>{% for u in dr.unsupported %}<li>{{ words.factcheck_note(u)|ticks }}</li>{% endfor %}</ul>
+      {% if editable %}<div class="flag-actions">{{ act(number, 'allow', "It's right, allow posting", 'sm', variant, nxt, extra={'draft_id': dr.id}, ic='check') }}<span class="muted small">or fix it with Edit or Rewrite</span></div>{% endif %}
+    </div></div>
+    {% endif %}
+    {% if editable and rw.writing %}
+    <p class="rewrite-status" data-poll hx-get="/partials/card/{{ number }}?variant={{ variant }}&amp;rewrite={{ rw.writing.id }}" hx-trigger="every 3s" hx-target="#{{ cid }}" hx-swap="outerHTML"><span class="spinner" aria-hidden="true"></span><span>Rewriting: “{{ rw.writing.suggestion }}” It shows up here when it's ready.</span></p>
+    {% endif %}
+    {% if editable and rw.error %}<p class="rewrite-status is-error">{{ icon('alert', 'i-xs') }}<span>Couldn't rewrite it: {{ rw.error }}</span></p>{% endif %}
+    {% if editable and rw.ready %}{% set p = rw.ready %}
+    <section class="rewrite-proposal{{ ' needs-edit' if p.needs_edit }}" aria-label="Rewritten comment">
+      <p class="proposal-head">{{ icon('sparkles') }}<span>Rewritten</span><q>{{ p.suggestion }}</q></p>
+      <div class="comment">{{ (p.body|flagged(p.unsupported) if p.needs_edit else p.body|ticks)|refs(c.refs) }}</div>
+      {% if p.needs_edit %}
+      <div class="flags">{{ icon('alert') }}<div>
+        <p><strong>The fact-check couldn't back the highlighted part.</strong> Using this keeps the flag, so you'd check it before posting:</p>
+        <ul>{% for u in p.unsupported %}<li>{{ words.factcheck_note(u)|ticks }}</li>{% endfor %}</ul>
+      </div></div>
+      {% endif %}
+      <div class="proposal-actions">
+        {{ act(number, 'use_rewrite', 'Use this', 'primary sm', variant, nxt, extra={'draft_id': dr.id, 'rewrite_id': p.id}, ic='check') }}
+        {{ act(number, 'keep_mine', 'Keep mine', 'sm', variant, nxt, extra={'draft_id': dr.id, 'rewrite_id': p.id}) }}
+        {% if not rw.writing and dr.finding_id %}
+        <details class="rewrite-again" data-autofocus>
+          <summary class="button ghost sm">{{ icon('sparkles') }}<span>Rewrite again</span></summary>
+          {{ rewrite_form(dr, p.id) }}
+        </details>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+    {% if dr.finding %}
+    <details class="why">
+      <summary>{{ icon('chevron-right', 'i-xs chev') }}<span>Why it thinks so</span>{% if dr.finding.verified %}<span class="why-checked">{{ icon('check', 'i-xs') }}double-checked</span>{% else %}<span class="why-overruled">you overruled the double-check</span>{% endif %}</summary>
+      <dl class="finding-body">
+        <div><dt>What it saw</dt><dd>{{ dr.finding.evidence|ticks|refs(c.refs) }}</dd></div>
+        <div><dt>Why it matters</dt><dd>{{ dr.finding.impact|ticks|refs(c.refs) }}</dd></div>
+        <div><dt>{{ 'How it double-checked' if dr.finding.verified else 'Why the double-check dropped it' }}</dt><dd>{{ dr.finding.verify_reason|ticks|refs(c.refs) }}</dd></div>
+      </dl>
+    </details>
+    {% endif %}
+    {% if editable and (dr.restorable or dr.notes) %}
+    <div class="draft-foot">
+      {% if dr.notes %}{% set rule = dr.rule %}
+        {% if rule and rule.status == 'pending' %}<span class="rule-note"><span class="spinner" aria-hidden="true"></span><span>Drafting the rule. It shows up in <a href="/proposals/{{ rule.id }}">Rubric changes</a>.</span></span>
+        {% elif rule and rule.status == 'ready' %}<a class="button ghost sm" href="/proposals/{{ rule.id }}">{{ icon('book') }}<span>Review the rule</span></a>
+        {% elif rule and rule.status == 'accepted' %}<a class="rule-note" href="/proposals/{{ rule.id }}">{{ icon('check', 'i-xs') }}<span>Rule added to your rubric</span></a>
+        {% else %}
+        <details class="make-rule" data-autofocus>
+          <summary class="button ghost sm">{{ icon('book') }}<span>Make this a rule</span></summary>
+          <form method="post" action="/card/{{ number }}/make_rule" hx-post="/card/{{ number }}/make_rule" hx-target="#{{ cid }}" hx-swap="outerHTML">
+            {{ card_fields(nxt, variant) }}<input type="hidden" name="draft_id" value="{{ dr.id }}"><input type="hidden" name="review_id" value="{{ c.review_id }}">
+            <label class="rule-label" for="{{ cid }}-rule-{{ dr.id }}">What should future comments do?</label>
+            <textarea id="{{ cid }}-rule-{{ dr.id }}" name="note" rows="2" maxlength="1000" required>{{ dr.notes|join(' ') }}</textarea>
+            <p class="muted small">It drafts a change to the Comment format section of your rubric. Nothing changes until you accept it in Rubric changes.</p>
+            <div class="edit-actions"><span class="muted small"><kbd data-mod>⌘</kbd><kbd>↵</kbd> to draft</span><span class="edit-buttons"><button type="button" class="ghost sm" data-close-details>Cancel</button><button type="submit" class="primary sm">Draft the rule</button></span></div>
+          </form>
+        </details>
+        {% if rule and rule.status == 'failed' %}<span class="rule-note is-error">Couldn't draft the last one: {{ rule.error }}</span>{% endif %}
+        {% endif %}
+      {% endif %}
+      {% if dr.restorable %}{{ act(number, 'restore_original', 'Restore original', 'ghost sm', variant, nxt, extra={'draft_id': dr.id}, ic='undo') }}{% endif %}
+    </div>
+    {% endif %}
+    {% if editable %}
+    <details class="edit" name="{{ cid }}-draft-{{ dr.id }}">
+      <summary class="button ghost sm">{{ icon('pencil') }}<span>Edit</span></summary>
+      <form method="post" action="/card/{{ number }}/save_comment" hx-post="/card/{{ number }}/save_comment" hx-target="#{{ cid }}" hx-swap="outerHTML">
+        {{ card_fields(nxt, variant) }}<input type="hidden" name="draft_id" value="{{ dr.id }}"><input type="hidden" name="review_id" value="{{ c.review_id }}">
+        <textarea name="body" rows="7" aria-label="Comment text">{{ dr.body }}</textarea>
+        <div class="edit-actions"><span class="muted small"><kbd data-mod>⌘</kbd><kbd>↵</kbd> to save</span><span class="edit-buttons"><button type="button" class="ghost sm" data-close-details>Cancel</button><button type="submit" class="primary sm">Save</button></span></div>
+      </form>
+    </details>
+    {% if dr.finding_id and not rw.writing and not rw.ready %}
+    <details class="rewrite" name="{{ cid }}-draft-{{ dr.id }}" data-autofocus>
+      <summary class="button ghost sm">{{ icon('sparkles') }}<span>Rewrite</span></summary>
+      {{ rewrite_form(dr) }}
+    </details>
+    {% endif %}
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <div class="buttons">
+  {% if c.stale %}
+    {{ act(number, 'handled', 'Mark as handled', '', variant, nxt) }}
+  {% elif c.state == 'blocking' %}
+    {{ act(number, 'dont_post', "Don't post", '', variant, nxt) }}
+  {% elif c.state == 'worth_fixing' %}
+    {{ act(number, 'approve_without_comment', 'Approve without comment', '', variant, nxt) }}
+  {% elif c.state == 'needs_eyes' %}
+    {% if c.clean %}<a class="button" href="{{ c.url }}" target="_blank" rel="noopener noreferrer">{{ icon('external') }}<span>Open on GitHub</span></a>
+    {% else %}{{ act(number, 'approve', 'Approve', '', variant, nxt, ic='check') }}{% endif %}
+    {{ act(number, 'handled', 'Mark as handled', '', variant, nxt) }}
+  {% elif c.state == 'looks_good' %}
+    <details class="popover">
+      <summary class="button">{{ icon('message') }}<span>I'd comment</span></summary>
+      <form method="post" action="/card/{{ number }}/would_comment" hx-post="/card/{{ number }}/would_comment" hx-target="#{{ cid }}" hx-swap="outerHTML" class="pop-panel stack">
+        {{ card_fields(nxt, variant) }}<input type="hidden" name="review_id" value="{{ c.review_id }}">
+        <label>What would you flag?<textarea name="note" rows="3" required></textarea></label>
+        <label>It
+          <select name="tag">
+            <option value="false approval">shouldn't have approved this</option>
+            <option value="missed issue">missed a specific issue</option>
+            <option value="wrong lane">looked at it the wrong way</option>
+            <option value="other">other</option>
+          </select>
+        </label>
+        <button type="submit" class="primary">Save, and keep it off my list</button>
+      </form>
+    </details>
+  {% elif c.state == 'error' %}
+    {{ act(number, 'handled', 'Mark as handled', '', variant, nxt) }}
+  {% elif c.state == 'fixed' %}
+    {{ act(number, 'keep_waiting', 'Not yet', '', variant, nxt) }}
+  {% elif c.state == 'still_open' %}
+    {{ act(number, 'approve_followup', 'Approve anyway', '', variant, nxt, ic='check') }}
+  {% endif %}
+  {{ act(number, 'hand_off', 'Let someone else review', '', variant, nxt, ic='user-x', kbd='I') }}
+  {% if not c.stale or variant != 'page' %}
+  <details class="more">
+    <summary class="button icon-only" aria-label="More actions" title="More actions">{{ icon('more') }}</summary>
+    <div class="menu" role="menu">
+      {% if not c.stale %}
+      {% if c.state == 'blocking' %}{{ act(number, 'approve_anyway', 'Approve without commenting', 'menu-item', variant, nxt, ic='check') }}{% endif %}
+      {% if c.state == 'worth_fixing' %}{{ act(number, 'dont_post', "Don't comment or approve", 'menu-item', variant, nxt, ic='x') }}{% endif %}
+      {{ act(number, 'review_now', 'Review it again now', 'menu-item', variant, nxt, ic='refresh') }}
+      {% if c.state in ('blocking', 'worth_fixing') %}{{ act(number, 'review_later', 'Review it again at the next check', 'menu-item', variant, nxt, ic='clock') }}{% endif %}
+      {% endif %}
+      {% if variant != 'page' %}<a class="menu-item" href="/review/{{ c.review_id }}">{{ icon('eye') }}<span>See all the details</span></a>{% endif %}
+    </div>
+  </details>
+  {% endif %}
+  {% if c.state != 'needs_eyes' %}<a class="button ghost push-right" href="{{ c.url }}" target="_blank" rel="noopener noreferrer">{{ icon('pr') }}<span>GitHub</span>{{ icon('external', 'i-xs') }}</a>{% endif %}
+  </div>

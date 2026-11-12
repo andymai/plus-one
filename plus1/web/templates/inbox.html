@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}To do{% endblock %}
+{% block content_class %}has-inbox {{ 'is-review' if path.startswith('/review/') else 'is-home' }}{% endblock %}
+{% block page_class %}page-inbox{% endblock %}
+{% block head %}
+<div class="ph-title">
+  <a class="ph-back button ghost icon-only" href="/" aria-label="Back to To do">{{ icon('arrow-left') }}</a>
+  <h1>To do</h1><span class="ph-count" data-todo-count {% if not cards %}hidden{% endif %}>{{ cards|length }}</span>
+</div>
+<div class="ph-actions">{% with compact=False %}{% include "partials/review_any.html" %}{% endwith %}</div>
+{% endblock %}
+{% block main %}
+<div class="inbox">
+  <div class="inbox-list">{% include "partials/todo_list.html" %}</div>
+  <section class="inbox-pane{{ ' is-empty' if not cards }}" id="pane" aria-label="Review">
+    {% if pane %}
+    {% with r=pane.r, files=pane.files, card=pane.card, number=pane.number, ticket=pane.ticket, parts=pane.parts,
+            handed_off=pane.handed_off, rr=pane.rr, nav=pane.nav, pending=pane.pending, result=pane.result,
+            proposals=pane.proposals, is_latest=pane.is_latest, latest_id=pane.latest_id %}
+    {% include "partials/pane.html" %}
+    {% endwith %}
+    {% elif cards %}
+    <p class="pane-hint">Pick a PR to see its review.</p>
+    {% else %}
+    <div class="empty">
+      <span class="empty-mark">{{ icon('check') }}</span>
+      <h2>You're all caught up</h2>
+      <p>PRs it reviews show up here when they need a decision.{% if status.next_run and status.next_run.split(' ')|length > 2 %} Next check at {{ status.next_run.split(' ')[2][:5] }}.{% endif %}</p>
+      {% if nudge and nudge.left %}
+      <div class="nudge">
+        <p>{% if nudge.to_go %}Grade {{ nudge.to_go }} more approval{{ 's' if nudge.to_go != 1 }} to finish its checklist for approving on its own.{% else %}Grades keep its agreement score honest.{% endif %} {{ nudge.left }} past decision{{ 's are' if nudge.left != 1 else ' is' }} waiting for one.</p>
+        <a class="button primary" href="/grade">{{ icon('thumbs-up') }}<span>Start a grading queue</span></a>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

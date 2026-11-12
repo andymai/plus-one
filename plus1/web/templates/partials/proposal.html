@@ -1,0 +1,41 @@
+{% from "_macros.html" import icon, chip %}
+<div id="proposal" class="proposal" {% if p.status == 'pending' %}hx-get="/proposals/{{ p.id }}" hx-trigger="every 3s" hx-swap="outerHTML"{% endif %}>
+  {% if p.review_id %}
+  <h1 class="detail-title">{{ 'Comment rule from' if p.kind == 'rewrite' else 'Rubric change for' }} <a href="/review/{{ p.review_id }}">{{ p.pr|prlabel }}</a></h1>
+  <div class="detail-meta">{{ chip(p.status, words.PROPOSAL_TONE.get(p.status, 'muted')) }}<span>{{ p.title }}</span><span>{{ words.OUTCOME.get(p.verdict, p.verdict) }}</span><span>{{ p.created_at|ago }}</span></div>
+  {% else %}
+  <h1 class="detail-title">Rubric learned from your reviews on GitHub</h1>
+  <div class="detail-meta">{{ chip(p.status, words.PROPOSAL_TONE.get(p.status, 'muted')) }}<span>{{ p.created_at|ago }}</span></div>
+  {% endif %}
+  {% if p.note %}<blockquote class="quote">{{ p.note }}</blockquote>{% endif %}
+  {% if p.status == 'pending' %}
+    <div class="panel loading-panel"><span class="spinner"></span><p><strong>Drafting a rubric change.</strong> <span class="muted">This takes about a minute, and the page updates on its own.</span></p></div>
+  {% elif p.status == 'failed' %}
+    <div class="notice err">{{ icon('alert') }}<span>{{ p.error }}</span></div>
+  {% else %}
+    <section class="block">
+      <h2 class="block-title">Why</h2>
+      <p class="prose">{{ p.rationale }}</p>
+    </section>
+    <section class="block">
+      <h2 class="block-title">Change to rubric.md</h2>
+      {% if diff_text %}
+      <pre class="udiff">{% for line in diff_text.splitlines() %}<span class="{{ 'a' if line.startswith('+') and not line.startswith('+++') else 'd' if line.startswith('-') and not line.startswith('---') else 'h' if line.startswith('@@') else '' }}">{{ line }}</span>
+{% endfor %}</pre>
+      {% else %}
+      <p class="muted">No rubric change proposed.</p>
+      {% endif %}
+    </section>
+    <div class="buttons">
+    {% if p.status == 'ready' and diff_text %}
+      <form method="post" action="/proposals/{{ p.id }}/accept" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit" class="primary">{{ icon('check') }}<span>Accept and update rubric.md</span></button></form>
+    {% endif %}
+    {% if p.status == 'ready' %}
+      <form method="post" action="/proposals/{{ p.id }}/reject" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit">Reject</button></form>
+    {% endif %}
+    {% if p.status == 'accepted' %}
+      <form method="post" action="/proposals/{{ p.id }}/revert" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit" class="danger">{{ icon('undo') }}<span>Revert</span></button></form>
+    {% endif %}
+    </div>
+  {% endif %}
+</div>

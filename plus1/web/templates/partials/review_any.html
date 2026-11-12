@@ -1,0 +1,12 @@
+{% from "_macros.html" import icon %}
+<details class="popover review-any{{ ' is-compact' if compact }}">
+  <summary class="button{{ ' ghost icon-only' if compact }}"{% if compact %} aria-label="Review a PR" title="Review a PR"{% endif %}>{{ icon('plus') }}{% if not compact %}<span>Review a PR</span>{% endif %}</summary>
+  <form method="post" action="/review-now" class="pop-panel">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label for="review-target{{ '-top' if compact }}">Review a PR that isn't on the list</label>
+    <div class="input-row">
+      <input id="review-target{{ '-top' if compact }}" type="text" name="target" placeholder="PR number or GitHub link" autocomplete="off" required>
+      <button type="submit" class="primary">Review</button>
+    </div>
+  </form>
+</details>

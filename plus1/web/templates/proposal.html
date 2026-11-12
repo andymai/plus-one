@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Proposal {{ p.id }}{% endblock %}
+{% block page_class %}page-narrow{% endblock %}
+{% block head %}
+<nav class="ph-title crumbs" aria-label="Breadcrumb"><a href="/proposals">Rubric changes</a>{{ icon('chevron-right') }}<span>Proposal {{ p.id }}</span></nav>
+{% endblock %}
+{% block main %}
+{% include "partials/proposal.html" %}
+{% endblock %}

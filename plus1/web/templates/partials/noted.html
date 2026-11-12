@@ -1,0 +1,15 @@
+{% from "_macros.html" import icon, status_icon %}
+<article class="dcard slim{{ ' is-row' if variant != 'page' }}" id="{{ ('pane-' if variant == 'page' else 'card-') ~ number }}" data-variant="{{ variant }}">
+{% if reviewing %}
+  <p class="slim-row">{{ status_icon('run') }}<span>Reviewing {{ number|prlabel }} again now.</span><a href="/activity">Watch it on Activity</a></p>
+{% else %}
+  <p class="slim-row">{{ status_icon('ok') }}<span>Got it. It's off your list, and this counts as a disagreement.</span></p>
+  <div class="buttons">
+    <form method="post" action="/review/{{ review_id }}/propose" class="inline">
+      <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="note" value="{{ note or '' }}">
+      <button type="submit" class="primary">{{ icon('book') }}<span>Teach it: suggest a rubric change</span></button>
+    </form>
+    <a class="button ghost" href="/review/{{ review_id }}">See the details</a>
+  </div>
+{% endif %}
+</article>

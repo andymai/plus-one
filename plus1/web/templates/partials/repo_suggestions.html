@@ -1,0 +1,19 @@
+{% from "_macros.html" import icon %}
+{% if failed %}
+<p class="st-help">Couldn't ask GitHub for repos you review. Type one below instead.</p>
+{% elif not found %}
+<p class="st-help">No other repos turned up in your review requests or recent reviews. Type one below.</p>
+{% else %}
+<ul class="inner-list st-suggest">
+{% for name, clone in found %}
+  <li>
+    <form method="post" action="/settings/repos/add#repos" class="st-suggest-row">
+      <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="name" value="{{ name }}">
+      <span class="grow"><span class="inner-title">{{ name }}</span><span class="inner-note">{% if clone %}Clone at {{ clone|tilde }}{% else %}No clone found in your usual code folders{% endif %}</span></span>
+      {% if clone %}<input type="hidden" name="checkout" value="{{ clone }}">{% else %}<input type="text" name="checkout" class="mono-input" placeholder="Path to its clone" aria-label="Clone of {{ name }}" spellcheck="false" required>{% endif %}
+      <button type="submit" class="sm">{{ icon('plus') }}<span>Add</span></button>
+    </form>
+  </li>
+{% endfor %}
+</ul>
+{% endif %}

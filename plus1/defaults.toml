@@ -1,0 +1,132 @@
+# Defaults for every instance. ~/.config/plus1/config.toml overrides any value here, except the never-approve
+# lanes and the filter lists, which personal config only adds to.
+
+state_dir = "~/.local/state/plus1"
+notify = false
+claude_config_dir = ""
+# Comments are written by models.draft unless this names a script taking: BRIEF_PATH OUT_PATH --max WORDS, exiting 1
+# when the text has a dash.
+draft_command = ""
+# Addresses you commit as, besides git's user.email in each clone and those GitHub matches to your login. A PR that
+# changes lines blamed on them, or files they keep committing to, counts as in your code.
+emails = []
+
+# Whose PRs come first. teams are GitHub teams you work on, as org/team, and people are anyone else you count as your
+# team, by login. others are teams you're not on but still want to review, ranked after your team. This only orders PRs
+# that already reach you, so it adds no reviews and changes no approvals.
+[team]
+teams = []
+people = []
+others = []
+
+# How Plus One keeps itself up to date. mode is automatic (installs a new version at the next idle moment, checks it came
+# up, and goes back if it didn't), ask (shows Update available), or off (never checks on its own). channel is releases
+# (tagged versions that passed CI) or main (every merge). bin/plus1 update follows the same channel in any mode.
+[updates]
+mode = "automatic"
+channel = "releases"
+
+[window]
+days = [0, 1, 2, 3, 4]
+start_hour = 7
+end_hour = 17
+# Timer ticks start up to this many minutes late, so teammates' instances don't all review the same team request at
+# once.
+jitter_minutes = 10
+
+[limits]
+min_ready_minutes = 30
+max_reviews_per_tick = 4
+max_approvals_per_tick = 5
+max_approvals_per_day = 20
+max_diff_lines = 2500
+max_map_lines = 10000
+incremental_max_lines = 100
+handoff_working_days = 3
+check_timeout_s = 300
+# Rubric proposals a day drafted on their own when your review on GitHub differs from Plus One's call.
+auto_proposals_per_day = 3
+# Model spend a day can reach before ticks stop starting reviews. Write-ups and rubric proposals you ask for still run.
+max_spend_per_day_usd = 40.0
+
+[models.triage]
+model = "haiku"
+effort = "low"
+budget_usd = 0.5
+timeout_s = 180
+
+[models.deep]
+model = "opus"
+effort = "high"
+budget_usd = 8.0
+timeout_s = 1500
+
+[models.verify]
+model = "opus"
+effort = "medium"
+budget_usd = 2.0
+timeout_s = 600
+
+[models.draft]
+model = "sonnet"
+effort = "medium"
+budget_usd = 0.5
+timeout_s = 300
+
+# Reads batches of your own GitHub reviews for plus1 learn.
+[models.study]
+model = "sonnet"
+effort = "low"
+budget_usd = 1.0
+timeout_s = 600
+
+# Writes your rubric from those notes.
+[models.learn]
+model = "opus"
+effort = "high"
+budget_usd = 4.0
+timeout_s = 1200
+
+[models.factcheck]
+model = "haiku"
+effort = "low"
+budget_usd = 0.5
+timeout_s = 180
+
+[lanes]
+never_approve_owners = []
+never_approve_paths = [
+  # Files that instruct the reviewer itself. The review runs in the PR's checkout, so a change to them could steer
+  # its own approval.
+  '(^|/)(CLAUDE|AGENTS)\.md$',
+  '(^|/)\.claude/',
+  '(^|/)(authoriz|permission|ability|abilities|policy|policies|devise|oauth|jwt)',
+  '(payment|billing|refund|stripe|braintree|paypal|gift_card|credit_card|wallet)',
+]
+
+[filters]
+hold_labels = ["do-not-merge", "hold", "wip", "blocked"]
+blocking_markers = ["(blocking)", "[p0]", "[p1]", "blocking:", "must fix", "critical"]
+# Checks that wait for a person's approval rather than test the code. They fail until someone approves, so they
+# can't count as failing CI, or a PR waiting on the owner's team would never be reviewed. The last layer that sets this
+# wins.
+approval_gates = ['(?i)^require .+ approval$']
+
+[slack]
+enabled = false
+lookback_hours = 72
+# Claude Code's credentials file, which holds the Slack plugin's token. On macOS, leave it empty to read the Keychain.
+token_path = ""
+token_key = ""
+keychain_service = "Claude Code-credentials"
+
+[slack.channels]
+
+[web]
+# local: http://127.0.0.1:<port>, signed in with the link bin/plus1 open prints. tailscale: a unix socket for
+# tailscale serve, open to allowed_login only. Empty picks tailscale when allowed_login is set.
+mode = ""
+port = 8470
+socket = ""
+allowed_login = ""
+public_url = ""

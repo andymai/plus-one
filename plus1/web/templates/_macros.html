@@ -1,0 +1,33 @@
+{% macro icon(name, cls='') %}<svg class="i{% if cls %} {{ cls }}{% endif %}" aria-hidden="true" focusable="false"><use href="#i-{{ name }}"/></svg>{% endmacro %}
+{% macro status_icon(tone, label='') %}<span class="st st-{{ tone }}"{% if label %} title="{{ label }}"{% endif %} aria-hidden="true"><svg focusable="false"><use href="#st-{{ {'bad': 'urgent', 'warn': 'half', 'info': 'ring', 'ok': 'done', 'err': 'error', 'run': 'dashed'}.get(tone, 'empty') }}"/></svg></span>{% endmacro %}
+{% macro avatar(login) %}<span class="av av-{{ login|hue }}" aria-hidden="true">{{ (login or '?')[:1]|upper }}</span>{% endmacro %}
+{% macro creator(who) %}<span class="creator">{{ avatar(who[0]) }}<span class="creator-name">{{ who[0] }}</span>{% if who[1] %}<span class="creator-via">{{ icon('sparkles', 'i-xs') }}via {{ who[1] }}</span>{% endif %}</span>{% endmacro %}
+{% macro chip(text, tone='muted') %}<span class="chip"><span class="dot dot-{{ tone }}"></span>{{ text }}</span>{% endmacro %}
+{% macro gh(n, label='GitHub') %}<a class="ext" href="{{ n|prurl }}" target="_blank" rel="noopener noreferrer">{{ label }}{{ icon('external', 'i-xs') }}</a>{% endmacro %}
+{% macro filepath(path) %}{% set parts = (path or '').rsplit('/', 1) %}<span class="fp" title="{{ path }}">{% if parts|length > 1 %}<span class="fp-dir">{{ parts[0] }}/</span>{% endif %}<span class="fp-base">{{ parts[-1] }}</span></span>{% endmacro %}
+{% macro excerpt_rows(rows, focus) %}<table class="diff mini"><colgroup><col class="ln"><col></colgroup>{% for row in rows %}<tr class="{{ row.kind }}{% if row is sameas focus %} mark{% endif %}"><td class="ln">{{ row.new or row.old or '' }}</td><td class="code">{{ row.text }}</td></tr>{% endfor %}</table>{% endmacro %}
+{% macro file_label(f) %}{% set parts = f.path.rsplit('/', 1) %}{% if parts|length > 1 %}<span class="file-dir">{{ parts[0] }}/</span>{% endif %}<strong>{{ parts[-1] }}</strong>
+<span class="file-stats"><span class="add">+{{ f.rows|selectattr('kind', 'equalto', 'add')|list|length }}</span><span class="del">−{{ f.rows|selectattr('kind', 'equalto', 'del')|list|length }}</span></span>{% endmacro %}
+{% macro diff_table(path, rows, prefix) %}<div class="diff-wrap"><table class="diff"><colgroup><col class="ln"><col class="ln"><col></colgroup>
+{% for row in rows %}
+  {% if row.kind == 'gap' %}<tr class="hunk gap"><td colspan="3">⋯</td></tr>
+  {% elif row.kind == 'hunk' %}<tr class="hunk"><td colspan="3">{{ row.text }}</td></tr>
+  {% else %}<tr class="{{ row.kind }}{% if row.mark %} mark{% endif %}" {% if row.new %}id="{{ prefix }}-{{ path|anchor }}-{{ row.new }}"{% endif %}><td class="ln">{{ row.old or '' }}</td><td class="ln">{{ row.new or '' }}</td><td class="code">{{ row.text }}</td></tr>{% endif %}
+{% endfor %}
+</table></div>{% endmacro %}
+{% macro excerpt(x, show_path=False, mark=True) %}
+<div class="excerpt">
+  {% if show_path %}<div class="excerpt-path">{{ icon('file', 'i-xs') }}{{ filepath(x.path) }}</div>{% endif %}
+  <div class="excerpt-short">{{ excerpt_rows(x.rows, x.focus if mark else None) }}</div>
+  {% if x.more %}<details class="excerpt-more"><summary><span class="when-closed">{{ 'Show %d lines around it'|format(x.hunk|length) if x.trimmed else 'Show the whole hunk' }}</span><span class="when-open">Show less</span></summary>{{ excerpt_rows(x.hunk, x.focus if mark else None) }}</details>{% endif %}
+</div>
+{% endmacro %}
+{% macro card_fields(next, variant) %}<input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="next" value="{{ next }}"><input type="hidden" name="variant" value="{{ variant }}">{% endmacro %}
+{% macro act(number, action, label, cls='', variant='card', next='/', disabled=False, extra=None, ic=None, kbd=None) %}
+<form method="post" action="/card/{{ number }}/{{ action }}" hx-post="/card/{{ number }}/{{ action }}" hx-target="#{{ cid or ('card-' ~ number) }}" hx-swap="outerHTML" class="inline">
+  {{ card_fields(next, variant) }}
+  {% if c %}<input type="hidden" name="review_id" value="{{ c.review_id }}">{% endif %}
+  {% if extra %}{% for k, v in extra.items() %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}{% endif %}
+  <button type="submit" class="{{ cls }}" {% if disabled %}disabled{% endif %}>{% if ic %}{{ icon(ic) }}{% endif %}<span>{{ label }}</span>{% if kbd %}<kbd class="kbd-hint">{{ kbd }}</kbd>{% endif %}</button>
+</form>
+{% endmacro %}

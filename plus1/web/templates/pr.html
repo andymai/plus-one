@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, status_icon, avatar, chip %}
+{% block title %}{{ story.number|prlabel }}{% endblock %}
+{% block page_class %}page-detail{% endblock %}
+{% block head %}
+<nav class="ph-title crumbs" aria-label="Breadcrumb">
+  <a href="/activity">Activity</a>{{ icon('chevron-right') }}<span class="mono">{{ story.number|prlabel }}</span>
+</nav>
+<div class="ph-actions">
+  <a class="button" href="{{ story.number|prurl }}" target="_blank" rel="noopener noreferrer">{{ icon('pr') }}<span>Open on GitHub</span>{{ icon('external', 'i-xs') }}</a>
+</div>
+{% endblock %}
+{% block main %}
+{% set latest = story.reviews[0] if story.reviews else None %}
+<div class="detail">
+  <div class="detail-main">
+    <h1 class="detail-title">{{ latest.title if latest and latest.title else ('PR #' ~ story.number) }}</h1>
+    {% if latest %}<div class="detail-meta"><span class="meta-item">{{ avatar(latest.author) }}{{ latest.author }}</span><span>{{ story.reviews|length }} review{{ 's' if story.reviews|length != 1 }}</span></div>{% endif %}
+
+    {% if handed_off %}{% set h = handed_off %}{% include "partials/handed_off.html" %}{% endif %}
+    <section class="block">
+      <h2 class="block-title">Reviews</h2>
+      <ul class="list">
+      {% for r in story.reviews %}
+        {% set tone = 'err' if r.error else words.VERDICT_TONE.get(r.verdict, 'muted') %}
+        <li class="row is-tall" data-nav-item data-href="/review/{{ r.id }}">
+          <a class="row-link" href="/review/{{ r.id }}">
+            {{ status_icon(tone) }}
+            <span class="row-title">{{ words.OUTCOME.get(r.verdict, 'Unfinished') }} at <code>{{ r.sha|short }}</code>
+              {% if r.reason %}<span class="row-note">{{ words.waiting(r)[0] if r.verdict == 'DEFER' else r.reason }}</span>{% endif %}</span>
+            <span class="row-meta"><span class="row-cost">{{ r.cost_usd|money }}</span><span class="row-time">{{ r.started_at|clock }}</span></span>
+          </a>
+        </li>
+      {% else %}
+        <li class="list-empty">Never reviewed.</li>
+      {% endfor %}
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title">Every check that looked at it</h2>
+      <div class="table-wrap panel flush">
+      <table class="grid">
+        <thead><tr><th>When</th><th>Commit</th><th>What it did</th><th>Why</th><th>Found via</th></tr></thead>
+        <tbody>
+        {% for o in story.observations %}
+          <tr><td class="nowrap">{{ o.at|clock }}</td><td><code>{{ o.sha|short }}</code></td><td>{{ {'eligible': 'reviewed', 'skip': 'skipped', 'defer': 'left to you', 'error': 'problem'}.get(o.outcome, o.outcome) }}</td><td class="muted">{{ words.skip_reason(o.reason) if o.outcome != 'eligible' else '' }}</td><td class="muted">{{ o.source }}</td></tr>
+        {% else %}
+          <tr><td colspan="5" class="muted">No observations yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </section>
+  </div>
+
+  <aside class="detail-side" aria-label="Now on GitHub">
+    <h3 class="side-title">Now on GitHub <span class="muted">· up to a minute old</span></h3>
+    {% if live_pr.error %}
+      <p class="side-note">Could not load: {{ live_pr.error }}</p>
+    {% else %}
+    <dl class="props">
+      <div><dt>State</dt><dd>{{ chip((live_pr.state|lower) ~ (' draft' if live_pr.draft else ''), 'ok' if live_pr.state == 'OPEN' else 'muted') }}</dd></div>
+      <div><dt>Decision</dt><dd>{{ (live_pr.decision or 'none yet')|replace('_', ' ')|lower }}</dd></div>
+      <div><dt>Head</dt><dd><code>{{ live_pr.head|short }}</code>{% if live_pr.mergeable == 'CONFLICTING' %} {{ chip('conflict', 'bad') }}{% endif %}</dd></div>
+      <div><dt>Checks</dt><dd><span class="add-text">{{ live_pr.check_summary.PASS }} passing</span>{% if live_pr.check_summary.FAIL %}, <span class="del-text">{{ live_pr.check_summary.FAIL }} failing</span>{% endif %}{% if live_pr.check_summary.PENDING %}, {{ live_pr.check_summary.PENDING }} pending{% endif %}</dd></div>
+      {% if live_pr.failing %}<div><dt>Failing</dt><dd class="err">{{ live_pr.failing|join(', ') }}</dd></div>{% endif %}
+      <div><dt>Open threads</dt><dd>{{ live_pr.open_threads }}</dd></div>
+      <div><dt>Labels</dt><dd>{% for l in live_pr.labels %}<span class="tag">{{ l }}</span>{% else %}<span class="muted">none</span>{% endfor %}</dd></div>
+      <div><dt>Slack</dt><dd>{% if channels %}{% for c in channels %}<span class="tag">#{{ c|replace('_', '-') }}</span>{% endfor %}{% else %}<span class="muted">not announced</span>{% endif %}</dd></div>
+    </dl>
+    <h3 class="side-title">Reviewers</h3>
+    <ul class="people">
+    {% for rv in live_pr.reviewers %}<li>{{ avatar(rv.author) }}<span>{{ rv.author }}</span><span class="muted">{{ rv.state|replace('_', ' ')|lower }}</span></li>
+    {% else %}<li class="muted">None yet</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if story.actions %}
+    <h3 class="side-title">Actions</h3>
+    <ol class="timeline">{% for a in story.actions %}<li class="{{ 'is-bad' if not a.ok }}"><span class="tl-dot"></span><span class="tl-text">{{ words.ACTION.get(a.action, a.action) }}{% if a.sha %} <code>{{ a.sha|short }}</code>{% endif %}</span><span class="tl-time">{{ a.at|clock }}</span></li>{% endfor %}</ol>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

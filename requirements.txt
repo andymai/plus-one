@@ -1,0 +1,3 @@
+# bin/plus1 update from before uv.lock pulls, then installs this file with the code it had already loaded, so this file
+# has to keep working after that pull. bin/ensure-venv installs uv.lock or requirements.lock directly.
+-r requirements.lock

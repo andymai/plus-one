@@ -1,0 +1,72 @@
+{% set c = card %}
+{% set nxt = '/review/' ~ c.review_id if (c and variant == 'page') else '/' %}
+{% set cid = ('pane-' if variant == 'page' else 'card-') ~ number %}
+{# act reads cid, so import after it is set #}
+{% from "_macros.html" import act, card_fields, gh, icon, status_icon, creator with context %}
+{% if pending %}
+  {% set d = describe(pending) %}
+  {% set left_exact = [0, pending.execute_at - now_ts]|max %}
+  {% set left = left_exact|round(0, 'ceil')|int %}
+  <article class="dcard is-pending{{ ' is-page' if variant == 'page' else ' is-row' }}" id="{{ cid }}" data-variant="{{ variant }}" {% if variant != 'page' %}data-nav-item data-href="/review/{{ pending.review_id }}"{% endif %} hx-get="/partials/card/{{ number }}?variant={{ variant }}" hx-trigger="{{ 'load delay:%.1fs'|format(left_exact + 0.4) if left_exact > 0 and pending.status == 'pending' else 'every 1s' }}" hx-swap="outerHTML">
+    <div class="pending-row">
+      <span class="spinner" aria-hidden="true"></span>
+      <p class="pending-text"><strong>{{ d[0][0] }}</strong> <span class="muted">on {{ number|prlabel }} {{ d[1] }}</span></p>
+      <span class="pending-left">{% if left %}in {{ left }}s{% else %}now{% endif %}</span>
+      {% if pending.status == 'pending' %}
+      <form method="post" action="/pending/{{ pending.id }}/undo" hx-post="/pending/{{ pending.id }}/undo" hx-target="#{{ cid }}" hx-swap="outerHTML" class="inline">
+        {{ card_fields(nxt, variant) }}
+        <button type="submit" class="primary" data-undo>{{ icon('undo') }}<span>Undo</span><kbd class="kbd-hint">U</kbd></button>
+      </form>
+      {% endif %}
+    </div>
+    {% if pending.kind in not_posting %}{% set g = grade_for(pending.review_id) %}{% set rid = pending.review_id %}{% include "partials/reasons.html" %}{% endif %}
+    {% if pending.status == 'pending' %}<p class="pending-note">This happens on the server, so you can close the app.</p>{% endif %}
+    <div class="countdown" data-left="{{ '%.2f'|format(left_exact) }}" data-total="8" aria-hidden="true"><span></span></div>
+  </article>
+{% elif not c %}
+  <article class="dcard slim{{ ' is-row' if variant != 'page' }}{{ ' is-reviewing' if reviewing }}" id="{{ cid }}" data-variant="{{ variant }}"{% if reviewing %} hx-get="/partials/card/{{ number }}?variant={{ variant }}{{ '&open=1' if variant == 'page' }}" hx-trigger="every 5s" hx-swap="outerHTML"{% endif %}>
+  {% if result %}
+    {% set d = describe(result) %}
+    {% if result.status == 'done' %}<p class="slim-row">{{ status_icon('ok') }}<span>{{ d[0][1] }} on {{ number|prlabel }} {{ d[1] }}.</span>{{ gh(number, 'View on GitHub') }}</p>
+    {% if result.kind in not_posting %}{% set g = grade_for(result.review_id) %}{% set rid = result.review_id %}{% include "partials/reasons.html" %}{% endif %}
+    {% elif result.status == 'cancelled' %}<p class="slim-row">{{ status_icon('muted') }}<span>Undone. Nothing changed on {{ number|prlabel }}.</span></p>
+    {% else %}{% set fail = words.action_failure(result.kind, result.status, result.error, reviewing) %}<p class="slim-row err">{{ status_icon('err') }}<span><strong>{{ fail[0] }} on {{ number|prlabel }}.</strong> {{ fail[1] }}</span></p>
+    {% if not reviewing and words.HEAD_MOVED.search(result.error or '') %}<div class="buttons">{{ act(number, 'review_now', 'Review again', 'primary', variant, nxt, ic='refresh') }}</div>{% endif %}{% endif %}
+  {% elif error %}<p class="slim-row err">{{ status_icon('err') }}<span>{{ error }}</span></p>
+  {% elif note %}<p class="slim-row">{{ status_icon('ok') }}<span>{{ note }}</span></p>
+  {% elif reviewing %}<p class="slim-row">{{ status_icon('run') }}<span>Reviewing {{ number|prlabel }} again now.</span></p>
+  {% else %}<p class="slim-row muted">{{ status_icon('muted') }}<span>Nothing needed on {{ number|prlabel }}.</span></p>{% endif %}
+  </article>
+{% elif variant == 'page' %}
+<article class="dcard tone-{{ c.tone }} is-page" id="{{ cid }}" data-variant="page" data-href="/review/{{ c.review_id }}" data-gh="{{ c.url }}">
+  <p class="headline">{{ status_icon(c.tone) }}<span>{{ c.headline }}</span></p>
+  {% include "partials/card_body.html" %}
+</article>
+{% else %}
+{% set in_stack = c.stack and variant == 'part' %}
+<details class="titem tone-{{ c.tone }}" id="{{ cid }}" data-variant="{{ variant }}" data-nav-item data-href="/review/{{ c.review_id }}" data-gh="{{ c.url }}" {% if expanded %}open{% endif %}>
+  <summary class="trow">
+    <span class="trow-chev">{{ icon('chevron-right') }}</span>
+    {{ status_icon(c.tone, c.icon_label) }}
+    <span class="trow-main">
+      <span class="trow-line">
+        <span class="trow-num">{{ c.pr|prlabel }}</span>
+        {% if in_stack %}<span class="trow-part">{{ c.stack[1] }}/{{ c.stack[2] }}</span>{% endif %}
+        <a class="trow-title" href="/review/{{ c.review_id }}" title="{{ c.title }}">{{ c.short_title if in_stack else c.title }}</a>
+        {% if c.source %}<span class="source-chip">{{ c.source }}</span>{% endif %}
+        {% for y in c.yours %}<span class="yours-chip">{{ y }}</span>{% endfor %}
+      </span>
+      <span class="trow-info">
+        {{ creator(c.creator) }}
+        {% if c.team_chip %}<span class="yours-chip">{{ c.team_chip }}</span>{% endif %}
+        {% if c.failure %}<span class="trow-why is-err"><span class="trow-reason" title="{{ c.failure|join('. ') }}">{{ c.failure[0] }}. {{ c.failure[1] }}</span></span>
+        {% elif c.reason %}<span class="trow-why"><span class="trow-reason" title="{{ c.reason }}">{{ c.reason }}</span>{% if c.more %}<span class="trow-more">+{{ c.more }} more</span>{% endif %}</span>{% endif %}
+        <span class="trow-time">{{ c.when|ago }}</span>
+      </span>
+    </span>
+  </summary>
+  <div class="tbody">
+    {% include "partials/card_body.html" %}
+  </div>
+</details>
+{% endif %}

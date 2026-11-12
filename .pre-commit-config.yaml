@@ -1,0 +1,28 @@
+# Run `uv run prek install` once per clone. Every tool comes from uv.lock, so the hooks agree with CI.
+default_install_hook_types: [pre-commit, commit-msg]
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check --fix
+        entry: uv run --frozen ruff check --fix --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff format
+        entry: uv run --frozen ruff format --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: basedpyright
+        name: basedpyright
+        entry: uv run --frozen basedpyright
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: conventional-commit
+        name: Conventional Commit message
+        entry: python3 scripts/commit_msg.py
+        language: system
+        stages: [commit-msg]

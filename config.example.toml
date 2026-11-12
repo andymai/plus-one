@@ -1,0 +1,45 @@
+# bin/plus1 setup writes ~/.config/plus1/config.toml for you. This file shows what it can hold.
+# Anything in plus1/defaults.toml can be overridden here. Lanes and filters only add to the defaults.
+# Your rubric lives beside this file as rubric.md. Start it from a copy of plus1/starter_rubric.md.
+
+me = "your-github-login"
+name = "Your first name"
+# timezone = "America/Los_Angeles"   # defaults to this machine's zone
+# state_dir = "~/.local/state/plus1"
+# claude_config_dir = ""             # leave unset to use your normal Claude Code login
+# notify = false
+
+[[repos]]
+name = "your-org/your-repo"
+checkout = "~/code/your-repo"
+# Read-only snapshots of other repos the reviewer can open when a change reaches code that lives there.
+# peers = ["~/code/your-ios-app", "~/code/your-android-app"]
+# Commands Plus One runs in the PR's checkout before each review, with their output given to the reviewer. {files}
+# becomes the PR's changed files. Each runs code the PR can change (a binstub, a config it loads), so list only what
+# you'd run on any teammate's branch.
+# checks = ["bin/packwerk check {files}"]
+# Lets a scheduled check approve a clean PR here on its own, as you. Off until you turn it on, here or in Settings.
+# auto_approve = false
+
+# [repos.lanes]
+# never_approve_owners = ["growth"]
+# never_approve_paths = ['^app/models/registry']
+
+# Whose PRs come first in To do and get reviewed sooner. This only orders PRs that already reach you.
+# [team]
+# teams = ["your-org/your-team"]    # GitHub teams you work on
+# people = ["a-teammate"]           # anyone else you count as your team, by GitHub login
+# others = ["your-org/other-team"]  # teams you're not on but still want to review, ranked after your team
+
+# Plus One updates itself at the next idle moment. mode can also be "ask" or "off", and channel can be "main".
+# [updates]
+# mode = "automatic"
+# channel = "releases"
+
+# [window]
+# days = [0, 1, 2, 3, 4]
+# start_hour = 7
+# end_hour = 17
+
+# [slack]
+# enabled = false

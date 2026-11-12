@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Grade{% endblock %}
+{% block page_class %}page-narrow{% endblock %}
+{% block head %}
+<div class="ph-title"><h1>Grade past decisions</h1></div>
+<div class="ph-actions"><a class="button ghost" href="/insights">{{ icon('chart') }}<span>Checklist</span></a></div>
+{% endblock %}
+{% block main %}
+<div data-grade>{% include "partials/grade_card.html" %}</div>
+{% endblock %}

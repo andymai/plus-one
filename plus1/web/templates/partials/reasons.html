@@ -1,0 +1,15 @@
+{% from "_macros.html" import card_fields, icon with context %}
+<div class="reasons">
+  {% if g and g.source == 'manual' %}
+    <span class="reasons-noted">{{ icon('check', 'i-xs') }}Noted: {{ g.note }}</span>
+  {% else %}
+    <span class="reasons-label">Why not post it?</span>
+    {% for key, r in reasons.items() %}
+    <form method="post" action="/review/{{ rid }}/reason" hx-post="/review/{{ rid }}/reason" hx-target="#{{ cid }}" hx-swap="outerHTML" class="inline">
+      {{ card_fields(nxt, variant) }}<input type="hidden" name="reason" value="{{ key }}">
+      <button type="submit" class="reason-chip">{{ r[2][:1]|upper ~ r[2][1:] }}</button>
+    </form>
+    {% endfor %}
+    <span class="reasons-hint">optional</span>
+  {% endif %}
+</div>

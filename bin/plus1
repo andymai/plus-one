@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+"$root/bin/ensure-venv" || exit 1
+cd "$root" && exec "$root/.venv/bin/python" -c 'import sys; from plus1.cli import main; sys.exit(main())' "$@"

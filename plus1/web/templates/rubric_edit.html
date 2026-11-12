@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Edit rubric{% endblock %}
+{% block page_class %}page-narrow{% endblock %}
+{% block head %}<div class="ph-title"><h1>Your rubric</h1></div><a class="button ghost" href="/settings#rubric">{{ icon('arrow-left') }}<span>Settings</span></a>{% endblock %}
+{% block main %}
+<p class="muted settings-intro">Every review reads this. Saving records it under Rubric changes, where you can revert it. Keep the <code>## Comment format (drafts)</code> heading: drafted comments take their voice from that section.</p>
+{% if error %}<div class="notice err">{{ icon('alert') }}<span>{{ error }}</span></div>{% endif %}
+{% if diff_text %}
+<section class="block">
+  <h2 class="block-title">Change to rubric.md</h2>
+  <pre class="udiff">{% for line in diff_text.splitlines() %}<span class="{{ 'a' if line.startswith('+') and not line.startswith('+++') else 'd' if line.startswith('-') and not line.startswith('---') else 'h' if line.startswith('@@') else '' }}">{{ line }}</span>
+{% endfor %}</pre>
+</section>
+{% elif preview %}
+<p class="muted">No changes yet.</p>
+{% endif %}
+<form method="post" action="/settings/rubric" class="stack rubric-editor">
+  <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="base" value="{{ base }}">
+  <textarea name="text" spellcheck="false" aria-label="Rubric">{{ text }}</textarea>
+  <div class="buttons">
+    {% if diff_text %}<button type="submit" name="save" value="1" class="primary">{{ icon('check') }}<span>Save rubric</span></button>{% endif %}
+    <button type="submit" name="preview" value="1" class="{{ '' if diff_text else 'primary' }}">{{ icon('eye') }}<span>Preview changes</span></button>
+  </div>
+</form>
+{% endblock %}

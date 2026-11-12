@@ -1,0 +1,12 @@
+{% from "_macros.html" import icon %}
+{% if failed %}
+<p class="st-help">Couldn't ask GitHub for teams. Type one above, as org/team.</p>
+{% elif not found %}
+<p class="st-help">No more teams turned up. Type one above, as org/team.</p>
+{% else %}
+<ul class="st-team-options">
+{% for name, note in found %}
+  <li><button type="button" class="sm" data-chip-add="{{ name }}" data-chip-list="{{ target }}">{{ icon('plus') }}<span>{{ name }}</span>{% if note %}<span class="st-team-note">{{ note }}</span>{% endif %}</button></li>
+{% endfor %}
+</ul>
+{% endif %}

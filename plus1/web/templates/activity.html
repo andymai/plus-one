@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, status_icon, chip, creator %}
+{% block title %}Activity{% endblock %}
+{% block head %}
+<div class="ph-title"><h1>Activity</h1><span class="fresh" data-fresh>Updated just now</span></div>
+<div class="ph-actions">
+  <form class="search" method="get" action="/activity" role="search">
+    {{ icon('search') }}
+    <input type="search" name="q" value="{{ q }}" placeholder="Search title, author, #number" aria-label="Search" data-search>
+    <input type="hidden" name="show" value="{{ show }}">
+    <kbd class="search-key">/</kbd>
+  </form>
+</div>
+{% endblock %}
+{% block main %}
+{% include "partials/live.html" %}
+<nav class="tabs" aria-label="Filter">
+  {% for key, label in shows.items() %}<a href="/activity?show={{ key }}{% if q %}&q={{ q|urlencode }}{% endif %}" {% if key == show %}class="on" aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
+</nav>
+<div id="feed" hx-get="/activity?show={{ show }}&q={{ q|urlencode }}&page={{ page }}&seen={{ seen }}" hx-trigger="plus1:progress from:body delay:1500ms, plus1:refresh from:body, every 60s" hx-select="#feed" hx-swap="outerHTML" hx-request='{"timeout": 15000}'>
+{% if show == 'handed_off' %}
+  <p class="list-caption">PRs you left to other reviewers. Checks skip them until you bring them back.</p>
+  <ul class="list">
+  {% for h in handed_off %}
+    <li class="row has-actions" data-nav-item data-href="/pr/{{ h.pr }}">
+      <a class="row-link" href="/pr/{{ h.pr }}">
+        {{ status_icon('muted') }}
+        <span class="row-num">{{ h.pr|prlabel }}</span>
+        <span class="row-title">{{ h.title or '' }}</span>
+        <span class="row-meta"><span class="row-time">{{ h.at|ago }}</span></span>
+      </a>
+      <span class="row-actions"><form method="post" action="/pr/{{ h.pr }}/unignore" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="next" value="/activity?show=handed_off"><button type="submit" class="sm">Bring it back</button></form></span>
+    </li>
+  {% else %}
+    <li class="list-empty">Nothing handed off.</li>
+  {% endfor %}
+  </ul>
+{% elif show == 'skipped' %}
+  <p class="list-caption">PRs it looked at but didn't review, and why. Latest check per PR.</p>
+  <ul class="list">
+  {% for o in skips %}
+    <li class="row" data-nav-item data-href="/pr/{{ o.pr }}">
+      <a class="row-link" href="/pr/{{ o.pr }}">
+        {{ status_icon('muted') }}
+        <span class="row-num">{{ o.pr|prlabel }}</span>
+        <span class="row-title">{{ o.title or '' }}</span>
+        <span class="row-meta">
+          {{ chip(o.plain) }}
+          <span class="row-time">{{ o.at|ago }}</span>
+        </span>
+      </a>
+    </li>
+  {% else %}
+    <li class="list-empty">Nothing skipped yet.</li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <ul class="list">
+  {% set ns = namespace(day=None, divided=False) %}
+  {% for r in data.rows %}
+    {% if seen and not ns.divided and r.id <= seen %}
+      {% set ns.divided = True %}
+      {% if not loop.first %}<li class="list-new"><span>New since your last visit</span></li>{% endif %}
+    {% endif %}
+    {% if r.started_at[:10] != ns.day %}
+      {% set ns.day = r.started_at[:10] %}
+      <li class="list-day">{{ r.started_at|dayname }}</li>
+    {% endif %}
+    <li class="row" data-nav-item data-href="/review/{{ r.id }}" data-gh="{{ r.pr|prurl }}">
+      <a class="row-link" href="/review/{{ r.id }}">
+        {{ status_icon('run' if r.outcome == 'Reviewing now' else ('err' if r.error else r.tone), r.outcome) }}
+        <span class="row-num">{{ r.pr|prlabel }}</span>
+        <span class="row-title">{{ r.title or '' }}</span>
+        <span class="row-meta">
+          {{ chip(r.outcome, r.tone) }}
+          {% if r.after and r.after != 'Waiting on you' %}{{ chip(r.after, r.after_tone) }}{% endif %}
+          <span class="row-creator" title="{{ words.creator(r)|join(' via ') if words.creator(r)[1] else words.creator(r)[0] }}">{{ creator(words.creator(r)) }}</span>
+          <span class="row-cost">{{ r.cost_usd|money if r.cost_usd else '' }}</span>
+          <span class="row-time">{{ r.started_at|ago }}</span>
+        </span>
+      </a>
+    </li>
+    {% if r.older %}
+    <li class="row-older">
+      <details>
+        <summary>{{ icon('chevron-right', 'i-xs chev') }}<span>{{ r.older|length }} earlier review{{ 's' if r.older|length != 1 }} of {{ r.pr|prlabel }}</span></summary>
+        <ul class="list older-list">
+        {% for o in r.older %}
+          <li class="row is-older" data-nav-item data-href="/review/{{ o.id }}" data-gh="{{ o.pr|prurl }}">
+            <a class="row-link" href="/review/{{ o.id }}">
+              {{ status_icon('err' if o.error else o.tone, o.outcome) }}
+              <span class="row-title">{{ o.started_at|clock }}</span>
+              <span class="row-meta">
+                {{ chip(o.outcome, o.tone) }}
+                {% if o.after and o.after != 'Replaced by a newer review' %}{{ chip(o.after, o.after_tone) }}{% endif %}
+                <span class="row-cost">{{ o.cost_usd|money if o.cost_usd else '' }}</span>
+                <span class="row-time">{{ o.started_at|ago }}</span>
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      </details>
+    </li>
+    {% endif %}
+  {% else %}
+    <li class="list-empty">{% if q %}Nothing matches “{{ q }}”.{% else %}Nothing here yet.{% endif %}</li>
+  {% endfor %}
+  </ul>
+  {% if data.page > 1 or data.more %}
+  <nav class="pager">
+    {% if data.page > 1 %}<a class="button" href="/activity?show={{ show }}&q={{ q|urlencode }}&page={{ data.page - 1 }}">Newer</a>{% endif %}
+    {% if data.more %}<a class="button" href="/activity?show={{ show }}&q={{ q|urlencode }}&page={{ data.page + 1 }}">Older</a>{% endif %}
+  </nav>
+  {% endif %}
+{% endif %}
+</div>
+{% endblock %}

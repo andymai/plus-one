@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+"$root/bin/ensure-venv" || exit 1
+# Not -m: running app.py as __main__ gives HttpError a second identity that dispatch() cannot catch.
+cd "$root" && exec "$root/.venv/bin/python" -c 'import sys; from plus1.web.app import main; sys.exit(main())' "$@"

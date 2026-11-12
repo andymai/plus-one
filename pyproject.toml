@@ -1,0 +1,88 @@
+[project]
+name = "plus-one"
+# No version here: Plus One runs from its checkout and is never built, and a version in this table would be copied
+# into uv.lock, so every release would change the lock.
+dynamic = ["version"]
+description = "Reviews the pull requests waiting on you, learning from how you review"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "jinja2>=3.1,<4",
+    "pywebpush>=2,<3",
+    "tomlkit>=0.13,<1",
+]
+
+[tool.uv]
+# bin/plus1 runs the code in place, so uv installs the dependencies and never the project itself.
+package = false
+# Resolves only releases at least a week old, the cooldown Dependabot keeps too: most malicious uploads are caught and
+# pulled within days.
+exclude-newer = "7 days"
+
+[dependency-groups]
+# Locked like every other dependency, so a tool release that adds a rule can't turn main red on its own.
+dev = ["basedpyright", "coverage", "import-linter", "prek", "ruff", "vulture"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "C4", "S"]
+ignore = [
+    # The formatter wraps code. What it leaves long is a string or comment that reads better whole.
+    "E501",
+    # Every subprocess call is deliberate: fixed arguments, never a shell, and a tool found on PATH.
+    "S603",
+    "S607",
+]
+# The UI copy uses typographic apostrophes on purpose.
+allowed-confusables = ["’"]
+
+[tool.ruff.lint.per-file-ignores]
+# SQL text here is built from table and column names in code and ? placeholders. Values never enter it.
+"plus1/{store,web/queries}.py" = ["S608"]
+# Fixtures: asserts in setup, fake tokens, /tmp paths that only appear in strings, and constants shared by a class.
+"tests/**" = ["RUF012", "S101", "S105", "S106", "S108"]
+# A vulture whitelist is bare names on purpose.
+"vulture_whitelist.py" = ["B018"]
+
+[tool.basedpyright]
+pythonVersion = "3.11"
+include = ["plus1", "tests"]
+typeCheckingMode = "standard"
+
+[[tool.basedpyright.executionEnvironments]]
+root = "tests"
+# An environment's root is also its import root, so plus1 resolves only with the project root added back.
+extraPaths = ["."]
+# A None reaching a subscript, attribute, or operator in a test fails that test at runtime anyway.
+reportOptionalSubscript = "none"
+reportOptionalMemberAccess = "none"
+reportOptionalOperand = "none"
+
+[tool.coverage.run]
+source = ["plus1"]
+
+[tool.coverage.report]
+# The floor only rises: raise it when coverage does, so a change can't quietly drop tests.
+fail_under = 83
+show_missing = true
+skip_covered = true
+
+[tool.importlinter]
+root_package = "plus1"
+
+[[tool.importlinter.contracts]]
+# The CLI, the tick, and setup run without the web app; plus1.web sits on top of them, never under.
+name = "Only plus1.web imports plus1.web"
+type = "protected"
+protected_modules = ["plus1.web"]
+allowed_importers = []
+
+[tool.vulture]
+paths = ["plus1", "vulture_whitelist.py"]
+min_confidence = 60
+# Routes are registered by their decorator, never called by name.
+ignore_decorators = ["@app.route"]

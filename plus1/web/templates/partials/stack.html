@@ -1,0 +1,26 @@
+{% from "_macros.html" import icon, status_icon, creator %}
+<details class="titem tstack tone-{{ e.tone }}" id="stack-{{ e.ticket }}" data-nav-item {% if stack_open %}open{% endif %}>
+  <summary class="trow">
+    <span class="trow-chev">{{ icon('chevron-right') }}</span>
+    {{ status_icon(e.tone) }}
+    <span class="trow-main">
+      <span class="trow-line">
+        <span class="trow-num">{{ e.ticket }}</span>
+        <span class="trow-title">Stack of {{ e.total }} <span class="trow-sub">{{ e.parts|length }} waiting on you</span></span>
+        <span class="stack-dots">{% for p in e.parts %}{{ status_icon(p.tone, p.stack[1] ~ '/' ~ p.stack[2] ~ ': ' ~ p.icon_label) }}{% endfor %}</span>
+      </span>
+      <span class="trow-info">
+        {% for who in e.creators[:2] %}{{ creator(who) }}{% endfor %}
+        {% if e.creators|length > 2 %}<span class="trow-more" title="{{ e.creators[2:]|map('first')|join(', ') }}">+{{ e.creators|length - 2 }} more</span>{% endif %}
+        {% if e.team_chip %}<span class="yours-chip">{{ e.team_chip }}</span>{% endif %}
+        <span class="trow-time">{{ e.when|ago }}</span>
+      </span>
+    </span>
+  </summary>
+  <div class="tstack-parts">
+    {% for p in e.parts %}
+      {% set card = p %}{% set number = p.pr %}{% set pending = p.pending %}{% set variant = 'part' %}{% set expanded = stack_open and loop.first %}
+      {% include "partials/card.html" %}
+    {% endfor %}
+  </div>
+</details>

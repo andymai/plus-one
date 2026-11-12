@@ -1,0 +1,103 @@
+{% from "_macros.html" import icon, status_icon, creator %}
+{% macro carry() %}<input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="q" value="{{ queue }}"><input type="hidden" name="skip" value="{{ skipped }}">{% endmacro %}
+{% set right = strip|selectattr('state', 'equalto', 'agree')|list %}
+{% set wrong = strip|selectattr('state', 'equalto', 'disagree')|list %}
+{% set passed = strip|selectattr('state', 'equalto', 'skipped')|list %}
+<div class="grade" id="grade-card">
+  {% if notice %}<div class="notice err">{{ icon('alert') }}<span>{{ notice }}</span></div>{% endif %}
+  {% if strip %}
+  <div class="gq-head">
+    <p class="gq-pos">{% if item %}<strong>{{ position }} of {{ strip|length }}</strong> in this queue{% else %}<strong>Queue finished</strong>{% endif %}</p>
+    <p class="gq-left">{{ waiting }} more waiting</p>
+  </div>
+  <ol class="gq-strip">
+  {% for s in strip %}
+    {% set said = {'agree': 'right call', 'disagree': 'wrong call' ~ (', ' ~ s.tag if s.tag else ''), 'skipped': 'skipped', 'current': 'grading now', 'next': 'up next'}[s.state] %}
+    <li class="gq-cell is-{{ s.state }}" title="{{ s.pr|prlabel }} {{ s.title }}: {{ said }}" aria-label="{{ s.pr|prlabel }}, {{ said }}">{% if s.state == 'agree' %}{{ icon('check') }}{% elif s.state == 'disagree' %}{{ icon('x') }}{% elif s.state in ('next', 'current') %}<span class="dot dot-{{ words.VERDICT_TONE.get(s.verdict, 'muted') }}"></span>{% endif %}</li>
+  {% endfor %}
+  </ol>
+  {% endif %}
+  {% if item and not stats.ready and stats.approvals_to_go %}<p class="grade-progress"><strong>{{ stats.approvals_to_go }} graded approval{{ 's' if stats.approvals_to_go != 1 }} to go</strong> on its checklist for approving on its own.</p>{% endif %}
+  {% if item %}
+  {% set r = item.r %}
+  {% set raw = r.raw_review or {} %}
+  {% set tone = 'ok' if r.verdict == 'APPROVE' else ('info' if r.verdict == 'DEFER' else ('bad' if item.kept|selectattr('severity', 'equalto', 'P0')|list else 'warn')) %}
+  <article class="grade-item">
+    <p class="grade-verdict tone-{{ tone }}">{{ status_icon(tone) }}<span>{% if r.verdict == 'APPROVE' %}It would have approved this{% elif r.verdict == 'DRAFT' %}It drafted {{ r.drafts|length }} comment{{ 's' if r.drafts|length != 1 }}{% else %}It left this one to you{% endif %}</span></p>
+    <h2 class="grade-title"><span class="grade-num">{{ r.pr|prlabel }}</span> {{ r.title }}</h2>
+    <p class="meta-strip">{{ creator(words.creator(r)) }}<span>reviewed {{ r.started_at|ago }}</span><a href="/review/{{ r.id }}">See the full review</a></p>
+    {% if raw.about %}<p class="about clamp clamp-2">{{ raw.about|ticks }}</p>{% endif %}
+    <section class="grade-part">
+      <h3>What it said</h3>
+      {% if r.verdict == 'DRAFT' and r.drafts %}
+      <ul class="grade-comments">{% for d in r.drafts %}<li><code class="file-chip">{{ d.path.split('/')[-1] }}:{{ d.line }}</code><p class="clamp">{{ d.body|ticks }}</p></li>{% endfor %}</ul>
+      {% elif r.verdict == 'DEFER' %}{% set lead, detail = words.waiting(r) %}<p class="clamp">{{ lead|ticks }}</p>{% if detail %}<p class="summary-detail clamp clamp-2">{{ detail|ticks }}</p>{% endif %}
+      {% else %}<p class="clamp">{{ (r.reason or raw.summary or 'Nothing worth a comment.')|ticks }}</p>{% endif %}
+    </section>
+    <section class="grade-part">
+      <h3>What happened</h3>
+      {% set st = item.status %}
+      <ul class="grade-happened">
+        {% for a in r.actions %}<li{% if not a.ok %} class="err"{% endif %}>{{ words.ACTION.get(a.action, a.action) }}{% if not a.ok %} (failed){% endif %}<span class="muted"> · {{ a.at|ago }}</span></li>{% endfor %}
+        {% if st and st.state == 'MERGED' %}<li>Now: merged</li>{% elif st and st.state == 'CLOSED' %}<li>Now: closed without merging</li>
+        {% elif st and st.decision == 'APPROVED' %}<li>Now: approved on GitHub</li>{% elif st and st.merge_queue %}<li>Now: in the merge queue</li>{% endif %}
+        {% if not r.actions and not (st and (st.state != 'OPEN' or st.decision == 'APPROVED' or st.merge_queue)) %}<li class="muted">Nothing on record yet.</li>{% endif %}
+      </ul>
+    </section>
+    <div class="gq-actions">
+      <form method="post" action="/grade/{{ r.id }}" hx-post="/grade/{{ r.id }}" hx-target="#grade-card" hx-swap="outerHTML" class="inline">
+        {{ carry() }}<input type="hidden" name="grade" value="agree">
+        <button type="submit" class="primary" data-grade-agree>{{ icon('thumbs-up') }}<span>Right call</span><kbd>Y</kbd></button>
+      </form>
+      <details class="grade-wrong">
+        <summary class="button">{{ icon('thumbs-down') }}<span>Wrong call</span><kbd>N</kbd></summary>
+        <form method="post" action="/grade/{{ r.id }}" hx-post="/grade/{{ r.id }}" hx-target="#grade-card" hx-swap="outerHTML" class="grade-why">
+          {{ carry() }}<input type="hidden" name="grade" value="disagree">
+          <fieldset class="tag-chips">
+            <legend>What went wrong?</legend>
+            {% for t in tags %}<label class="tag-chip"><input type="radio" name="tag" value="{{ t }}" required><span><kbd>{{ loop.index }}</kbd>{{ t }}</span></label>{% endfor %}
+          </fieldset>
+          <textarea name="note" rows="2" placeholder="Optional: what you would have done" aria-label="Note"></textarea>
+          <div class="grade-why-actions"><button type="submit" class="primary">Save as wrong call</button></div>
+        </form>
+      </details>
+      <form method="post" action="/grade/{{ r.id }}" hx-post="/grade/{{ r.id }}" hx-target="#grade-card" hx-swap="outerHTML" class="inline push-right">
+        {{ carry() }}<input type="hidden" name="grade" value="skip">
+        <button type="submit" class="ghost" data-grade-skip><span>Skip</span><kbd>S</kbd></button>
+      </form>
+    </div>
+  </article>
+  {% elif strip %}
+  {% set approvals = strip|selectattr('verdict', 'equalto', 'APPROVE')|selectattr('state', 'in', ['agree', 'disagree'])|list %}
+  {% set missed = approvals|selectattr('state', 'equalto', 'disagree')|list %}
+  <section class="gq-done">
+    <div class="tiles gq-tiles">
+      <div class="tile"><span class="tile-label">{{ status_icon('ok') }}Right calls</span><span class="tile-num">{{ right|length }}</span></div>
+      <div class="tile"><span class="tile-label">{{ status_icon('bad') }}Wrong calls</span><span class="tile-num">{{ wrong|length }}</span></div>
+      <div class="tile"><span class="tile-label">{{ status_icon('muted') }}Skipped</span><span class="tile-num">{{ passed|length }}</span></div>
+    </div>
+    {% if wrong %}
+    <h3 class="gq-sub">Wrong calls</h3>
+    <ul class="mini-list">{% for s in wrong %}<li><a href="/review/{{ s.id }}">{{ status_icon('bad') }}<span class="mini-title"><span class="grade-num">{{ s.pr|prlabel }}</span> {{ s.title }}</span>{% if s.tag %}<span class="muted small">{{ s.tag }}</span>{% endif %}</a></li>{% endfor %}</ul>
+    {% endif %}
+    <h3 class="gq-sub">Its checklist now</h3>
+    {% set ga, fa, ag = checks.graded_approvals, checks.false_approvals, checks.agreement %}
+    <ul class="checklist gq-effect">
+      <li class="{{ 'is-ok' if ga.ok }}">{{ status_icon('ok' if ga.ok else 'muted') }}<span>Graded approvals</span><span class="checklist-value">{{ ga.value }}{% if approvals %} <span class="add-text">+{{ approvals|length }}</span>{% endif %}</span></li>
+      <li class="{{ 'is-ok' if fa.ok }}">{{ status_icon('ok' if fa.ok else 'warn') }}<span>False approvals</span><span class="checklist-value">{{ fa.value }}{% if missed %} <span class="del-text">+{{ missed|length }}</span>{% endif %}</span></li>
+      <li class="{{ 'is-ok' if ag.ok }}">{{ status_icon('ok' if ag.ok else 'muted') }}<span>Agreement</span><span class="checklist-value">{{ ag.value if stats.graded else 'None yet' }}</span></li>
+    </ul>
+    <div class="empty-actions gq-next">
+      {% if waiting %}<a class="button primary" href="/grade{% if skipped %}?skip={{ skipped }}{% endif %}">{{ icon('play') }}<span>Start another queue</span></a>{% else %}<span class="muted">That was the last of them.</span>{% endif %}
+      <a class="button" href="/">Back to To do</a>
+    </div>
+  </section>
+  {% else %}
+  <div class="empty">
+    <span class="empty-mark">{{ icon('check') }}</span>
+    <h2>Nothing left to grade</h2>
+    <p>Decisions you act on here or on GitHub get graded on their own.</p>
+    <div class="empty-actions"><a class="button" href="/insights">See its checklist</a></div>
+  </div>
+  {% endif %}
+</div>

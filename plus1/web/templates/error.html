@@ -1,0 +1,4 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>{{ status }} · Plus One</title><link rel="stylesheet" href="/static/app.css"></head>
+<body class="error-body"><main class="error-card"><p class="error-code">{{ status }}</p><h1>{{ {403: 'Not allowed', 404: 'Not found', 413: 'Too large', 500: 'Something broke'}.get(status, 'Error') }}</h1><p>{{ message }}</p><a class="button primary" href="/">Back to To do</a></main></body></html>

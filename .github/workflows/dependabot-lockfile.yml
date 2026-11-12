@@ -1,0 +1,63 @@
+name: Dependabot lockfile
+
+# Dependabot updates uv.lock but not requirements.lock, the export bin/ensure-venv installs where uv isn't available.
+# This commits a fresh export to the Dependabot branch. It pushes with the GitHub App's token, since a push made with
+# GITHUB_TOKEN never triggers CI on the new commit. Workflows Dependabot triggers read Dependabot secrets, so
+# RELEASE_KUN_APP_ID and RELEASE_KUN_APP_PRIVATE_KEY are set there too.
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths: [uv.lock]
+
+permissions: {}
+
+# Not cancelled: the refresh push starts a run in this group, which would cancel the one that pushed it.
+concurrency:
+  group: dependabot-lockfile-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  export:
+    # Only Dependabot's own pushes to its own in-repo branches, and not a re-run someone else started. The refresh
+    # commit below is pushed as the app, so the run it triggers skips here instead of looping.
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.triggering_actor == 'dependabot[bot]' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.RELEASE_KUN_APP_ID }}
+          private-key: ${{ secrets.RELEASE_KUN_APP_PRIVATE_KEY }}
+          permission-contents: write
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Still the commit Dependabot pushed
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED"
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      # --frozen reads the lock as written and runs nothing from the checkout.
+      - name: Export the lock
+        run: uv export --frozen --no-dev --no-emit-project --format requirements.txt --output-file requirements.lock -q
+      - name: Commit it if it changed
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          if git diff --quiet requirements.lock; then
+            exit 0
+          fi
+          id=$(gh api "/users/${SLUG}%5Bbot%5D" --jq .id)
+          git config user.name "${SLUG}[bot]"
+          git config user.email "${id}+${SLUG}[bot]@users.noreply.github.com"
+          # [dependabot skip] lets Dependabot keep rebasing its branch over this commit.
+          git commit -m "chore(deps): refresh requirements.lock" -m "[dependabot skip]" requirements.lock
+          git push

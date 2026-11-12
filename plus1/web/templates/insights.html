@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, status_icon, chip %}
+{% block title %}Insights{% endblock %}
+{% block page_class %}page-wide{% endblock %}
+{% block head %}
+<div class="ph-title"><h1>Insights</h1></div>
+<div class="ph-actions">
+  <a class="button ghost" href="/settings">{{ icon('sliders') }}<span>Settings</span></a>
+</div>
+{% endblock %}
+{% block main %}
+<div class="grid-2">
+{% for g in gates %}
+  {% set met = g.stats.checks|selectattr('ok')|list|length %}
+  {% set here = ' in ' ~ g.repo if gates|length > 1 else '' %}
+  <section class="panel">
+    <header class="panel-head">
+      <h2>Ready to approve on its own{{ here }}?</h2>
+      {% if g.auto %}{{ chip('Auto-approve', 'bad') }}{% else %}{{ chip(met ~ ' of ' ~ g.stats.checks|length ~ ' met', 'ok' if g.stats.ready else 'info') }}{% endif %}
+    </header>
+    {% if g.auto %}
+      <p class="panel-text">It approves clean PRs{{ here }} without you. Comments still wait for you.</p>
+    {% else %}
+      <p class="panel-text">It never posts on its own. This checklist is how far it has earned approving clean PRs{{ here }} without you.</p>
+    {% endif %}
+    <svg class="meter" width="100%" height="6" aria-hidden="true"><rect class="meter-track" width="100%" height="6" rx="3"/><rect class="meter-fill{{ ' is-ok' if g.stats.ready }}" width="{{ (met / g.stats.checks|length * 100)|round(1) }}%" height="6" rx="3"/></svg>
+    {% set eta_days, eta_note = g.stats.eta %}
+    {% if eta_note and not g.auto %}<p class="eta">{{ icon('clock', 'i-xs') }}<span>{{ eta_note }}</span></p>{% endif %}
+    <ul class="checklist">
+    {% for c in g.stats.checks %}<li class="{{ 'is-ok' if c.ok }}">{{ status_icon('ok' if c.ok else 'muted') }}{% if c.key == 'graded_approvals' and not c.ok %}<span><a href="/grade">{{ c.label }}</a><span class="muted"> · {{ g.stats.approvals_to_go }} to go</span></span>{% else %}<span>{{ c.label }}</span>{% endif %}<span class="checklist-value">{{ c.value }}</span></li>{% endfor %}
+    </ul>
+    <div class="gate-action"><a class="button{{ ' primary' if g.stats.ready and not g.auto }}" href="/settings#repo-{{ g.index }}">{{ icon('sliders') }}<span>{{ 'Turn it off in Settings' if g.auto else 'Turn it on in Settings' }}</span></a></div>
+  </section>
+{% endfor %}
+
+  <section class="panel">
+    <header class="panel-head"><h2>How often it agrees with you</h2></header>
+    <div class="stat-big">
+      <span class="stat-num">{{ '%.0f'|format(stats.agreement * 100) if stats.graded else '–' }}{% if stats.graded %}<small>%</small>{% endif %}</span>
+      <span class="stat-sub">{{ stats.graded }} of {{ stats.total }} decisions graded</span>
+    </div>
+    <svg class="meter" width="100%" height="6" aria-hidden="true"><rect class="meter-track" width="100%" height="6" rx="3"/><rect class="meter-fill" width="{{ ((stats.graded / stats.total * 100) if stats.total else 0)|round(1) }}%" height="6" rx="3"/></svg>
+    <p class="panel-text small">Grades come from what you do: posting or approving counts as agreeing, "Don't post" and "I'd comment" count as disagreeing, and so does reviewing a PR differently on GitHub.</p>
+    <form method="post" action="/insights/sync" class="inline">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit">{{ icon('refresh') }}<span>Check my GitHub reviews now</span></button>
+      {% if synced %}<span class="muted small">Last checked {{ synced|ago }}</span>{% endif %}
+    </form>
+  </section>
+</div>
+
+<section class="block">
+  <h2 class="block-title">This week</h2>
+  <div class="tiles">
+    <div class="tile"><span class="tile-label">PRs looked at</span><span class="tile-num">{{ w.prs_seen }}</span></div>
+    <div class="tile"><span class="tile-label">Reviewed</span><span class="tile-num">{{ w.reviews }}</span></div>
+    <div class="tile"><span class="tile-label">{{ status_icon('ok') }}Looked good</span><span class="tile-num">{{ w.verdicts.get('APPROVE', 0) }}</span></div>
+    <div class="tile"><span class="tile-label">{{ status_icon('warn') }}Found something</span><span class="tile-num">{{ w.verdicts.get('DRAFT', 0) }}</span></div>
+    <div class="tile"><span class="tile-label">{{ status_icon('info') }}Needed your eyes</span><span class="tile-num">{{ w.verdicts.get('DEFER', 0) }}</span></div>
+    <div class="tile"><span class="tile-label">Spent</span><span class="tile-num">{{ w.spend|money }}</span><span class="tile-sub">{{ w.avg_cost|money }} a review</span></div>
+  </div>
+</section>
+
+<div class="grid-2">
+  <section class="panel">
+    {% set peak = spend|map(attribute='cost')|max if spend else 0 %}
+    {% set n = spend|length %}
+    <header class="panel-head"><h2>Spend</h2><span class="muted small">Last {{ n }} days · {{ spend|sum(attribute='cost')|money }}</span></header>
+    {% if peak %}
+    <svg class="chart" width="100%" height="132" role="img" aria-label="Spend per day for the last {{ n }} days">
+      <line class="chart-base" x1="0" x2="100%" y1="104" y2="104"/>
+      {% for d in spend %}
+        {% set h = [(d.cost / peak) * 90, 2]|max if d.cost else 0 %}
+        <g class="chart-col">
+          <title>{{ d.day }}: {{ d.cost|money }}, {{ d.reviews }} review{{ 's' if d.reviews != 1 }}</title>
+          <rect class="chart-hit" x="{{ (loop.index0 / n * 100)|round(3) }}%" y="0" width="{{ (100 / n)|round(3) }}%" height="104"/>
+          <rect class="chart-bar{{ ' is-today' if loop.last }}" x="{{ ((loop.index0 + 0.18) / n * 100)|round(3) }}%" y="{{ (104 - h)|round(1) }}" width="{{ (0.64 / n * 100)|round(3) }}%" height="{{ h|round(1) }}" rx="3"/>
+          <text class="chart-label" x="{{ ((loop.index0 + 0.5) / n * 100)|round(3) }}%" y="122" text-anchor="middle">{{ d.day[8:10]|int }}</text>
+        </g>
+      {% endfor %}
+    </svg>
+    {% else %}
+    <p class="muted">No spend in the last {{ n }} days.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <header class="panel-head"><h2>Cost by step</h2><span class="muted small">Last 7 days</span></header>
+    {% if stages %}
+    <table class="grid">
+      <thead><tr><th>Step</th><th class="num">Calls</th><th class="num">Avg time</th><th class="num">Failures</th><th class="num">Cost</th></tr></thead>
+      <tbody>
+      {% for s in stages %}<tr><td>{{ words.STAGE.get(s.stage, s.stage) }}</td><td class="num">{{ s.calls }}</td><td class="num">{{ s.avg_s|duration }}</td><td class="num{{ ' err' if s.failures }}">{{ s.failures or '' }}</td><td class="num">{{ s.cost|money }}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="muted">No model calls in the last 7 days.</p>
+    {% endif %}
+    {% if factcheck.flagged %}
+    <h3 class="sub-title">Fact-check</h3>
+    <p class="panel-text small">Flagged {{ factcheck.flagged }} comment{{ 's' if factcheck.flagged != 1 }}. You said {{ factcheck.wrong }} {{ 'was' if factcheck.wrong == 1 else 'were' }} fine as written.</p>
+    {% endif %}
+    {% if w.skip_reasons %}
+    {% set top = w.skip_reasons|map(attribute='prs')|max %}
+    <h3 class="sub-title">Why PRs were skipped</h3>
+    <ul class="hbars">
+    {% for s in w.skip_reasons %}<li>{% set plain = words.skip_reason(s.reason) %}<span class="hbar-label">{{ plain[:1]|upper ~ plain[1:] }}</span><svg class="hbar" width="100%" height="6" aria-hidden="true"><rect class="meter-track" width="100%" height="6" rx="3"/><rect class="meter-fill is-quiet" width="{{ (s.prs / top * 100)|round(1) }}%" height="6" rx="3"/></svg><span class="hbar-num">{{ s.prs }}</span></li>{% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+</div>
+
+{% if stats.disagreements %}
+<section class="block">
+  <h2 class="block-title">Where it got it wrong <span class="count">{{ stats.disagreements|length }}</span></h2>
+  <ul class="list">
+  {% for r in stats.disagreements %}
+    <li class="row" data-nav-item data-href="/review/{{ r.id }}">
+      <a class="row-link" href="/review/{{ r.id }}">
+        {{ status_icon('err') }}
+        <span class="row-num">{{ r.pr|prlabel }}</span>
+        <span class="row-title">{{ r.title }}{% if r.note %}<span class="row-note">{{ r.note }}</span>{% endif %}</span>
+        <span class="row-meta">{{ chip(words.OUTCOME.get(r.verdict, '')) }}{% if r.tag %}{{ chip(r.tag, 'bad') }}{% endif %}{% if r.andy_action %}<span class="muted small">{{ r.andy_action }}</span>{% endif %}</span>
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if ungraded %}
+<a class="cta-row block" href="/grade">
+  {{ icon('thumbs-up') }}
+  <span class="cta-text"><strong>Decisions you haven't graded</strong><span class="count">{{ ungraded }}</span>{% if not stats.ready and stats.approvals_to_go %}<span class="muted">{{ stats.approvals_to_go }} graded approval{{ 's' if stats.approvals_to_go != 1 }} to go</span>{% endif %}</span>
+  <span class="button primary sm">Start a queue{{ icon('arrow-right') }}</span>
+</a>
+{% endif %}
+
+<div class="grid-2">
+  <section class="panel">
+    <header class="panel-head"><h2>Rubric changes</h2><a class="small" href="/proposals">See all</a></header>
+    <ul class="mini-list">
+    {% for p in proposals %}
+      <li><a href="/proposals/{{ p.id }}">{{ icon('book') }}<span class="mini-title">{% if p.pr %}From {{ p.pr|prlabel }} {{ p.title }}{% else %}Learned from your reviews on GitHub{% endif %}</span>{{ chip(p.status, words.PROPOSAL_TONE.get(p.status, 'muted')) }}</a></li>
+    {% else %}<li class="mini-empty">None yet. When it gets one wrong, use "Teach it" on that PR.</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <header class="panel-head"><h2>Recent checks</h2></header>
+    <div class="table-wrap">
+    <table class="grid">
+      <thead><tr><th>Started</th><th>By</th><th class="num">Took</th><th class="num">Looked at</th><th class="num">Reviewed</th><th class="num">Problems</th><th class="num">Cost</th></tr></thead>
+      <tbody>
+      {% for run in runs %}{% if run.quiet %}<tr class="is-quiet"><td colspan="7">{{ run.count }} checks, {{ run.first|clock }} to {{ run.last[11:16] if run.first[:10] == run.last[:10] else run.last|clock }}, nothing to review</td></tr>{% else %}<tr class="{{ 'is-bad' if run.errors }}"><td class="nowrap">{{ run.started_at|clock }}</td><td>{{ {'timer': 'schedule', 'ui': 'you', 'manual': 'command line'}.get(run.trigger, run.trigger) }}</td><td class="num">{{ run.started_at|elapsed(run.finished_at) if run.finished_at else 'running' }}</td><td class="num">{{ run.candidates or '' }}</td><td class="num">{{ run.reviewed or 0 }}</td><td class="num">{{ run.errors or '' }}</td><td class="num">{{ run.cost_usd|money }}</td></tr>{% endif %}
+      {% else %}<tr><td colspan="7" class="muted">No checks yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

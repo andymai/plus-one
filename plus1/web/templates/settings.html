@@ -1,0 +1,504 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, status_icon, chip %}
+{% macro val(sec, name, saved) %}{{ sent[name] if section == sec and name in sent else saved }}{% endmacro %}
+{% macro on(sec, name, saved) %}{% if (section == sec and name in sent) or (section != sec and saved) %}checked{% endif %}{% endmacro %}
+{% macro err(sec, name) %}{% if section == sec and error and error_field == name %}<p class="st-error">{{ icon('alert') }}<span>{{ error }}</span></p>{% endif %}{% endmacro %}
+{% macro row(label, help='', keys='', cls='', for_=None, sec=None, field=None) %}
+<div class="st-row {{ cls }}{% if field and section == sec and error and error_field == field %} has-error{% endif %}" data-keys="{{ keys }}">
+  <div class="st-text">
+    {% if for_ %}<label class="st-label" for="{{ for_ }}">{{ label }}</label>{% else %}<div class="st-label">{{ label }}</div>{% endif %}
+    {% if help %}<p class="st-help">{{ help }}</p>{% endif %}
+    {% if field %}{{ err(sec, field) }}{% endif %}
+  </div>
+  <div class="st-ctl">{{ caller() }}</div>
+</div>
+{% endmacro %}
+{% macro number(sec, name, saved, lo, hi, label, unit='', pre='', step=1, stepby=None, default=None, wide=False) %}
+<span class="num-field{{ ' wide' if wide }}"><button type="button" class="step" data-step="-1"{% if stepby %} data-stepby="{{ stepby }}"{% endif %} aria-label="Less" tabindex="-1">−</button>{% if pre %}<span class="affix pre">{{ pre }}</span>{% endif %}<input type="number" inputmode="decimal" name="{{ name }}" id="f-{{ name }}" value="{{ val(sec, name, saved) }}" min="{{ lo }}" max="{{ hi }}" step="{{ step }}" aria-label="{{ label }}" data-label="{{ label }}" data-saved="{{ saved }}"{% if default is not none %} data-default="{{ default }}"{% endif %} required>{% if unit %}<span class="affix">{{ unit }}</span>{% endif %}<button type="button" class="step" data-step="1"{% if stepby %} data-stepby="{{ stepby }}"{% endif %} aria-label="More" tabindex="-1">+</button></span>
+{% endmacro %}
+{% macro switch(sec, name, saved, label, default=None, risk=False) %}<input type="checkbox" class="switch{{ ' is-risk' if risk }}" role="switch" name="{{ name }}" id="f-{{ name }}" value="1" aria-label="{{ label }}" data-label="{{ label }}" data-saved="{{ 'on' if saved }}"{% if default is not none %} data-default="{{ 'on' if default }}"{% endif %} {{ on(sec, name, saved) }}>{% endmacro %}
+{% macro textbox(sec, name, saved, label, mono=False, default=None, placeholder='') %}<input type="text" name="{{ name }}" id="f-{{ name }}" value="{{ val(sec, name, saved) }}"{% if mono %} class="mono"{% endif %} aria-label="{{ label }}" data-label="{{ label }}" data-saved="{{ saved }}"{% if default is not none %} data-default="{{ default }}"{% endif %} placeholder="{{ placeholder }}" spellcheck="false" autocomplete="off">{% endmacro %}
+{% macro choose(sec, name, saved, label, options) %}{% set picked = val(sec, name, saved)|string %}<select name="{{ name }}" aria-label="{{ label }}" data-label="{{ label }}" data-saved="{{ saved }}">{% for o in options %}<option{% if o == picked %} selected{% endif %}>{{ o }}</option>{% endfor %}{% if picked not in options %}<option selected>{{ picked }}</option>{% endif %}</select>{% endmacro %}
+{% macro seg(sec, name, saved, label, options) %}{% set picked = val(sec, name, saved)|string %}<span class="seg" role="radiogroup" aria-label="{{ label }}">{% for value, text in options %}<label><input type="radio" name="{{ name }}" value="{{ value }}" data-label="{{ label }}" data-saved="{{ saved }}"{% if value == picked %} checked{% endif %}><span>{{ text }}</span></label>{% endfor %}</span>{% endmacro %}
+{% macro locked(items, mono=True) %}{% if items %}<div class="locked">{% for item in items %}<span class="chip-lock{{ ' mono' if mono }}" title="{{ item }}">{{ icon('shield') }}<span>{{ item }}</span></span>{% endfor %}</div>{% else %}<span class="layer-none">None</span>{% endif %}{% endmacro %}
+{% macro chips(sec, name, saved, label, mono=False, placeholder='Add…', kind='text') %}
+{% set text = val(sec, name, saved|join('\n')) %}
+<div class="chips" data-chips data-kind="{{ kind }}" data-mono="{{ 1 if mono else 0 }}">
+  <textarea class="st-fallback{{ ' mono' if mono }}" name="{{ name }}" rows="3" aria-label="{{ label }}" data-label="{{ label }}" data-saved="{{ saved|join('\n') }}" hidden>{{ text }}</textarea>
+  {% for item in text.split('\n') if item.strip() %}<span class="chip-x{{ ' mono' if mono }}" title="{{ item }}"><span>{{ item }}</span><button type="button" aria-label="Remove {{ item }}">{{ icon('x') }}</button></span>{% endfor %}
+  <input type="text" class="st-enhanced{{ ' mono-input' if mono }}" placeholder="{{ placeholder }}" aria-label="Add to {{ label }}" spellcheck="false">
+</div>
+{% endmacro %}
+{% macro team_read(found) %}
+{% set good = found|rejectattr('failed')|list %}
+{% if good %}<p class="st-help">{% for t in good %}{{ t.name }}: {{ t.size }}{{ ', ' if not loop.last }}{% endfor %}</p>{% endif %}
+{% for t in found if t.failed %}<p class="st-error">{{ icon('alert') }}<span>Couldn't read {{ t.name }}{% if t.count %}, so it keeps the {{ t.size }} it last found{% endif %}. Check the name and that your GitHub login can see that team.</span></p>{% endfor %}
+{% endmacro %}
+{% macro team_suggest(target, label) %}
+<details class="st-team-suggest" id="suggest-{{ target }}">
+  <summary class="button sm">{{ icon('chevron-right') }}<span>{{ label }}</span></summary>
+  <div hx-get="/settings/team/suggest?list={{ target }}" hx-trigger="toggle once from:#suggest-{{ target }}" hx-swap="innerHTML"><p class="st-help">Asking GitHub…</p></div>
+</details>
+{% endmacro %}
+{% macro section_head(id, title, extra='') %}<header class="st-section-head"><h3>{{ title }}</h3><span class="push-right"><span class="st-unsaved">Unsaved</span>{{ extra }}</span></header>{% endmacro %}
+{% macro savebar(sec) %}
+{% if section == sec and confirm == sec %}
+{% if items %}<div class="st-confirm is-loosen">
+  <h4>{{ icon('alert') }}This lets Plus One do more on its own</h4>
+  <dl class="st-diff">{% for item in items %}<dt>{{ item.label }}</dt><dd>{% if item.removed or item.added %}{% for gone in item.removed %}<span class="del-text">− {{ gone }}</span>{% endfor %}{% for more in item.added %}<span class="add-text">+ {{ more }}</span>{% endfor %}{% else %}<span class="was">{{ item.was }}</span>{{ icon('arrow-right', 'arrow') }}<span class="now">{{ item.now }}</span>{% endif %}</dd>{% endfor %}</dl>
+  <label class="confirm-field"><span>Type <code>{{ confirm_word }}</code> to save</span><input type="text" name="confirm" data-word="{{ confirm_word }}" autocomplete="off" spellcheck="false" required></label>
+</div>{% endif %}
+{% if runs %}<div class="st-confirm is-run">
+  <h4>{{ icon('alert') }}This runs code on this machine</h4>
+  <p>Plus One will run exactly this, as you, with access to your files.</p>
+  {% for r in runs %}<div class="run-item"><b>{{ r.label }}</b><div class="argv">{% for a in r.argv %}<code{% if a == '{files}' %} class="is-files" title="Becomes the changed files that exist"{% endif %}>{{ a }}</code>{% endfor %}</div><span class="small">{{ r.note }}</span></div>{% endfor %}
+  <label class="confirm-field"><span>Type <code>{{ run_word }}</code> to save</span><input type="text" name="confirm_run" data-word="{{ run_word }}" autocomplete="off" spellcheck="false" required></label>
+</div>{% endif %}
+{% if retypes %}<div class="st-confirm is-retype">
+  <h4>{{ icon('alert') }}This can lock you out of the web app</h4>
+  <p>A wrong value keeps the web app from letting you in once it restarts.</p>
+  {% for r in retypes %}<label class="confirm-field"><span>Type the new {{ r.label|lower }} again: <code>{{ r.value }}</code></span><input type="text" name="again_{{ r.name }}" data-word="{{ r.value }}" data-exact autocomplete="off" spellcheck="false" required></label>{% endfor %}
+  <p class="recover">If you get locked out, fix <code>[web]</code> in <code>{{ cfg.config_path|tilde }}</code> on this computer, then restart the web app.</p>
+</div>{% endif %}
+{% elif section == sec and error and not error_field %}<div class="notice err st-notice-err">{{ icon('alert') }}<span>{{ error }}</span></div>{% endif %}
+<div class="st-savebar"><span class="msg">{{ 'Not saved yet' if section == sec else 'Unsaved changes' }}</span><button type="button" class="ghost" data-discard>Discard</button><button type="submit" class="primary" data-save><span>Save</span><kbd data-mod>⌘</kbd><kbd>S</kbd></button></div>
+{% endmacro %}
+{% macro form_open(sec, action) %}<form method="post" action="{{ action }}#{{ sec }}" data-form="{{ sec }}" novalidate autocomplete="off"><input type="hidden" name="csrf" value="{{ csrf }}">{% endmacro %}
+{% macro section_class(sec) %}st-section{% if section == sec %} is-dirty has-problem{% endif %}{% endmacro %}
+
+{% block title %}Settings{% endblock %}
+{% block page_class %}page-settings{% endblock %}
+{% block head %}<div class="ph-title"><h1>Settings</h1></div>{% endblock %}
+{% block scripts %}<script src="/static/settings.js" defer></script>
+<noscript><link rel="stylesheet" href="/static/noscript.css"></noscript>{% endblock %}
+{% block main %}
+<div class="st-wrap">
+<nav class="st-rail" aria-label="Settings sections">
+  <div class="st-search">{{ icon('search') }}<input type="search" data-filter placeholder="Find a setting" aria-label="Find a setting" autocomplete="off"><kbd>/</kbd></div>
+  {% for group, items in nav %}<div class="st-rail-group">{{ group }}</div>
+  {% for id, title, value, live in items %}<a href="#{{ id }}" data-nav="{{ id }}"><span>{{ title }}</span>{% if id.startswith('repo-') %}<span class="rail-state{{ ' is-on' if live }}">{{ value }}</span>{% endif %}<span class="dirty-dot"></span></a>{% endfor %}
+  {% endfor %}
+</nav>
+
+<div class="st-main">
+{% if broken %}<div class="notice err st-broken">{{ icon('alert') }}<span>config.toml doesn't parse right now, so Plus One keeps using the last settings that did, and nothing saves here until it's fixed: {{ broken }}</span></div>{% endif %}
+
+<section class="st-status{{ ' is-paused' if status.paused }}" id="overview" aria-label="What it's doing now">
+  <form method="post" action="{{ '/resume' if status.paused else '/pause' }}" class="st-status-main">
+    <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="next" value="/settings">
+    <button type="submit" class="switch-button" role="switch" aria-checked="{{ 'false' if status.paused else 'true' }}" aria-label="{{ 'Resume checking PRs' if status.paused else 'Pause checking PRs' }}"><span></span></button>
+    <div>
+      <p class="st-status-title">{{ 'Paused' if status.paused else ('Checking PRs now' if status.running else 'Checking PRs') }}</p>
+      <p class="st-status-sub">{% if status.paused %}{% if paused_since %}Since {{ paused_since|clock }}. {% endif %}No checks run until you turn this back on.{% elif not status.timer_enabled %}The timer isn't installed. Run <code>bin/plus1 install</code>.{% elif next_label %}Next check {{ 'at ' if next_today }}{{ next_label }}{% else %}No checks scheduled{% endif %}</p>
+    </div>
+  </form>
+  <div class="st-facts">
+    <a class="st-fact" href="#schedule"><span class="st-fact-k">When</span><span class="st-fact-v">{{ when }} {{ zone_abbr }}</span></a>
+    <a class="st-fact" href="#budget"><span class="st-fact-k">Spent today</span><span class="st-fact-v">{{ spend_today|money }} of {{ cfg.limits.max_spend_per_day_usd|money }}<svg class="mini-meter" width="44" height="6" aria-hidden="true"><rect class="meter-track" width="44" height="6" rx="3"/><rect class="meter-fill{{ ' is-over' if status.spend_capped }}" width="{{ (44 * [1, spend_today / cfg.limits.max_spend_per_day_usd]|min)|round(1) if cfg.limits.max_spend_per_day_usd else 44 }}" height="6" rx="3"/></svg></span></a>
+    {% for r in repos[:2] %}<a class="st-fact" href="#repo-{{ r.index }}"><span class="st-fact-k">{{ r.entry.name }}</span><span class="st-fact-v{{ ' is-on' if r.entry.auto_approve }}">{{ 'Approves on its own' if r.entry.auto_approve else 'You approve' }}</span></a>{% endfor %}
+    {% if repos|length > 2 %}<a class="st-fact" href="#repo-2"><span class="st-fact-k">Other repos</span><span class="st-fact-v">{{ repos|length - 2 }} more</span></a>{% endif %}
+  </div>
+</section>
+<p class="st-saved-to">Changes save to <code>{{ cfg.config_path|tilde }}</code>, keeping your comments, and the next check uses them.</p>
+
+<nav class="st-index" aria-label="Settings sections">
+  <div class="st-search">{{ icon('search') }}<input type="search" data-filter placeholder="Find a setting" aria-label="Find a setting" autocomplete="off"></div>
+  {% for group, items in nav %}<div class="st-index-group"><h2>{{ group }}</h2><ul>
+    {% for id, title, value, live in items %}<li><a href="#{{ id }}" data-nav="{{ id }}"><span>{{ title }}</span><span class="v{{ ' is-on' if live }}">{{ value }}</span><span class="dirty-dot"></span>{{ icon('chevron-right') }}</a></li>{% endfor %}
+  </ul></div>{% endfor %}
+</nav>
+<div class="st-crumb"><span>Settings</span>{{ icon('chevron-right') }}<strong data-crumb-name>Overview</strong><button type="button" class="ghost sm" data-to-index>Sections</button></div>
+
+{# Checking #}
+<div class="st-group" id="g-checking"><div class="st-group-head"><h2>Checking</h2><p>When it runs, which PRs it picks up, and what it may spend.</p></div>
+
+<section class="{{ section_class('schedule') }}" id="schedule" data-title="Schedule">
+  {{ section_head('schedule', 'Schedule') }}
+  {{ form_open('schedule', '/settings/schedule') }}<div class="st-rows">
+    {% call row('Days', keys='days weekdays weekend window.days', cls='is-top', sec='schedule', field='days') %}
+      <div class="days" role="group" aria-label="Days">{% for d in days %}<label class="pill"><input type="checkbox" name="day_{{ d }}" value="1" data-label="{{ d }}" data-saved="{{ 'on' if loop.index0 in cfg.window.days }}" {{ on('schedule', 'day_' ~ d, loop.index0 in cfg.window.days) }}><span>{{ d }}</span></label>{% endfor %}</div>
+    {% endcall %}
+    {% call row('Hours', 'Checks start on the hour and half hour, in the zone below.', keys='hours start end window.start_hour window.end_hour', sec='schedule', field='end') %}
+      <div class="time-range">
+        <select name="start_hour" id="f-start_hour" aria-label="From" data-label="Start" data-saved="{{ cfg.window.start_hour }}" data-default="{{ defaults.window.start_hour }}">{% for h, label in hours[:24] %}<option value="{{ h }}"{% if val('schedule', 'start_hour', cfg.window.start_hour)|string == h|string %} selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+        <span>to</span>
+        <select name="end" id="f-end" aria-label="To" data-label="End" data-saved="{{ cfg.window.end_hour + 1 }}" data-default="{{ defaults.window.end_hour + 1 }}">{% for h, label in hours[1:] %}<option value="{{ h }}"{% if val('schedule', 'end', cfg.window.end_hour + 1)|string == h|string %} selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+      </div>
+    {% endcall %}
+    {% call row('Time zone', keys='timezone zone tz', for_='f-timezone', sec='schedule', field='timezone') %}
+      <div class="combo" data-combo><input type="text" name="timezone" id="f-timezone" value="{{ val('schedule', 'timezone', cfg.timezone) }}" data-label="Time zone" data-saved="{{ cfg.timezone }}" data-default="{{ system_zone }}" spellcheck="false" required>{{ icon('chevron-down') }}</div>
+    {% endcall %}
+    {% call row('Random delay', "Each check starts up to this late, so teammates' copies of Plus One don't all review a team request at the same moment.", keys='jitter delay random window.jitter_minutes', sec='schedule', field='jitter_minutes') %}
+      {{ number('schedule', 'jitter_minutes', cfg.window.jitter_minutes, 0, 29, 'Random delay', unit='min', default=defaults.window.jitter_minutes) }}
+    {% endcall %}
+    {% set per_day = (cfg.window.end_hour + 1 - cfg.window.start_hour) * 2 %}
+    {% call row('When checks run', keys='preview checks run timeline', cls='is-stack') %}
+      <div class="sched" data-sched><svg role="img" aria-label="When checks run in a day"></svg>
+      <p class="sched-cap" data-sched-cap><span><strong>{{ per_day }}</strong> checks a day</span><span><strong>{{ per_day * cfg.window.days|length }}</strong> a week</span><span>Last one starts at {{ words.clock_hour(cfg.window.end_hour)|replace(':00', ':30') }}</span></p></div>
+    {% endcall %}
+  </div>{{ savebar('schedule') }}</form>
+</section>
+
+<section class="{{ section_class('sources') }}" id="sources" data-title="Sources">
+  {{ section_head('sources', 'Sources') }}
+  {{ form_open('sources', '/settings/sources') }}<div class="st-rows">
+    {% call row('Review requests', 'PRs where GitHub asks you for a review.', keys='review requests github') %}<span class="st-always">{{ icon('check') }}Always</span>{% endcall %}
+    {% call row('Follow-ups', 'Open PRs you asked to change, so it can check your asks once the author pushes.', keys='follow-ups followups changes requested') %}<span class="st-always">{{ icon('check') }}Always</span>{% endcall %}
+    {% call row('Slack', 'Also review PRs linked in these channels.', keys='slack enabled', cls='is-inline', for_='f-enabled') %}{{ switch('sources', 'enabled', cfg.slack.enabled, 'Slack', default=defaults.slack.enabled) }}{% endcall %}
+    {% set chan_text = val('sources', 'channels', channels) %}
+    {% call row('Channels', 'Paste a channel link or ID to add one. Counts are PRs each channel surfaced in the last 14 days.', keys='slack channels', cls='is-stack is-sub', sec='sources', field='channels') %}
+      <div class="slack-rows" data-slack>
+        <textarea class="st-fallback mono" name="channels" rows="4" aria-label="Slack channels, one per line as name=ID" data-label="Slack channels" data-saved="{{ channels }}" hidden>{{ chan_text }}</textarea>
+        <div class="st-enhanced" data-slack-list>{% for line in chan_text.split('\n') if line.strip() %}{% set name, _, id = line.partition('=') %}<div class="slack-row"><span class="name-wrap">#<input type="text" value="{{ name.strip() }}" aria-label="Channel name" spellcheck="false"></span><span class="id-wrap"><input type="text" class="mono-input" value="{{ id.strip() }}" aria-label="Channel ID" spellcheck="false"></span><span class="slack-count{{ ' is-zero' if not channel_counts.get(name.strip()) }}" data-count="{{ channel_counts.get(name.strip(), 0) }}">{{ channel_counts.get(name.strip(), 0) }} PRs</span><button type="button" class="ghost icon-only sm x" aria-label="Remove {{ name.strip() }}">{{ icon('x') }}</button></div>{% endfor %}</div>
+        <div class="slack-add st-enhanced"><input type="text" placeholder="Paste a channel link or ID" aria-label="Add a channel" data-slack-add spellcheck="false"><button type="button" class="sm" data-slack-add-btn>{{ icon('plus') }}<span>Add</span></button></div>
+      </div>
+      <script type="application/json" data-channel-counts>{{ channel_counts|tojson }}</script>
+    {% endcall %}
+    {% call row('Look back', 'How far back it reads each channel.', keys='lookback_hours slack hours', sec='sources', field='lookback_hours') %}
+      {{ number('sources', 'lookback_hours', cfg.slack.lookback_hours, 1, 336, 'Look back', unit='hours', default=defaults.slack.lookback_hours, wide=True) }}
+    {% endcall %}
+    {% set token_paths = [cfg.slack.token_path] if cfg.slack.token_path is string else cfg.slack.token_path %}
+    {% call row('Token files', "Claude Code's credentials files, which hold the Slack plugin's token. Each Claude login that uses Slack keeps its own copy, and only the one it refreshed last works, so list each login's file and Plus One uses the newest. On macOS, leave it empty to read the Keychain.", keys='token_path credentials slack token', cls='is-stack', sec='sources', field='token_path') %}
+      {{ chips('sources', 'token_path', token_paths|select|list, 'Token files', mono=True, placeholder='Add a credentials file…') }}
+    {% endcall %}
+    {% call row('Token key', 'Which entry in that file is the Slack token.', keys='token_key slack token', for_='f-token_key') %}
+      {{ textbox('sources', 'token_key', cfg.slack.token_key, 'Token key', mono=True, default=defaults.slack.token_key) }}
+    {% endcall %}
+    {% call row('Keychain item', 'Read on macOS when the token file is empty.', keys='keychain_service keychain macos', for_='f-keychain_service') %}
+      {{ textbox('sources', 'keychain_service', cfg.slack.keychain_service, 'Keychain item', default=defaults.slack.keychain_service) }}
+    {% endcall %}
+  </div>{{ savebar('sources') }}</form>
+</section>
+
+<section class="{{ section_class('skips') }}" id="skips" data-title="Waits and skips">
+  {{ section_head('skips', 'Waits and skips') }}
+  {{ form_open('skips', '/settings/skips') }}<div class="st-rows">
+    {% call row('Wait after a PR is ready', 'Gives the author time to settle after opening it or marking it ready.', keys='min_ready_minutes wait ready draft', sec='skips', field='min_ready_minutes') %}
+      {{ number('skips', 'min_ready_minutes', cfg.limits.min_ready_minutes, 0, 1440, 'Wait after a PR is ready', unit='min', default=defaults.limits.min_ready_minutes) }}
+    {% endcall %}
+    {% call row('Skip PRs labeled', 'Skipped PRs cost nothing and show under Activity.', keys='hold_labels labels skip wip', cls='is-stack') %}
+      <div class="layers">
+        <div class="layer"><span class="layer-name">Built in</span>{{ locked(builtin[('filters', 'hold_labels')], mono=False) }}</div>
+        <div class="layer"><span class="layer-name">Every repo</span>{{ chips('skips', 'hold_labels', top.get(('filters', 'hold_labels'), []), 'Skip labels in every repo', placeholder='Add a label…') }}</div>
+        {% for r in repos %}<div class="layer"><span class="layer-name" title="{{ r.entry.name }}">{{ r.entry.name }}</span>{{ chips('skips', 'hold_labels@' ~ r.entry.name, r.owned.get(('filters', 'hold_labels'), []), 'Skip labels in ' ~ r.entry.name, placeholder='Add a label…') }}</div>{% endfor %}
+      </div>
+    {% endcall %}
+    {% call row('Skip while blocked', 'An open comment containing one of these means someone already blocked the PR, so it waits.', keys='blocking_markers blocking markers p0 must fix', cls='is-stack') %}
+      <div class="layers">
+        <div class="layer"><span class="layer-name">Built in</span>{{ locked(builtin[('filters', 'blocking_markers')], mono=False) }}</div>
+        <div class="layer"><span class="layer-name">Every repo</span>{{ chips('skips', 'blocking_markers', top.get(('filters', 'blocking_markers'), []), 'Blocking markers in every repo', placeholder='Add a marker…') }}</div>
+        {% for r in repos %}<div class="layer"><span class="layer-name" title="{{ r.entry.name }}">{{ r.entry.name }}</span>{{ chips('skips', 'blocking_markers@' ~ r.entry.name, r.owned.get(('filters', 'blocking_markers'), []), 'Blocking markers in ' ~ r.entry.name, placeholder='Add a marker…') }}</div>{% endfor %}
+      </div>
+    {% endcall %}
+    {% call row('Approval-gate checks', "Checks that wait for a person's approval instead of testing the code, so they never count as failing CI. Adding one means a failing check with that name no longer holds a PR back.", keys='approval_gates gates ci checks', cls='is-stack', sec='skips', field='approval_gates') %}
+      {{ chips('skips', 'approval_gates', gates, 'Approval-gate checks', mono=True, placeholder='Add a pattern…', kind='regex') }}
+      {% if gate_overrides %}<p class="st-help">{{ gate_overrides|join(', ') }} {{ 'sets' if gate_overrides|length == 1 else 'set' }} {{ 'its' if gate_overrides|length == 1 else 'their' }} own in config.toml, which this list doesn't change.</p>{% endif %}
+    {% endcall %}
+    {% call row('Hand-offs come back after', 'A PR you let someone else review returns when nobody has reviewed it by then.', keys='handoff_working_days hand-off handoff', sec='skips', field='handoff_working_days') %}
+      {{ number('skips', 'handoff_working_days', cfg.limits.handoff_working_days, 1, 30, 'Hand-offs come back after', unit='working days', default=defaults.limits.handoff_working_days, wide=True) }}
+    {% endcall %}
+    {% call row('Skip PRs larger than', 'Bigger PRs get a Needs you card without a review.', keys='max_map_lines large size', sec='skips', field='max_map_lines') %}
+      {{ number('skips', 'max_map_lines', cfg.limits.max_map_lines, 500, 100000, 'Skip PRs larger than', unit='lines', step=500, default=defaults.limits.max_map_lines, wide=True) }}
+    {% endcall %}
+  </div>{{ savebar('skips') }}</form>
+</section>
+
+<section class="{{ section_class('budget') }}" id="budget" data-title="Budget">
+  {{ section_head('budget', 'Budget') }}
+  {{ form_open('budget', '/settings/budget') }}<div class="st-rows">
+    {% call row('Daily spend cap', "Once today's model spend reaches this, checks stop starting reviews until tomorrow. Reviews and rubric changes you ask for still run.", keys='max_spend_per_day_usd spend cap money budget', sec='budget', field='max_spend_per_day_usd') %}
+      {{ number('budget', 'max_spend_per_day_usd', '%g'|format(cfg.limits.max_spend_per_day_usd), 0, 10000, 'Daily spend cap', pre='$', step='0.01', stepby=5, default='%g'|format(defaults.limits.max_spend_per_day_usd), wide=True) }}
+    {% endcall %}
+    {% call row('Last 14 days', keys='spend chart history', cls='is-stack is-sub') %}
+      <div class="spend" data-spend data-today="{{ spend_today }}">
+        <div class="spend-today"><span>Today <strong>{{ spend_today|money }}</strong> of <span data-cap-text>{{ cfg.limits.max_spend_per_day_usd|money }}</span></span><svg width="120" height="6" aria-hidden="true"><rect class="meter-track" width="120" height="6" rx="3"/><rect class="meter-fill" data-today-meter width="{{ (120 * [1, spend_today / cfg.limits.max_spend_per_day_usd]|min)|round(1) if cfg.limits.max_spend_per_day_usd else 120 }}" height="6" rx="3"/></svg></div>
+        <svg class="chart" role="img" aria-label="Spend for each of the last 14 days against the cap"></svg>
+        <p class="spend-cap-note" data-spend-note></p>
+        <script type="application/json" data-spend-days>{{ spend_days|tojson }}</script>
+      </div>
+    {% endcall %}
+    {% call row('Reviews per check', 'The rest wait for the next check. Follow-ups go first.', keys='max_reviews_per_tick reviews per check', sec='budget', field='max_reviews_per_tick') %}
+      {{ number('budget', 'max_reviews_per_tick', cfg.limits.max_reviews_per_tick, 1, 20, 'Reviews per check', unit='PRs', default=defaults.limits.max_reviews_per_tick) }}
+    {% endcall %}
+  </div>{{ savebar('budget') }}</form>
+</section>
+</div>
+
+{# Approving on its own #}
+<div class="st-group" id="g-approving"><div class="st-group-head"><h2>Approving on its own</h2><p>Off until you turn it on for a repo. Comments always wait for you.</p></div>
+{% for r in repos %}
+{% set sec = 'repo-' ~ r.index %}
+{% set auto_now = (section == sec and 'auto_approve' in sent) or (section != sec and r.entry.auto_approve) %}
+{% set hold_now = (section == sec and 'hold_yours' in sent) or (section != sec and r.entry.hold_yours) %}
+{% set met = r.stats.checks|selectattr('ok')|list|length %}
+<section class="{{ section_class(sec) }}" id="{{ sec }}" data-title="{{ r.entry.name }}">
+  {% set extra %}<span class="chip"><span class="dot{{ ' dot-bad' if r.entry.auto_approve }}"></span>{{ 'Approves on its own' if r.entry.auto_approve else 'You approve' }}</span>{% endset %}
+  {{ section_head(sec, r.entry.name, extra) }}
+  {{ form_open(sec, '/settings/repo/' ~ r.index) }}<input type="hidden" name="repo" value="{{ r.entry.name }}"><div class="st-rows">
+    <div class="st-row is-stack is-flush" data-keys="auto_approve approve on its own readiness checklist trust">
+      <div class="trust" data-trust data-was="{{ 'on' if r.entry.auto_approve }}">
+        <div class="trust-head"><div>
+          <label class="trust-state{{ ' is-on' if r.entry.auto_approve }}" for="f-auto-{{ r.index }}">{{ 'Approves clean PRs on its own' if r.entry.auto_approve else 'You approve every PR' }}</label>
+          <p class="trust-sub">{% if r.entry.auto_approve %}Scheduled checks approve PRs they find nothing to raise on, as {{ cfg.me }}, within the limits below. Review again, follow-ups, and anything in the lists below still wait for you.{% else %}Turn this on to let scheduled checks approve PRs they find nothing to raise on, as {{ cfg.me }}. Review again, follow-ups, and anything in the lists below always wait for you.{% endif %}</p>
+          <p class="trust-pending" data-trust-pending{% if auto_now == r.entry.auto_approve %} hidden{% endif %}>{{ 'Turns on when you save.' if auto_now else 'Turns off when you save.' }}</p>
+        </div><input type="checkbox" class="switch is-risk" role="switch" name="auto_approve" id="f-auto-{{ r.index }}" value="1" aria-label="Approve on its own in {{ r.entry.name }}" data-label="Approve on its own" data-saved="{{ 'on' if r.entry.auto_approve }}" {{ 'checked' if auto_now }}></div>
+        <div class="ready-head"><span>Readiness <strong>{{ met }} of {{ r.stats.checks|length }}</strong></span><span>Advice from your grades. It doesn't block the switch.</span></div>
+        <svg class="meter" width="100%" height="6" aria-hidden="true"><rect class="meter-track" width="100%" height="6" rx="3"/><rect class="meter-fill{{ ' is-ok' if r.stats.ready }}" width="{{ (met / r.stats.checks|length * 100)|round(1) }}%" height="6" rx="3"/></svg>
+        <ul class="checklist">
+        {% for c in r.stats.checks %}<li class="{{ 'is-ok' if c.ok }}">{{ status_icon('ok' if c.ok else 'warn') }}{% if c.key == 'graded_approvals' and not c.ok %}<span><a href="/grade">{{ c.label|capitalize }}</a><span class="muted"> · {{ r.stats.approvals_to_go }} to go</span></span>{% else %}<span>{{ c.label|capitalize }}</span>{% endif %}<span class="checklist-value">{{ c.value }}</span></li>{% endfor %}
+        </ul>
+        {% set eta_days, eta_note = r.stats.eta %}
+        {% if eta_note and not r.entry.auto_approve %}<p class="eta">{{ icon('clock', 'i-xs') }}<span>{{ eta_note }}</span></p>{% endif %}
+      </div>
+    </div>
+    {% call row('Hold PRs in your code', 'Leaves a clean PR for you when its author asked you by name, or it rewrites 20 or more lines you wrote (or a quarter of what it changes). Your recent commits alone only move a PR up.', keys='hold_yours your code blame asked by name', for_='f-hold-' ~ r.index, sec=sec, field='hold_yours') %}<input type="hidden" name="hold_shown" value="1"><input type="checkbox" class="switch" role="switch" name="hold_yours" id="f-hold-{{ r.index }}" value="1" aria-label="Hold PRs in your code in {{ r.entry.name }}" data-label="Hold PRs in your code" data-saved="{{ 'on' if r.entry.hold_yours }}" data-default="on" {{ 'checked' if hold_now }}>{% endcall %}
+    {% call row('Never approves when these teams own the code', 'From CODEOWNERS. Paste @org/team or just the team name.', keys='never_approve_owners teams codeowners', cls='is-stack') %}
+      <div class="layers">
+        <div class="layer"><span class="layer-name">Built in</span>{{ locked(builtin[('lanes', 'never_approve_owners')], mono=False) }}</div>
+        <div class="layer"><span class="layer-name"><a href="#every">Every repo</a></span>{{ locked(top.get(('lanes', 'never_approve_owners'), []), mono=False) }}</div>
+        <div class="layer"><span class="layer-name" title="{{ r.entry.name }}">{{ r.entry.name }}</span>{{ chips(sec, 'owners', r.owned.get(('lanes', 'never_approve_owners'), []), 'Never-approve teams in ' ~ r.entry.name, placeholder='Add a team…') }}</div>
+      </div>
+    {% endcall %}
+    {% call row('…or a changed path matches', "Regular expressions matched against each changed file's path.", keys='never_approve_paths paths regex', cls='is-stack', sec=sec, field='paths') %}
+      <div class="layers">
+        <div class="layer"><span class="layer-name">Built in</span>{{ locked(builtin[('lanes', 'never_approve_paths')]) }}</div>
+        <div class="layer"><span class="layer-name"><a href="#every">Every repo</a></span>{{ locked(top.get(('lanes', 'never_approve_paths'), [])) }}</div>
+        <div class="layer"><span class="layer-name" title="{{ r.entry.name }}">{{ r.entry.name }}</span>{{ chips(sec, 'paths', r.owned.get(('lanes', 'never_approve_paths'), []), 'Never-approve paths in ' ~ r.entry.name, mono=True, placeholder='Add a pattern…', kind='regex') }}</div>
+      </div>
+    {% endcall %}
+  </div>{{ savebar(sec) }}</form>
+</section>
+{% endfor %}
+
+<section class="{{ section_class('every') }}" id="every" data-title="Every repo">
+  {{ section_head('every', 'Every repo') }}
+  {{ form_open('every', '/settings/every') }}<div class="st-rows">
+    {% call row('Never-approve teams', 'Apply to every repo on top of its own list. Paste @org/team or just the team name.', keys='never_approve_owners teams every', cls='is-stack') %}
+      {{ chips('every', 'owners', top.get(('lanes', 'never_approve_owners'), []), 'Never-approve teams in every repo', placeholder='Add a team…') }}
+    {% endcall %}
+    {% call row('Never-approve paths', 'The built-in paths always apply as well: files that instruct the reviewer, auth, and payments.', keys='never_approve_paths paths every', cls='is-stack', sec='every', field='paths') %}
+      {{ chips('every', 'paths', top.get(('lanes', 'never_approve_paths'), []), 'Never-approve paths in every repo', mono=True, placeholder='Add a pattern…', kind='regex') }}
+    {% endcall %}
+  </div>{{ savebar('every') }}</form>
+</section>
+
+<section class="{{ section_class('limits') }}" id="limits" data-title="Limits">
+  {{ section_head('limits', 'Limits') }}
+  {{ form_open('limits', '/settings/limits') }}<div class="st-rows">
+    {% call row('Approvals per check', 'Counts only approvals it posts on its own.', keys='max_approvals_per_tick approvals', sec='limits', field='max_approvals_per_tick') %}
+      {{ number('limits', 'max_approvals_per_tick', cfg.limits.max_approvals_per_tick, 0, 50, 'Approvals per check', default=defaults.limits.max_approvals_per_tick) }}
+    {% endcall %}
+    {% call row('Approvals per day', 'Approvals you click never count toward this.', keys='max_approvals_per_day approvals day', sec='limits', field='max_approvals_per_day') %}
+      <div class="st-ctl-col">{{ number('limits', 'max_approvals_per_day', cfg.limits.max_approvals_per_day, 0, 500, 'Approvals per day', default=defaults.limits.max_approvals_per_day) }}<span class="usage">{{ approvals_today }} today</span></div>
+    {% endcall %}
+    {% call row('Largest PR it can approve', 'Bigger PRs are mapped instead of traced: you get where to look first, and it never approves them.', keys='max_diff_lines large map trace', sec='limits', field='max_diff_lines') %}
+      {{ number('limits', 'max_diff_lines', cfg.limits.max_diff_lines, 100, 20000, 'Largest PR it can approve', unit='lines', step=100, default=defaults.limits.max_diff_lines, wide=True) }}
+    {% endcall %}
+  </div>{{ savebar('limits') }}</form>
+</section>
+</div>
+
+{# Reviewing #}
+<div class="st-group" id="g-reviewing"><div class="st-group-head"><h2>Reviewing</h2><p>What it looks for, which models do the work, and where your code lives.</p></div>
+
+<section class="{{ section_class('rubric') }}" id="rubric" data-title="Rubric">
+  {% set extra %}<span class="muted small">{{ '{:,}'.format(rubric_words) }} words{% if rubric_change %} · changed {{ rubric_change.decided_at|ago }}{% endif %}</span>{% endset %}
+  {{ section_head('rubric', 'Rubric', extra) }}
+  {{ form_open('rubric', '/settings/rubric-limits') }}<div class="st-rows">
+    {% call row('Sections', "What blocks a merge for you, what's worth a comment, and how drafted comments read.", keys='rubric sections outline', cls='is-stack') %}
+      <ul class="inner-list outline">{% for s in outline %}<li>{{ icon('shield' if s.locked else 'file') }}<span class="grow">{{ s.heading }}{% if s.locked %} <span class="tagline">Learn again never changes this</span>{% elif s.voice %} <span class="tagline">Drafts read this section by its heading</span>{% endif %}</span><span class="w">{{ s.words }}</span></li>{% else %}<li class="empty-row">No sections yet.</li>{% endfor %}</ul>
+    {% endcall %}
+    {% call row('Rubric changes', 'Proposals from Learn again and from reviews you graded wrong wait there for you.', keys='proposals rubric changes') %}<span class="st-value">{{ proposals_waiting ~ ' waiting' if proposals_waiting else 'None waiting' }}</span><a class="button sm" href="/proposals">{{ icon('book') }}<span>Open</span></a>{% endcall %}
+    {% call row('Proposals a day from GitHub', 'When your own review on GitHub disagrees with its call, it drafts a rubric change, up to this many a day.', keys='auto_proposals_per_day proposals', sec='rubric', field='auto_proposals_per_day') %}
+      {{ number('rubric', 'auto_proposals_per_day', cfg.limits.auto_proposals_per_day, 0, 20, 'Proposals a day from GitHub', default=defaults.limits.auto_proposals_per_day) }}
+    {% endcall %}
+  </div>{{ savebar('rubric') }}</form>
+  <div class="section-foot">
+    <a class="button primary" href="/settings/rubric">{{ icon('pencil') }}<span>Edit rubric</span></a>
+    <form method="post" action="/settings/learn" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit">{{ icon('sparkles') }}<span>Learn again</span><span class="muted">about $1</span></button></form>
+  </div>
+</section>
+
+<section class="{{ section_class('models') }}" id="models" data-title="Models">
+  {{ section_head('models', 'Models') }}
+  {{ form_open('models', '/settings/models') }}<div class="st-rows">
+    {% call row('Each role', 'Budget is the most one call may spend. Average cost is real, from the last 14 days.', keys='models model effort budget timeout opus sonnet haiku', cls='is-stack', sec='models', field=error_field if error_field and '.' in error_field else none) %}
+      <div class="table-wrap"><table class="models"><thead><tr><th>Role</th><th>Model</th><th>Effort</th><th>Budget</th><th>Time limit</th><th>Avg cost</th></tr></thead><tbody>
+      {% for key in cfg.models|keys %}{% set m = cfg.models|attr(key) %}{% set name, what = words.MODEL_ROLES.get(key, (key|capitalize, '')) %}{% set used = stage_costs.get(key) %}{% set d = defaults.models.get(key, {}) %}
+        <tr><td><span class="role"><b>{{ name }}</b><span>{{ what }}</span></span></td>
+        <td data-k="Model">{{ choose('models', key ~ '.model', m.model, name ~ ' model', model_names) }}</td>
+        <td data-k="Effort">{{ choose('models', key ~ '.effort', m.effort, name ~ ' effort', efforts) }}</td>
+        <td data-k="Budget">{{ number('models', key ~ '.budget_usd', '%g'|format(m.budget_usd), 0.01, 100, name ~ ' budget', pre='$', step='0.01', stepby=0.5, default=('%g'|format(d.budget_usd) if d.budget_usd is defined else none)) }}</td>
+        <td data-k="Time limit">{{ number('models', key ~ '.timeout_s', m.timeout_s // 60 if m.timeout_s % 60 == 0 else m.timeout_s / 60, 1, 120, name ~ ' time limit', unit='min', default=(d.timeout_s // 60 if d.timeout_s is defined else none)) }}</td>
+        <td data-k="Avg cost">{% if key == 'draft' and cfg.draft_command %}<span class="avg">Script<small>drafts instead</small></span>{% elif used and used.calls %}<span class="avg">${{ '%.3f'|format(used.cost / used.calls) if used.cost / used.calls < 0.01 else '%.2f'|format(used.cost / used.calls) }}<small>{{ used.calls }} calls</small></span>{% else %}<span class="avg">None<small>in 14 days</small></span>{% endif %}</td></tr>
+      {% endfor %}
+      </tbody></table></div>
+    {% endcall %}
+    {% call row('Re-review only the new change under', 'On a new push to a PR it already reviewed, it looks only at what changed when the change is this small.', keys='incremental_max_lines re-review', sec='models', field='incremental_max_lines') %}
+      {{ number('models', 'incremental_max_lines', cfg.limits.incremental_max_lines, 0, 2000, 'Re-review only the new change under', unit='lines', step=10, default=defaults.limits.incremental_max_lines, wide=True) }}
+    {% endcall %}
+    {% call row('Comments drafted by', 'The drafting model above, or a script of your own.', keys='draft_command drafting script', cls='is-inline') %}
+      {{ seg('models', 'draft_mode', 'script' if cfg.draft_command else 'claude', 'Comments drafted by', [('claude', 'Claude'), ('script', 'Your script')]) }}
+    {% endcall %}
+    {% call row('Drafting script', "Called for each comment as bash script BRIEF_PATH OUT_PATH --max WORDS. It exits 1 when its text has a dash.", keys='draft_command script', cls='is-sub st-draft-script', for_='f-draft_command', sec='models', field='draft_command') %}
+      {{ textbox('models', 'draft_command', cfg.draft_command, 'Drafting script', mono=True, placeholder='~/bin/draft.sh') }}
+    {% endcall %}
+    {% call row('Claude login folder', 'Which Claude Code login every model call uses. Leave it empty for your normal login.', keys='claude_config_dir login', for_='f-claude_config_dir', sec='models', field='claude_config_dir') %}
+      {{ textbox('models', 'claude_config_dir', cfg.claude_config_dir, 'Claude login folder', mono=True, placeholder='Your normal login') }}
+    {% endcall %}
+  </div>{{ savebar('models') }}</form>
+</section>
+
+<section class="{{ section_class('repos') }}" id="repos" data-title="Repos">
+  {{ section_head('repos', 'Repos') }}
+  <details class="st-add" id="add-repo">
+    <summary class="button sm">{{ icon('plus') }}<span>Add repo</span></summary>
+    <div class="st-add-panel">
+      <div hx-get="/settings/repos/suggest" hx-trigger="toggle once from:#add-repo" hx-swap="innerHTML"><p class="st-help">Looking for repos you review…</p></div>
+      <form method="post" action="/settings/repos/add#repos" class="st-add-form">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <label>Repo<input type="text" name="name" placeholder="owner/repo" aria-label="Repo to add" spellcheck="false" required></label>
+        <label>Local clone<input type="text" name="checkout" class="mono-input" placeholder="~/code/repo" aria-label="Its local clone" spellcheck="false" required></label>
+        <button type="submit" class="sm primary">Add repo</button>
+      </form>
+      <p class="st-help">A new repo starts with approving on its own off.</p>
+    </div>
+  </details>
+  {{ form_open('repos', '/settings/repos') }}<div class="st-rows">
+  {% for r in repos %}
+    {% set name = r.entry.name %}
+    {% set field = 'checks@' ~ name %}
+    {% set text = val('repos', field, r.entry.checks|join('\n')) %}
+    {% call row(name, keys='repo ' ~ name, cls='is-inline st-repo-head') %}{% if repos|length > 1 %}<details class="popover st-remove"><summary class="button sm ghost danger">Remove</summary><div class="pop-panel"><p class="small">Stop reviewing {{ name }}? Its reviews and history stay.</p><button type="submit" form="remove-{{ r.index }}" class="sm danger">Remove {{ name }}</button></div></details>{% endif %}{% endcall %}
+    {% call row('Local clone', 'Reviews run in throwaway worktrees made from this clone. Its origin has to be ' ~ name ~ ' on GitHub.', keys='checkout clone path', cls='is-sub', for_='f-checkout@' ~ name, sec='repos', field='checkout@' ~ name) %}{{ textbox('repos', 'checkout@' ~ name, r.entry.checkout|tilde, 'Local clone of ' ~ name, mono=True) }}{% endcall %}
+    {% call row('Checks before each review', "Run in the PR's worktree with no shell. {files} becomes the changed files that exist.", keys='checks packwerk commands', cls='is-sub is-stack', sec='repos', field=field) %}
+      <div class="cmd-list" data-cmds>
+        <textarea class="st-fallback mono" name="{{ field }}" rows="3" aria-label="Checks in {{ name }}, one command per line" data-label="Checks in {{ name }}" data-saved="{{ r.entry.checks|join('\n') }}" hidden>{{ text }}</textarea>
+        <ul class="inner-list st-enhanced" data-cmd-list>{% for c in text.split('\n') if c.strip() %}<li><input type="text" class="mono-input grow" value="{{ c }}" aria-label="Check command" spellcheck="false"><button type="button" class="ghost icon-only sm" aria-label="Remove command">{{ icon('x') }}</button></li>{% else %}<li class="empty-row">No checks. Reviews start right away.</li>{% endfor %}</ul>
+        <button type="button" class="sm ghost st-enhanced" data-cmd-add>{{ icon('plus') }}<span>Add a command</span></button>
+      </div>
+    {% endcall %}
+    {% call row('Peers', 'Clones of other repos the reviewer can read, from a snapshot of their default branch, when a change here affects them.', keys='peers other repos', cls='is-sub is-stack', sec='repos', field='peers@' ~ name) %}
+      {{ chips('repos', 'peers@' ~ name, r.entry.peers|map('tilde')|list, 'Peers of ' ~ name, mono=True, placeholder='Add a clone path…') }}
+    {% endcall %}
+    {% call row('Issue tracker', 'Ticket keys in PR titles link here.', keys='issues tracker linear jira', cls='is-sub', for_='f-issues@' ~ name, sec='repos', field='issues@' ~ name) %}{{ textbox('repos', 'issues@' ~ name, r.entry.issues or '', 'Issue tracker for ' ~ name, mono=True, placeholder='https://linear.app/team/issue') }}{% endcall %}
+  {% endfor %}
+    {% call row('Check time limit', "For every repo's checks. Output is kept up to the limit.", keys='check_timeout_s timeout', sec='repos', field='check_timeout_s') %}
+      {{ number('repos', 'check_timeout_s', cfg.limits.check_timeout_s, 10, 3600, 'Check time limit', unit='s', step=10, default=defaults.limits.check_timeout_s, wide=True) }}
+    {% endcall %}
+  </div>{{ savebar('repos') }}</form>
+  {% for r in repos %}<form method="post" action="/settings/repo/{{ r.index }}/remove" id="remove-{{ r.index }}" hidden><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="repo" value="{{ r.entry.name }}"></form>{% endfor %}
+</section>
+</div>
+
+{# Notifications #}
+<div class="st-group" id="g-notifications"><div class="st-group-head"><h2>Notifications</h2><p>When a comment is ready, a PR needs you, or something goes wrong.</p></div>
+<section class="{{ section_class('notifications') }}" id="notifications" data-title="Notifications">
+  {{ section_head('notifications', 'Notifications') }}
+  {{ form_open('notifications', '/settings/notifications') }}<div class="st-rows">
+    {% call row('This computer', 'Desktop notifications from this machine.', keys='notify desktop', cls='is-inline', for_='f-notify') %}{{ switch('notifications', 'notify', cfg.notify, 'Desktop notifications', default=defaults.notify) }}{% endcall %}
+    {% if subs is not none %}
+    {% call row('Phones and other devices', 'Web Push over Tailscale. On iPhone, add Plus One to the Home Screen from Safari, open it from there, then add the device.', keys='push devices phone iphone web push', cls='is-stack') %}
+      <ul class="inner-list">{% for s in subs %}<li>{{ status_icon('bad' if s.failures else 'ok') }}<span class="grow"><span class="inner-title">{{ s.label }}</span><span class="inner-note">Added {{ s.created_at|ago }}{% if s.last_ok %} · last delivered {{ s.last_ok|ago }}{% endif %}{% if s.failures %} · {{ s.failures }} failure{{ 's' if s.failures != 1 }}{% endif %}</span></span><button type="submit" form="push-remove-{{ s.id }}" class="sm ghost danger">Remove</button></li>{% else %}<li class="empty-row">No devices yet.</li>{% endfor %}</ul>
+      <div class="st-device-actions"><button type="button" class="sm primary" id="enable-push" data-key="{{ vapid }}">{{ icon('bell') }}<span>Add this device</span></button>{% if subs %}<button type="submit" form="push-test" class="sm">Send a test</button>{% endif %}</div>
+      <p id="push-status" class="muted small" role="status"></p>
+    {% endcall %}
+    {% else %}
+    {% call row('Phones and other devices', 'Notifications on your phone need the web app served over Tailscale, which you can set under Web app.', keys='push devices phone iphone web push') %}<span class="st-value">Off</span>{% endcall %}
+    {% endif %}
+  </div>{{ savebar('notifications') }}</form>
+  {% if subs %}<form method="post" action="/push/test" id="push-test" hidden><input type="hidden" name="csrf" value="{{ csrf }}"></form>{% for s in subs %}<form method="post" action="/push/{{ s.id }}/delete" id="push-remove-{{ s.id }}" hidden><input type="hidden" name="csrf" value="{{ csrf }}"></form>{% endfor %}{% endif %}
+</section>
+</div>
+
+{# System #}
+<div class="st-group" id="g-system"><div class="st-group-head"><h2>System</h2><p>Who you are, how the web app is served, and where history lives.</p></div>
+<section class="{{ section_class('you') }}" id="you" data-title="You">
+  {{ section_head('you', 'You') }}
+  {{ form_open('you', '/settings/you') }}<div class="st-rows">
+    {% call row('Name', 'How prompts and drafted comments refer to you.', keys='name', for_='f-name', sec='you', field='name') %}{{ textbox('you', 'name', cfg.name, 'Name') }}{% endcall %}
+    {% call row('GitHub login', 'Whose review requests it picks up and whose reviews it learns from.', keys='me login github', for_='f-me', sec='you', field='me') %}{{ textbox('you', 'me', cfg.me, 'GitHub login') }}{% endcall %}
+    {% call row('Commit emails', 'A PR that changes lines you wrote under these, or files you keep committing to, counts as in your code. Your GitHub noreply address always counts.', keys='emails email commits blame your code', cls='is-stack', sec='you', field='emails') %}
+      <div class="layers">
+        <div class="layer"><span class="layer-name">Found</span>{{ locked(found_emails) }}</div>
+        <div class="layer"><span class="layer-name">Also</span>{{ chips('you', 'emails', cfg.emails, 'Commit emails', mono=True, placeholder='Add an email…') }}</div>
+      </div>
+    {% endcall %}
+    {% call row('Your teams', 'GitHub teams you work on, as org/team. Their PRs lead each To do group with a team chip, get reviewed sooner, and count in notifications. Members refresh daily.', keys='team teams teammates github org', cls='is-stack', sec='you', field='teams') %}
+      <div class="layers">
+        {{ chips('you', 'teams', cfg.team.teams, 'Your teams', mono=True, placeholder='Add org/team…') }}
+        {{ team_read(team_status.teams) }}
+        {{ team_suggest('teams', 'Suggest from your GitHub teams') }}
+      </div>
+    {% endcall %}
+    {% call row('People', 'Anyone else who counts as your team, by GitHub login. Their PRs get the same treatment as your teams.', keys='team people individuals person login teammates', cls='is-stack', sec='you', field='people') %}
+      <div class="layers">{{ chips('you', 'people', cfg.team.people, 'People', mono=True, placeholder='Add a GitHub login…') }}</div>
+    {% endcall %}
+    {% call row('Other teams', "Teams you're not on but still want to review, as org/team. Their PRs come right after your team's with a watching chip and get reviewed sooner. This reorders PRs that already reach you and doesn't pick up new ones.", keys='other teams watching org', cls='is-stack', sec='you', field='others') %}
+      <div class="layers">
+        {{ chips('you', 'others', cfg.team.others, 'Other teams', mono=True, placeholder='Add org/team…') }}
+        {{ team_read(team_status.others) }}
+        {{ team_suggest('others', 'Suggest from your orgs') }}
+      </div>
+    {% endcall %}
+  </div>{{ savebar('you') }}</form>
+</section>
+{% if pending %}<div class="st-notice st-restart" role="status">{{ icon('refresh') }}<span>Saved, and waiting for the web app to restart: {{ pending.keys()|join(', ')|lower }}.</span>{% if web_installed %}<form method="post" action="/settings/restart" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit" class="sm primary">Restart web app</button></form>{% else %}<span class="muted">Restart <code>bin/plus1-web</code> to use it.</span>{% endif %}</div>
+{% if 'Socket' in pending and disk.web.mode == 'tailscale' %}<div class="st-notice st-restart">{{ icon('alert') }}<span>Then point Tailscale at the new socket, which needs root:</span><span class="cmd"><code data-sudo>sudo tailscale serve --bg unix:{{ disk.web.socket }}</code><button type="button" class="ghost icon-only sm" data-copy="[data-sudo]" aria-label="Copy the command">{{ icon('file') }}</button></span></div>{% endif %}{% endif %}
+<section class="{{ section_class('web') }}" id="web" data-title="Web app">
+  {{ section_head('web', 'Web app') }}
+  {{ form_open('web', '/settings/web') }}<div class="st-rows">
+    {% call row('Served', 'Over Tailscale also reaches your phone. Every change here applies once the web app restarts.', keys='web.mode tailscale local', cls='is-inline', sec='web', field='mode') %}
+      {{ seg('web', 'mode', disk.web.mode, 'Served', [('local', 'On this computer'), ('tailscale', 'Over Tailscale')]) }}
+    {% endcall %}
+    {% call row('Allowed login', 'The only Tailscale login let in.', keys='allowed_login tailscale login', for_='f-allowed_login', sec='web', field='allowed_login') %}{{ textbox('web', 'allowed_login', disk.web.allowed_login, 'Allowed login', placeholder='you@github') }}{% endcall %}
+    {% call row('Socket', 'What tailscale serve points at.', keys='web.socket socket unix', for_='f-socket', sec='web', field='socket') %}{{ textbox('web', 'socket', disk.web.socket|tilde, 'Socket', mono=True) }}{% endcall %}
+    {% call row('Port', 'Used when it runs on this computer.', keys='web.port port', sec='web', field='port') %}{{ number('web', 'port', disk.web.port, 1024, 65535, 'Port', default=defaults.web.port, wide=True) }}{% endcall %}
+    {% call row('Address', 'The link notifications open.', keys='public_url url address', for_='f-public_url', sec='web', field='public_url') %}{{ textbox('web', 'public_url', disk.web.public_url, 'Address', mono=True) }}{% endcall %}
+  </div>{{ savebar('web') }}</form>
+</section>
+<section class="{{ section_class('files') }}" id="files" data-title="Files">
+  {{ section_head('files', 'Files') }}
+  {{ form_open('files', '/settings/files') }}<div class="st-rows">
+    {% call row('History folder', 'Reviews, drafts, logs, and the audit trail. A new folder starts a fresh history unless you move the old one there, and applies once the web app restarts.', keys='state_dir history folder', for_='f-state_dir', sec='files', field='state_dir') %}{{ textbox('files', 'state_dir', disk.state_dir|tilde, 'History folder', mono=True) }}{% endcall %}
+    {% call row('Config file', 'Where this page saves. The version before each save is kept as config.toml.bak.', keys='config file toml bak') %}<span class="cmd"><code data-config-path>{{ cfg.config_path|tilde }}</code><button type="button" class="ghost icon-only sm" data-copy="[data-config-path]" aria-label="Copy the path">{{ icon('file') }}</button></span>{% endcall %}
+  </div>{{ savebar('files') }}</form>
+</section>
+<section class="{{ section_class('updates') }}" id="updates" data-title="Updates">
+  {{ section_head('updates', 'Updates') }}
+  {{ form_open('updates', '/settings/updates') }}<div class="st-rows">
+    {% call row('When a new version is out', "Automatic installs it at the next idle moment, checks that it came up, and goes back if it didn't. Ask first shows Update available in the sidebar. Off never checks on its own.", keys='updates automatic ask off version', sec='updates', field='mode') %}{{ seg('updates', 'mode', cfg.updates.mode, 'When a new version is out', [('automatic', 'Automatic'), ('ask', 'Ask first'), ('off', 'Off')]) }}{% endcall %}
+    {% call row('Follow', 'Releases are tagged versions that passed CI. Main is every merge as it lands.', keys='updates channel releases main', sec='updates', field='channel') %}{{ seg('updates', 'channel', cfg.updates.channel, 'Follow', [('releases', 'Releases'), ('main', 'Main')]) }}{% endcall %}
+  </div>{{ savebar('updates') }}</form>
+  <div class="st-rows st-update-status">
+    {% call row('Installed', keys='updates version installed') %}<span class="st-value">Plus One {{ update.version }} <code>{{ update.commit }}</code>{% if update.installed_at %}, updated {{ update.installed_at|ago }}{% endif %}</span>{% endcall %}
+    {% call row('Latest', update_line, keys='updates latest check') %}<span class="st-value">{% if update.state.checked_at %}Checked {{ update.state.checked_at|ago }}{% else %}Not checked yet{% endif %}</span>{% endcall %}
+    <div class="st-update-actions" data-keys="updates check install rollback whats new">
+      <form method="post" action="/settings/updates/check" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit" class="sm">{{ icon('refresh') }}<span>Check now</span></button></form>
+      {% if update.state.status in ('available', 'skipped') and not update.installing %}<form method="post" action="/settings/updates/install" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit" class="sm primary">Install {{ update.state.latest }}</button></form>{% endif %}
+      {% if update.previous and not update.installing %}<form method="post" action="/settings/updates/rollback" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button type="submit" class="sm">{{ icon('undo') }}<span>Roll back to {{ update.previous.version }}</span></button></form>{% endif %}
+      <a class="button sm" href="/whats-new">{{ icon('sparkles') }}<span>What's new</span></a>
+    </div>
+    {% if update.history %}{% call row('History', keys='updates history rollback', cls='is-stack') %}<ul class="inner-list">{% for h in update.history[:6] %}<li>{{ status_icon('ok' if h.result == 'installed' else 'warn') }}<span class="grow"><span class="inner-title">{{ h.version }} {{ h.result }}</span>{% if h.why %}<span class="inner-note">{{ h.why }}</span>{% endif %}</span><span class="inner-note">{{ h.at|ago }}</span></li>{% endfor %}</ul>{% endcall %}{% endif %}
+  </div>
+</section>
+<section class="st-section" id="changes" data-title="Recent changes">
+  {{ section_head('changes', 'Recent changes') }}
+  <div class="st-rows">
+    <div class="st-row is-stack" data-keys="recent changes log history audit">
+      <ul class="inner-list">
+      {% for entry in log %}
+        <li>{{ status_icon('ok') }}<span class="grow"><span class="change-diff">{% for c in entry.changes %}<span><b>{{ c.label }}</b> {% if c.added is defined %}{% for a in c.added %}<span class="add-text">+ {{ a }}</span> {% endfor %}{% for gone in c.removed %}<span class="del-text">− {{ gone }}</span> {% endfor %}{% else %}{% if c.was is not none %}<s>{{ c.was }}</s> → {% endif %}{{ c.now }}{% endif %}</span>{% else %}<span>Saved with nothing changed</span>{% endfor %}</span></span><span class="muted small">{{ entry.at|ago }}</span></li>
+      {% else %}
+        <li class="empty-row">Nothing saved from this page yet. Each save shows up here with what changed.</li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="st-empty-filter" data-filter-empty hidden>No settings match <strong data-filter-q></strong>.</div>
+</div>
+</div>
+{% endblock %}

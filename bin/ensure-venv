@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Builds .venv on first run and syncs it to the lock whenever the lock changes or a dependency doesn't import. Both
+# launchers and update run it, so the web service picks up a dependency an update added, not only the CLI.
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+python="$root/.venv/bin/python"
+stamp="$root/.venv/.plus1-lock"
+if command -v uv >/dev/null 2>&1; then
+  uv=1
+  lock="$root/uv.lock"
+else
+  uv=""
+  # Exported from uv.lock with hashes (CI checks it matches), so pip installs exactly the locked files.
+  lock="$root/requirements.lock"
+fi
+if [ ! -x "$python" ]; then
+  echo "plus1: first run, setting up $root/.venv" >&2
+  if [ -n "$uv" ]; then
+    # uv reads .python-version and fetches that Python when it isn't installed.
+    (cd "$root" && uv venv -q .venv) || exit 1
+  else
+    base=""
+    for candidate in python3.14 python3.13 python3.12 python3.11 python3; do
+      if command -v "$candidate" >/dev/null 2>&1 &&
+        "$candidate" -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null; then
+        base="$candidate"
+        break
+      fi
+    done
+    if [ -z "$base" ]; then
+      echo "plus1: needs uv or Python 3.11+. Install uv: https://docs.astral.sh/uv/ (macOS: brew install uv)" >&2
+      exit 1
+    fi
+    "$base" -m venv "$root/.venv" || exit 1
+  fi
+fi
+hash="$("$python" -c 'import hashlib, sys; print(hashlib.sha256(open(sys.argv[1], "rb").read()).hexdigest())' "$lock")" ||
+  exit 1
+# A half-finished install can leave package metadata behind with no package, so one that doesn't import reinstalls.
+broken=""
+"$python" -c 'import jinja2, pywebpush, tomlkit' 2>/dev/null || broken=1
+if [ -n "$broken" ] || [ "$(cat "$stamp" 2>/dev/null)" != "$hash" ]; then
+  echo "plus1: installing dependencies into $root/.venv" >&2
+  if [ -n "$uv" ]; then
+    # --inexact keeps a developer's dev tools; UV_PROJECT_ENVIRONMENT is pinned so a global setting can't send the
+    # sync to another environment.
+    (cd "$root" && UV_PROJECT_ENVIRONMENT="$root/.venv" uv sync -q --frozen --no-dev --inexact ${broken:+--reinstall}) ||
+      exit 1
+  else
+    "$python" -m pip install -q --disable-pip-version-check ${broken:+--force-reinstall} -r "$lock" || exit 1
+  fi
+  echo "$hash" >"$stamp"
+fi

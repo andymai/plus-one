@@ -1,0 +1,124 @@
+<!doctype html>
+{% from "_macros.html" import icon, status_icon %}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f4f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="csrf-token" content="{{ csrf }}">
+<meta name="plus1-build" content="{{ build }}">
+<meta name="plus1-version" content="{{ version }}">
+<meta name="htmx-config" content='{"includeIndicatorStyles": false, "allowEval": false, "allowScriptTags": false}'>
+<title>{% if todo_count %}({{ todo_count }}) {% endif %}{% block title %}PR review{% endblock %} · Plus One</title>
+<link rel="preload" href="/static/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/app.css">
+<link rel="manifest" href="/static/manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="{% if todo_count %}/static/fav-{{ [todo_count, 9]|min }}.svg{% else %}/static/icon.svg{% endif %}" data-favicon>
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<script src="/static/htmx.min.js" defer></script>
+<script src="/static/app.js" defer></script>
+{% block scripts %}{% endblock %}
+</head>
+<body>
+{% include "_icons.html" %}
+<div class="app">
+  <aside class="sidebar" aria-label="Main">
+    <a class="brand" href="/">
+      <img class="logo" src="/static/icon.svg" width="24" height="24" alt="">
+      <span class="brand-text"><strong>Plus One</strong><span>{{ repos_label }}</span></span>
+    </a>
+    <button type="button" class="sb-search" data-open-palette>
+      {{ icon('search') }}<span>Search or jump to…</span><span class="keys"><kbd data-mod>⌘</kbd><kbd>K</kbd></span>
+    </button>
+    <nav class="sb-nav">
+      <a href="/" {% if path == '/' %}class="on" aria-current="page"{% endif %}>{{ icon('inbox') }}<span>To do</span><span class="sb-count" data-todo-count {% if not todo_count %}hidden{% endif %}>{{ todo_count }}</span></a>
+      <a href="/activity" {% if path.startswith('/activity') %}class="on" aria-current="page"{% endif %}>{{ icon('activity') }}<span>Activity</span></a>
+      <a href="/insights" {% if path.startswith('/insights') %}class="on" aria-current="page"{% endif %}>{{ icon('chart') }}<span>Insights</span></a>
+    </nav>
+    <div class="sb-label">Tuning</div>
+    <nav class="sb-nav">
+      <a href="/grade" {% if path.startswith('/grade') %}class="on" aria-current="page"{% endif %}>{{ icon('thumbs-up') }}<span>Grade</span>{% if grade_count %}<span class="sb-count is-quiet" title="{{ grade_count }} past decision{{ 's' if grade_count != 1 }} waiting for a grade">{{ grade_count }}</span>{% endif %}</a>
+      <a href="/proposals" {% if path.startswith('/proposals') %}class="on" aria-current="page"{% endif %}>{{ icon('book') }}<span>Rubric changes</span></a>
+      <a href="/settings" {% if path.startswith('/settings') %}class="on" aria-current="page"{% endif %}>{{ icon('sliders') }}<span>Settings</span></a>
+      <a href="https://github.com/pulls/review-requested" target="_blank" rel="noopener noreferrer">{{ icon('pr') }}<span>Review requests</span>{{ icon('external', 'i-xs sb-ext') }}</a>
+    </nav>
+    <div class="sb-foot">
+      {% include "partials/status.html" %}
+      <button type="button" class="sb-help" data-open-shortcuts>{{ icon('keyboard') }}<span>Keyboard shortcuts</span><kbd>?</kbd></button>
+      {% if update_note %}<a class="sb-update" href="/settings#updates">{{ update_note }}</a>{% endif %}
+      <a class="sb-version" href="/whats-new">Plus One {{ version }}</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="mobile-top">
+      <a class="brand" href="/"><img class="logo" src="/static/icon.svg" width="24" height="24" alt=""><strong>Plus One</strong></a>
+      <span class="mode-chip {{ 'is-live' if status.auto_repos }}">{% if status.running %}<span class="pulse"></span>{% endif %}{{ 'Auto-approve' if status.auto_repos else 'You approve' }}{% if status.paused %} · paused{% endif %}</span>
+      {% with compact=True %}{% include "partials/review_any.html" %}{% endwith %}
+      <button type="button" class="button ghost icon-only" data-open-palette aria-label="Search">{{ icon('search') }}</button>
+    </header>
+    <main class="content {% block content_class %}{% endblock %}" id="content" tabindex="-1">
+      <header class="page-head">{% block head %}<div class="ph-title"><h1>{{ self.title() }}</h1></div>{% endblock %}</header>
+      <div class="page {% block page_class %}{% endblock %}">
+        {% block main %}{% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="/" {% if path == '/' %}class="on"{% endif %}>{{ icon('inbox') }}<span>To do</span><span class="tab-count" data-todo-count {% if not todo_count %}hidden{% endif %}>{{ todo_count }}</span></a>
+    <a href="/activity" {% if path.startswith('/activity') %}class="on"{% endif %}>{{ icon('activity') }}<span>Activity</span></a>
+    <a href="/insights" {% if path.startswith('/insights') or path.startswith('/grade') %}class="on"{% endif %}>{{ icon('chart') }}<span>Insights</span></a>
+    <a href="/settings" {% if path.startswith('/settings') or path.startswith('/proposals') %}class="on"{% endif %}>{{ icon('sliders') }}<span>Settings</span></a>
+  </nav>
+</div>
+
+<div class="ptr" data-ptr aria-hidden="true">{{ icon('refresh') }}</div>
+
+<div class="toasts" id="toasts" aria-live="polite">
+{% if update_notice %}<div class="toast is-sticky" role="status">{{ status_icon('ok') }}<span>{{ update_notice }}</span><button type="button" class="toast-x" aria-label="Dismiss">{{ icon('x') }}</button></div>{% endif %}
+{% if flash %}<div class="toast" role="status">{{ status_icon('ok') }}<span>{{ flash }}</span><button type="button" class="toast-x" aria-label="Dismiss">{{ icon('x') }}</button></div>{% endif %}
+{% if flash_error %}<div class="toast is-bad" role="alert">{{ status_icon('err') }}<span>{{ flash_error }}</span><button type="button" class="toast-x" aria-label="Dismiss">{{ icon('x') }}</button></div>{% endif %}
+</div>
+
+<dialog class="palette" id="palette" aria-label="Command menu">
+  <div class="palette-input">{{ icon('search') }}<input type="text" placeholder="Type a command, a PR number, or a title" autocomplete="off" spellcheck="false" aria-label="Command" aria-controls="palette-list"></div>
+  <ul class="palette-list" id="palette-list" role="listbox"></ul>
+  <div class="palette-foot"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> select</span><span><kbd>esc</kbd> close</span></div>
+</dialog>
+
+<dialog class="shortcuts" id="shortcuts" aria-labelledby="shortcuts-title">
+  <header><h2 id="shortcuts-title">Keyboard shortcuts</h2><button type="button" class="button ghost icon-only" data-close aria-label="Close">{{ icon('x') }}</button></header>
+  <div class="shortcut-groups">
+    <section><h3>Anywhere</h3><dl>
+      <div><dt>Command menu</dt><dd><kbd data-mod>⌘</kbd><kbd>K</kbd></dd></div>
+      <div><dt>Go to To do</dt><dd><kbd>G</kbd><kbd>T</kbd></dd></div>
+      <div><dt>Go to Activity</dt><dd><kbd>G</kbd><kbd>A</kbd></dd></div>
+      <div><dt>Go to Insights</dt><dd><kbd>G</kbd><kbd>I</kbd></dd></div>
+      <div><dt>Search</dt><dd><kbd>/</kbd></dd></div>
+      <div><dt>This list</dt><dd><kbd>?</kbd></dd></div>
+    </dl></section>
+    <section><h3>Rows and reviews</h3><dl>
+      <div><dt>Next, previous</dt><dd><kbd>J</kbd><kbd>K</kbd></dd></div>
+      <div><dt>Open or close a row</dt><dd><kbd>↵</kbd></dd></div>
+      <div><dt>Open the review page</dt><dd><kbd>⇧</kbd><kbd>↵</kbd></dd></div>
+      <div><dt>Open on GitHub</dt><dd><kbd>O</kbd></dd></div>
+      <div><dt>Edit the comment</dt><dd><kbd>E</kbd></dd></div>
+      <div><dt>Ask for a rewrite</dt><dd><kbd>R</kbd></dd></div>
+      <div><dt>Let someone else review</dt><dd><kbd>I</kbd></dd></div>
+      <div><dt>Main action (opens a closed row first)</dt><dd><kbd data-mod>⌘</kbd><kbd>↵</kbd></dd></div>
+      <div><dt>Undo</dt><dd><kbd>U</kbd></dd></div>
+    </dl></section>
+    <section><h3>Grading</h3><dl>
+      <div><dt>Right call</dt><dd><kbd>Y</kbd></dd></div>
+      <div><dt>Wrong call, then what went wrong</dt><dd><kbd>N</kbd><kbd>1</kbd>…<kbd>8</kbd></dd></div>
+      <div><dt>Skip</dt><dd><kbd>S</kbd></dd></div>
+    </dl></section>
+  </div>
+</dialog>
+</body>
+</html>
