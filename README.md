@@ -45,7 +45,7 @@ Each comment shows what the reviewer saw and how it made sure. You can edit the 
 - **It does not approve on its own.** That switch is off for each repository until you turn it on. Insights shows how often its calls agreed with yours, so you can decide when a repository is ready.
 - **It does not approve code that you fence off.** You name the CODEOWNERS teams and the paths. Files that instruct the reviewer, such as `CLAUDE.md`, are always on that list.
 - **It does not give the model your GitHub login.** The reviewer runs with read-only tools, in an environment with no GitHub credentials.
-- **It does not spend without a limit.** You set the maximum spend for each day.
+- **It does not keep spending all day.** You set a daily amount. When the day's spend reaches it, the timer starts no more reviews.
 
 ## It learns how you review
 
