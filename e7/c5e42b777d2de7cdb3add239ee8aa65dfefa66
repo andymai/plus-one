@@ -1,0 +1,23 @@
+.release-please-manifest.json
+  s_89896d250217aa::t_dafd463f13376b 1
+CHANGELOG.md
+  s_89896d250217aa::t_920bdf1d8e58f7 3-15
+plus1/__init__.py
+  s_89896d250217aa::t_cc0a70edaa2be8 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e7c5e42b777d2de7cdb3add239ee8aa65dfefa66",
+  "prompts": {},
+  "sessions": {
+    "s_89896d250217aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "05aabe45-af7c-478b-acb1-113b0e372d3f",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Andy Aragon <hi@andymai.com>"
+    }
+  }
+}
