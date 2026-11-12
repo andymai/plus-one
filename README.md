@@ -2,7 +2,7 @@
 
 # Plus One
 
-Local pull request reviews, drafted by Claude Code in your voice.
+A second reviewer that sounds like you.
 
 [![CI](https://github.com/andymai/plus-one/actions/workflows/ci.yml/badge.svg)](https://github.com/andymai/plus-one/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/andymai/plus-one)](https://github.com/andymai/plus-one/releases)
@@ -15,11 +15,43 @@ Local pull request reviews, drafted by Claude Code in your voice.
 
 </div>
 
-Plus One reviews the pull requests waiting on you. It finds review requests in the repositories you choose, including requests to your teams, revisits PRs where you requested changes after the author pushes again, and can include PR links from selected Slack channels.
+Review requests pile up, and each one is a teammate who waits on you. Plus One reads those pull requests first. It runs Claude Code on your own machine, sorts each PR by the decision it needs from you, and drafts the comments in your voice. You read, you click, and only then does it post.
 
-It learns from reviews you have written on GitHub and drafts comments in your voice. When you mark a call wrong, or your GitHub review differs from its call, Plus One drafts a rubric change for you to accept. Approving clean PRs on its own is off by default for every repository, so nothing posts without you. You can turn it on independently for repositories you trust.
+I built it because my own review queue never emptied.
 
-Plus One runs on your own Mac or Linux machine with your GitHub and Claude Code logins.
+## What you see
+
+Each PR lands on To do in one of these groups:
+
+- **Ready to approve.** It traced the change and found no problem. You approve with one click.
+- **Blocking.** It found a problem that must not ship, and the comment is ready to post.
+- **Worth fixing.** It found a problem that does not block the PR. The comment posts with your approval.
+- **Needs a look.** It could not decide, or the change touches code that only you approve.
+- **Fixed since you asked.** You requested changes and the author pushed again. It tells you which of your comments the new code fixes.
+
+It finds these PRs from review requests in the repositories you choose, which includes requests to your teams. It can also read PR links from Slack channels that you select.
+
+## How a comment gets to you
+
+1. Plus One checks out the PR in a temporary worktree, and Claude Code reads the change with read-only tools.
+2. A second model call tries to prove each finding against the code. A finding that fails becomes a private note, not a comment.
+3. It drafts each comment from your rubric. Then a fact-check compares the text with the evidence, and it flags a comment that the evidence does not support.
+
+Each comment shows what the reviewer saw and how it made sure. You can edit the text, or ask for a rewrite ("shorter", "as a question", or your own words).
+
+## What it does not do
+
+- **It does not post without you.** In the web app, each post waits for your click, and then you have 8 seconds to undo it.
+- **It does not approve on its own.** That switch is off for each repository until you turn it on. Insights shows how often its calls agreed with yours, so you can decide when a repository is ready.
+- **It does not approve code that you fence off.** You name the CODEOWNERS teams and the paths. Files that instruct the reviewer, such as `CLAUDE.md`, are always on that list.
+- **It does not give the model your GitHub login.** The reviewer runs with read-only tools, in an environment with no GitHub credentials.
+- **It does not spend without a limit.** You set the maximum spend for each day.
+
+## It learns how you review
+
+`bin/plus1 learn` reads the reviews you wrote on GitHub and proposes your rubric from them. After that, when you mark a call wrong, or your GitHub review differs from its call, it drafts a change to the rubric. You see each change as a diff, and you accept or reject it.
+
+Plus One runs on your own Mac or Linux machine, with your GitHub and Claude Code logins.
 
 ## Start
 
