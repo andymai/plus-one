@@ -10,7 +10,7 @@ Review more pull requests. Keep your team moving. Stay in the loop.
 
 </div>
 
-https://github.com/user-attachments/assets/8a5173a7-ee42-42cc-84d7-0fc5fe12c623
+https://github.com/user-attachments/assets/a3c0de6b-d4f3-4bb9-bde8-4d7a0cd8aef7
 
 The video shows a sandbox with invented pull requests for `acme/storefront`. Nothing in it reaches GitHub.
 
