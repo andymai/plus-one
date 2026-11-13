@@ -2,7 +2,7 @@
 
 # Plus One
 
-A second reviewer that sounds like you.
+Review more pull requests. Keep your team moving. Stay in the loop.
 
 [![CI](https://github.com/andymai/plus-one/actions/workflows/ci.yml/badge.svg)](https://github.com/andymai/plus-one/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/andymai/plus-one)](https://github.com/andymai/plus-one/releases)
@@ -10,13 +10,11 @@ A second reviewer that sounds like you.
 
 </div>
 
-https://github.com/user-attachments/assets/8a5173a7-ee42-42cc-84d7-0fc5fe12c623
+https://github.com/user-attachments/assets/a3c0de6b-d4f3-4bb9-bde8-4d7a0cd8aef7
 
 The video shows a sandbox with invented pull requests for `acme/storefront`. Nothing in it reaches GitHub.
 
-Review requests pile up, and each one is a teammate who waits on you. Plus One reads those pull requests first. It runs Claude Code on your own machine, sorts each PR by the decision it needs from you, and drafts the comments in your voice. You read, you click, and only then does it post.
-
-I built it because my own review queue never emptied.
+Plus One helps you review many pull requests, so your team keeps moving fast and you stay in the loop. It runs Claude Code on your own machine and reads each PR that waits on you. It sorts each PR by the decision it needs from you, and it drafts the comments in your voice. You read, you click, and only then does it post.
 
 ## What you see
 
