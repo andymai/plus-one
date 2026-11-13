@@ -8,18 +8,22 @@ A second reviewer that sounds like you.
 [![Release](https://img.shields.io/github/v/release/andymai/plus-one)](https://github.com/andymai/plus-one/releases)
 [![License: MIT](https://img.shields.io/github/license/andymai/plus-one)](./LICENSE)
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/media/to-do-dark.png">
-  <img alt="Plus One's To do list for acme/storefront groups pull requests as Ready to approve, Blocking, Worth fixing, and Needs a look, beside an open blocking PR with a drafted comment about a duplicated idempotency key." src="docs/media/to-do-light.png">
-</picture>
-
 </div>
+
+https://github.com/user-attachments/assets/8a5173a7-ee42-42cc-84d7-0fc5fe12c623
+
+The video shows a sandbox with invented pull requests for `acme/storefront`. Nothing in it reaches GitHub.
 
 Review requests pile up, and each one is a teammate who waits on you. Plus One reads those pull requests first. It runs Claude Code on your own machine, sorts each PR by the decision it needs from you, and drafts the comments in your voice. You read, you click, and only then does it post.
 
 I built it because my own review queue never emptied.
 
 ## What you see
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/to-do-dark.png">
+  <img alt="Plus One's To do list for acme/storefront groups pull requests as Ready to approve, Blocking, Worth fixing, and Needs a look, beside an open blocking PR with a drafted comment about a duplicated idempotency key." src="docs/media/to-do-light.png">
+</picture>
 
 Each PR lands on To do in one of these groups:
 
